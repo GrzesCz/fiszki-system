@@ -1,0 +1,229 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const fiszki = await getCollection('fiszki');
+  return fiszki.map((f) => {
+    // Odcięcie '.json' z końca id
+    const slug = f.id.replace(/\.json$/, '');
+    return { params: { slug }, props: { fiszka: f } };
+  });
+}
+
+const { fiszka } = Astro.props;
+const { title, subtitle, cards, category } = fiszka.data;
+
+// Zbuduj slug powiązanej kategorii, by móc łatwo wrócić
+const categorySlug = category ? category.toLowerCase().replace(/\s+/g, '-') : '';
+---
+<BaseLayout title={title} subtitle={subtitle}>
+  <div class="navigation-bar">
+    {categorySlug && (
+      <a href={`/kategoria/${categorySlug}`} class="btn-secondary btn-small">
+        ← Wróć do kategorii
+      </a>
+    )}
+  </div>
+
+  <div id="progressWrap" class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">1 / {cards.length}</div>
+  </div>
+
+  <div class="card-wrap" id="cardWrap" data-cards={JSON.stringify(cards)}>
+    <div class="card" id="card">
+      <div class="card-face card-front" id="cardFront">
+        <div class="category" id="cardCategory"></div>
+        <div class="card-label">PYTANIE</div>
+        <div class="card-question" id="cardQuestion"></div>
+        <div class="card-hint pulse">↩ kliknij aby odkryć odpowiedź</div>
+      </div>
+      <div class="card-face card-back" id="cardBack">
+        <div class="category" id="cardCategoryBack"></div>
+        <div class="card-label">ODPOWIEDŹ</div>
+        <div class="answer-sep"></div>
+        <div class="card-answer" id="cardAnswer"></div>
+        <div class="card-next-hint" id="cardNextHint">↓ Przewiń w razie potrzeby · Przyciski na dole ekranu</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls-wrap" id="controlsWrap">
+    <div class="btn-row" id="btnRow" style="display:none">
+      <button type="button" class="btn btn-bad" data-rate="bad">✗ Nie wiedziałem</button>
+      <button type="button" class="btn btn-ok" data-rate="ok">~ Prawie</button>
+      <button type="button" class="btn btn-good" data-rate="good">✓ Wiedziałem</button>
+    </div>
+    <div class="btn-nav" id="btnNav">
+      <button type="button" class="btn-secondary" id="btnPrev">← Poprzednia</button>
+      <button type="button" class="btn-secondary" id="btnShuffle">⇄ Tasuj</button>
+      <button type="button" class="btn-secondary" id="btnNext">Następna →</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-num" id="statGood" style="color:var(--green)">0</div>
+      <div class="stat-label">Wiedziałem</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="statOk" style="color:var(--yellow)">0</div>
+      <div class="stat-label">Prawie</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="statBad" style="color:var(--red)">0</div>
+      <div class="stat-label">Nie wiedziałem</div>
+    </div>
+  </div>
+
+  <div class="finish-screen" id="finishScreen">
+    <div class="finish-emoji">🎯</div>
+    <div class="finish-title">Sesja zakończona!</div>
+    <div class="finish-stats" id="finishStats"></div>
+    <button type="button" class="btn-secondary" id="btnRestartAll" style="margin-top:1rem">↺ Zacznij od nowa</button>
+    <button type="button" class="btn-secondary" id="btnRestartBad">↺ Powtórz błędne</button>
+  </div>
+
+  <script is:inline>
+    const cardWrap = document.getElementById('cardWrap');
+    const cards = JSON.parse(cardWrap?.dataset.cards || '[]');
+    let currentCards = [...cards];
+    let currentIndex = 0;
+    let isFlipped = false;
+    let scores = { good: 0, ok: 0, bad: 0 };
+    let rated = new Set();
+    let ratedScores = {};
+
+    const catClass = (cat) => ({ pojecie: 'cat-pojecie', kod: 'cat-kod', analogia: 'cat-analogia', naming: 'cat-naming' }[cat] || 'cat-pojecie');
+
+    function render() {
+      const card = currentCards[currentIndex];
+      if (!card) return;
+      const catCls = catClass(card.cat);
+      document.getElementById('cardCategory').className = `category ${catCls}`;
+      document.getElementById('cardCategory').textContent = card.catLabel;
+      document.getElementById('cardCategoryBack').className = `category ${catCls}`;
+      document.getElementById('cardCategoryBack').textContent = card.catLabel;
+      document.getElementById('cardQuestion').textContent = card.q;
+      document.getElementById('cardAnswer').innerHTML = card.a;
+      document.getElementById('progressLabel').textContent = `${currentIndex + 1} / ${currentCards.length}`;
+      document.getElementById('progressFill').style.width = `${((currentIndex + 1) / currentCards.length) * 100}%`;
+      isFlipped = false;
+      document.getElementById('card').classList.remove('flipped');
+      document.getElementById('btnRow').style.display = 'none';
+      document.getElementById('statGood').textContent = scores.good;
+      document.getElementById('statOk').textContent = scores.ok;
+      document.getElementById('statBad').textContent = scores.bad;
+    }
+
+    function flipCard() {
+      if (isFlipped) return;
+      isFlipped = true;
+      document.getElementById('card').classList.add('flipped');
+      document.getElementById('btnRow').style.display = 'grid';
+    }
+
+    function rate(score) {
+      const cardIndex = cards.indexOf(currentCards[currentIndex]);
+      if (!rated.has(currentIndex)) {
+        scores[score]++;
+        rated.add(currentIndex);
+        ratedScores[cardIndex] = score;
+      }
+      nextCard();
+    }
+
+    function nextCard() {
+      if (currentIndex < currentCards.length - 1) {
+        currentIndex++;
+        render();
+      } else {
+        showFinish();
+      }
+    }
+
+    function prevCard() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        render();
+      }
+    }
+
+    function shuffleCards() {
+      for (let i = currentCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [currentCards[i], currentCards[j]] = [currentCards[j], currentCards[i]];
+      }
+      currentIndex = 0;
+      rated.clear();
+      render();
+    }
+
+    function showFinish() {
+      document.getElementById('cardWrap').classList.add('hidden');
+      document.getElementById('controlsWrap').classList.add('hidden');
+      document.getElementById('progressWrap').classList.add('hidden');
+      document.querySelector('.stats').classList.add('hidden');
+      const pct = Math.round((scores.good / currentCards.length) * 100);
+      document.getElementById('finishStats').innerHTML = `
+        <div class="stat-box"><div class="stat-num" style="color:var(--green)">${scores.good}</div><div class="stat-label">Wiedziałem</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--yellow)">${scores.ok}</div><div class="stat-label">Prawie</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--red)">${scores.bad}</div><div class="stat-label">Nie wiedziałem</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--accent)">${pct}%</div><div class="stat-label">Wynik</div></div>
+      `;
+      document.getElementById('finishScreen').classList.add('visible');
+      if (scores.bad === 0) document.getElementById('btnRestartBad').style.display = 'none';
+    }
+
+    function restartAll() {
+      currentCards = [...cards];
+      currentIndex = 0;
+      scores = { good: 0, ok: 0, bad: 0 };
+      rated.clear();
+      ratedScores = {};
+      document.getElementById('cardWrap').classList.remove('hidden');
+      document.getElementById('controlsWrap').classList.remove('hidden');
+      document.getElementById('progressWrap').classList.remove('hidden');
+      document.querySelector('.stats').classList.remove('hidden');
+      document.getElementById('finishScreen').classList.remove('visible');
+      document.getElementById('btnRestartBad').style.display = '';
+      render();
+    }
+
+    function restartBad() {
+      const badIndices = Object.keys(ratedScores).filter(k => ratedScores[k] === 'bad').map(Number);
+      if (badIndices.length === 0) return;
+      currentCards = badIndices.map(i => cards[i]);
+      currentIndex = 0;
+      scores = { good: 0, ok: 0, bad: 0 };
+      rated.clear();
+      document.getElementById('cardWrap').classList.remove('hidden');
+      document.getElementById('controlsWrap').classList.remove('hidden');
+      document.getElementById('progressWrap').classList.remove('hidden');
+      document.querySelector('.stats').classList.remove('hidden');
+      document.getElementById('finishScreen').classList.remove('visible');
+      document.getElementById('btnRestartBad').style.display = badIndices.length > 0 ? '' : 'none';
+      render();
+    }
+
+    cardWrap?.addEventListener('click', flipCard);
+    document.querySelectorAll('[data-rate]').forEach(btn => btn.addEventListener('click', () => rate(btn.dataset.rate)));
+    document.getElementById('btnPrev')?.addEventListener('click', prevCard);
+    document.getElementById('btnNext')?.addEventListener('click', nextCard);
+    document.getElementById('btnShuffle')?.addEventListener('click', shuffleCards);
+    document.getElementById('btnRestartAll')?.addEventListener('click', restartAll);
+    document.getElementById('btnRestartBad')?.addEventListener('click', restartBad);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') { e.preventDefault(); flipCard(); }
+      if (e.code === 'ArrowRight') nextCard();
+      if (e.code === 'ArrowLeft') prevCard();
+      if (e.code === 'Digit1') rate('bad');
+      if (e.code === 'Digit2') rate('ok');
+      if (e.code === 'Digit3') rate('good');
+    });
+
+    render();
+  </script>
+</BaseLayout>

@@ -1,0 +1,342 @@
+<!DOCTYPE html><html lang="pl"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"><title>Notatki: Struktura projektów – architektura wspierająca model domeny — Fiszki EDU</title><link rel="stylesheet" href="../../_astro/index.CdCvzWCf.css">
+<style>.navigation-bar[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;display:flex;justify-content:space-between;margin-bottom:2rem}.btn-small[data-astro-cid-lw6yg7ny]{padding:.5rem 1rem;font-size:.8rem;text-decoration:none;display:inline-flex}.markdown-body[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;color:var(--text);font-family:Syne,sans-serif;line-height:1.7;font-size:1.05rem;padding-bottom:4rem}.markdown-body[data-astro-cid-lw6yg7ny] h1,.markdown-body[data-astro-cid-lw6yg7ny] h2,.markdown-body[data-astro-cid-lw6yg7ny] h3,.markdown-body[data-astro-cid-lw6yg7ny] h4{color:var(--text);font-weight:700;margin-top:2.5rem;margin-bottom:1rem;line-height:1.3}.markdown-body[data-astro-cid-lw6yg7ny] h1{font-size:2.2rem;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.markdown-body[data-astro-cid-lw6yg7ny] h2{font-size:1.8rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}.markdown-body[data-astro-cid-lw6yg7ny] h3{font-size:1.4rem;color:var(--accent3)}.markdown-body[data-astro-cid-lw6yg7ny] p{margin-bottom:1.2rem}.markdown-body[data-astro-cid-lw6yg7ny] ul,.markdown-body[data-astro-cid-lw6yg7ny] ol{margin-bottom:1.2rem;padding-left:1.5rem}.markdown-body[data-astro-cid-lw6yg7ny] li{margin-bottom:.5rem}.markdown-body[data-astro-cid-lw6yg7ny] strong,.markdown-body[data-astro-cid-lw6yg7ny] b{color:var(--accent3);font-weight:600}.markdown-body[data-astro-cid-lw6yg7ny] em,.markdown-body[data-astro-cid-lw6yg7ny] i{color:var(--yellow);font-style:normal;font-weight:600}.markdown-body[data-astro-cid-lw6yg7ny] blockquote{border-left:4px solid var(--accent);background:#7c6af70d;padding:1rem 1.5rem;margin:1.5rem 0;border-radius:0 8px 8px 0;font-style:italic;color:var(--text-dim)}.markdown-body[data-astro-cid-lw6yg7ny] a{color:var(--accent);text-decoration:underline;text-underline-offset:4px;transition:color .2s}.markdown-body[data-astro-cid-lw6yg7ny] a:hover{color:var(--accent2)}.markdown-body[data-astro-cid-lw6yg7ny] pre{background:var(--code-bg)!important;border:1px solid var(--border);border-radius:12px;padding:1.2rem;font-family:JetBrains Mono,monospace;font-size:.85rem;overflow-x:auto;margin:1.5rem 0}.markdown-body[data-astro-cid-lw6yg7ny] code{font-family:JetBrains Mono,monospace;font-size:.85em;background:var(--code-bg);padding:.2em .4em;border-radius:4px;border:1px solid var(--border);color:#e8e8f0}.markdown-body[data-astro-cid-lw6yg7ny] pre code{background:transparent;padding:0;border:none;font-size:1em}.markdown-body[data-astro-cid-lw6yg7ny] table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.95rem}.markdown-body[data-astro-cid-lw6yg7ny] th,.markdown-body[data-astro-cid-lw6yg7ny] td{border:1px solid var(--border);padding:.75rem 1rem;text-align:left}.markdown-body[data-astro-cid-lw6yg7ny] th{background:var(--surface2);font-weight:600;color:var(--accent3)}.markdown-body[data-astro-cid-lw6yg7ny] tr:nth-child(2n){background:#ffffff05}.mindmap-container[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;margin:0 auto 3rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center}.mindmap-container[data-astro-cid-lw6yg7ny] h3[data-astro-cid-lw6yg7ny]{color:var(--accent);margin-top:0;margin-bottom:1rem;font-family:Syne,sans-serif}.mindmap-image[data-astro-cid-lw6yg7ny]{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--border);transition:transform .2s,box-shadow .2s;cursor:zoom-in}.mindmap-image[data-astro-cid-lw6yg7ny]:hover{transform:scale(1.02);box-shadow:0 8px 24px #0000004d}.mindmap-hint[data-astro-cid-lw6yg7ny]{font-size:.8rem;color:var(--text-dim);margin-top:.5rem;margin-bottom:0}
+</style></head> <body> <header> <a href="../../index.html" class="header-tag header-home">← Strona główna</a> <h1>Notatki: Struktura projektów – architektura wspierająca model domeny</h1> <div class="subtitle">Kategoria: Struktura Projektow</div> </header> <main>  <div class="navigation-bar" data-astro-cid-lw6yg7ny> <a href="../../kategoria/struktura-projektow/index.html" class="btn-secondary btn-small" data-astro-cid-lw6yg7ny>
+← Wróć do kategorii
+</a> </div> <article class="markdown-body" data-astro-cid-lw6yg7ny> <h1 id="notatki-struktura-projektów--architektura-wspierająca-model-domeny">Notatki: Struktura projektów – architektura wspierająca model domeny</h1>
+<p><strong>Źródło:</strong> Książka <em>Architecture Patterns with Python</em> (Harry Percival, Bob Gregory), wyd. O’Reilly. Wersja online: <a href="https://www.cosmicpython.com/book/preface.html">Cosmic Python</a> – całość dostępna na cosmicpython.com.</p>
+<p><strong>Temat:</strong> Jak strukturyzować aplikacje Pythona, żeby uniknąć „Big Ball of Mud”, wspierać TDD i DDD, oraz budować architekturę, w której logika biznesowa nie zależy od infrastruktury (baza, HTTP, framework).</p>
+<hr>
+<h2 id="lekcja-1-dlaczego-projekty-się-rozjeżdżają-big-ball-of-mud">Lekcja 1: Dlaczego projekty się rozjeżdżają? Big Ball of Mud</h2>
+<h3 id="zagadnienie">Zagadnienie</h3>
+<p>Na początku mamy grand ideas – kod będzie czysty i uporządkowany. Z czasem zbiera się cruft, edge case’y, a sensowna architektura zapada się jak przesiąknięty trifle. Dlaczego?</p>
+<hr>
+<h3 id="opis">Opis</h3>
+<h4 id="chaos-vs-porządek-perspektywa-naukowa">Chaos vs porządek (perspektywa naukowa)</h4>
+<p>Dla naukowców <strong>chaos</strong> charakteryzuje się <strong>jednorodnością</strong> (wszystko wygląda tak samo), a <strong>porządek</strong> – <strong>złożonością</strong> (różnice, granice, struktura).</p>
+<p><strong>Analogia ogrodu:</strong> Dobrze utrzymany ogród to system uporządkowany – ścieżki, płotki, grządki. Bez wysiłku ogród zdziczeje: chwasty zagłuszą rośliny, ścieżki znikną, wszystko stanie się jednolite – dzikie i niekontrolowane.</p>
+<p><strong>Software:</strong> Systemy programistyczne też dążą do chaosu. API handlery, które mają wiedzę domenową, wysyłają maile i logują. Klasy „logiki biznesowej”, które nie wykonują obliczeń, ale robią I/O. Wszystko zależy od wszystkiego – zmiana jednej części staje się ryzykowna. To ma swoją nazwę: <strong>Big Ball of Mud</strong> (antypattern).</p>
+<p><strong>Wniosek:</strong> Big ball of mud to naturalny stan oprogramowania, tak jak dzicz to naturalny stan ogrodu. Potrzebna jest energia i kierunek, żeby zapobiec zapadnięciu.</p>
+<hr>
+<h2 id="lekcja-2-enkapsulacja-i-abstrakcje">Lekcja 2: Enkapsulacja i abstrakcje</h2>
+<h3 id="zagadnienie-1">Zagadnienie</h3>
+<p>Enkapsulacja i abstrakcja to narzędzia, po które instynktownie sięgamy. Co oznaczają w kontekście architektury?</p>
+<hr>
+<h3 id="opis-1">Opis</h3>
+<p><strong>Enkapsulacja</strong> – upraszczanie zachowania i ukrywanie danych. <strong>Abstrakcja</strong> – obiekt lub funkcja, która realizuje dobrze zdefiniowane zadanie.</p>
+<p><strong>Przykład (z książki):</strong> Trzy sposoby wyszukania w API DuckDuckGo:</p>
+<ol>
+<li><code>urllib</code> – dużo kodu, niski poziom</li>
+<li><code>requests</code> – mniej kodu, wyższy poziom</li>
+<li><code>duckduckpy</code> – <code>duckduckpy.query('Sausages').related_topics</code> – najwyższy poziom, zadanie ma nazwę</li>
+</ol>
+<p>Im wyższa abstrakcja, tym kod jest bardziej ekspresywny, łatwiejszy do testowania i utrzymania.</p>
+<p><strong>W Pythonie:</strong> Można używać ABC (Abstract Base Classes), ale duck typing też wystarczy. Abstrakcja może oznaczać po prostu „publiczne API rzeczy, której używasz” – nazwa funkcji plus argumenty.</p>
+<hr>
+<h2 id="lekcja-3-architektura-warstwowa-i-dependency-inversion">Lekcja 3: Architektura warstwowa i Dependency Inversion</h2>
+<h3 id="zagadnienie-2">Zagadnienie</h3>
+<p>Jedna z najczęstszych architektur to trzy warstwy: Presentation → Business Logic → Database. Cosmic Python proponuje <strong>odwrócenie</strong> tej struktury – zasada DIP.</p>
+<hr>
+<h3 id="opis-2">Opis</h3>
+<h4 id="klasyczna-architektura-warstwowa">Klasyczna architektura warstwowa</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>+----------------------------------------------------+</span></span>
+<span class="line"><span>|                Presentation Layer                  |  (API, CLI, web)</span></span>
+<span class="line"><span>+----------------------------------------------------+</span></span>
+<span class="line"><span>                          |</span></span>
+<span class="line"><span>                          V</span></span>
+<span class="line"><span>+----------------------------------------------------+</span></span>
+<span class="line"><span>|                 Business Logic                     |</span></span>
+<span class="line"><span>+----------------------------------------------------+</span></span>
+<span class="line"><span>                          |</span></span>
+<span class="line"><span>                          V</span></span>
+<span class="line"><span>+----------------------------------------------------+</span></span>
+<span class="line"><span>|                  Database Layer                    |</span></span>
+<span class="line"><span>+----------------------------------------------------+</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Warstwy wyższe zależą od niższych. Problem: logika biznesowa zaczyna zależeć od szczegółów infrastruktury (ORM, framework, baza).</p>
+<h4 id="dependency-inversion-principle-dip">Dependency Inversion Principle (DIP)</h4>
+<blockquote>
+<p>Moduły wysokiego poziomu nie powinny zależeć od modułów niskiego poziomu. Oba powinny zależeć od abstrakcji.<br>
+Abstrakcje nie powinny zależeć od szczegółów. Szczegóły powinny zależeć od abstrakcji.</p>
+</blockquote>
+<p><strong>Moduły wysokiego poziomu</strong> – to, na czym organizacji naprawdę zależy (pacjenci, próby kliniczne, transakcje, zamówienia).<br>
+<strong>Moduły niskiego poziomu</strong> – to, na czym organizacji nie zależy (system plików, sockety, SMTP, HTTP, baza danych).</p>
+<p><strong>Cel:</strong> Logika biznesowa nie powinna zależeć od technicznych szczegółów. Oba poziomy używają abstrakcji. Dzięki temu można zmieniać je niezależnie – zmiana reguły biznesowej nie wymaga migracji bazy, a zmiana bazy nie wymaga zmian w logice.</p>
+<p><strong>Onion architecture / Ports and Adapters / Hexagonal:</strong> Wszystkie te nazwy sprowadzają się do DIP – domena w środku, zależności płyną do środka.</p>
+<hr>
+<h2 id="lekcja-4-domain-model--model-domeny">Lekcja 4: Domain Model – model domeny</h2>
+<h3 id="zagadnienie-3">Zagadnienie</h3>
+<p>Zamiast „warstwa logiki biznesowej” książka używa terminu <strong>domain model</strong>. Co to jest i po co?</p>
+<hr>
+<h3 id="opis-3">Opis</h3>
+<p><strong>Domena</strong> – problem, który próbujesz rozwiązać (np. alokacja zapasów, logistyka, płatności).<br>
+<strong>Model</strong> – mapa procesu lub zjawiska, która uchwyca użyteczną właściwość.</p>
+<p><strong>Domain model</strong> – mapa mentalna, którą mają właściciele biznesu. Język biznesowy (jargon) to skondensowane zrozumienie tej mapy. Gdy słyszymy nieznane słowa lub specyficzne użycie terminów – powinniśmy słuchać i kodować to doświadczenie w oprogramowaniu.</p>
+<p><strong>Wzorce z DDD (Domain-Driven Design):</strong></p>
+<ul>
+<li><strong>Entity</strong> – obiekt z tożsamością (np. <code>Batch</code> z referencją)</li>
+<li><strong>Value Object</strong> – obiekt bez tożsamości, niezmienny (np. <code>OrderLine</code> jako <code>@dataclass(frozen=True)</code>)</li>
+<li><strong>Domain Service</strong> – operacje, które nie należą do jednej encji</li>
+</ul>
+<p><strong>Przykład z książki:</strong> System alokacji zapasów. <code>Batch</code> (partia towaru), <code>OrderLine</code> (linia zamówienia). Reguły: alokujemy do batchy, zmniejszamy dostępną ilość, nie alokujemy dwa razy tej samej linii, preferujemy warehouse przed shipment, batchy sortujemy po ETA.</p>
+<p><strong>Klucz:</strong> Model domeny <strong>nie ma zewnętrznych zależności</strong>. Żadnego ORM, HTTP, bazy. Tylko czysty Python. Dzięki temu testy jednostkowe są szybkie i proste.</p>
+<hr>
+<h2 id="lekcja-5-repository-pattern--abstrakcja-nad-magazynem-danych">Lekcja 5: Repository Pattern – abstrakcja nad magazynem danych</h2>
+<h3 id="zagadnienie-4">Zagadnienie</h3>
+<p>Jak połączyć czysty model domeny z bazą danych, nie wplatając SQL/ORM do modelu?</p>
+<hr>
+<h3 id="opis-4">Opis</h3>
+<p><strong>Repository</strong> – upraszczająca abstrakcja nad magazynem danych. Siedzi między modelem domeny a bazą. Ukrywa złożoność bazy – model nie wie, czy dane są w PostgreSQL, SQLite czy CSV.</p>
+<p><strong>Przed:</strong> Endpoint ładuje batchy z bazy, wywołuje logikę, zapisuje. Wszystko pomieszane.<br>
+<strong>Po:</strong> Endpoint wywołuje <code>repository.get()</code>, dostaje obiekty domenowe, wywołuje logikę, <code>repository.add()</code> – zapis. Model nie zna bazy.</p>
+<p><strong>DIP w praktyce:</strong> Model domeny definiuje abstrakcję (np. <code>AbstractRepository</code>). Konkretna implementacja (<code>SqlAlchemyRepository</code>) zależy od tej abstrakcji. Warstwa wyższa (service) zależy od abstrakcji, nie od implementacji.</p>
+<p><strong>Korzyść:</strong> Testy jednostkowe używają <code>FakeRepository</code> (lista w pamięci) – zero bazy, zero I/O, milisekundy.</p>
+<hr>
+<h2 id="lekcja-6-service-layer--cienkie-punkty-wejścia">Lekcja 6: Service Layer – cienkie punkty wejścia</h2>
+<h3 id="zagadnienie-5">Zagadnienie</h3>
+<p>Gdzie umieścić orkiestrację – wywołanie repozytorium, wywołanie modelu, transakcje?</p>
+<hr>
+<h3 id="opis-5">Opis</h3>
+<p><strong>Service Layer</strong> – warstwa definiująca punkty wejścia do systemu i przechwytująca główne use case’y. Cienkie endpointy (Flask, FastAPI) – przyjmują request, wywołują serwis, zwracają response. Cała logika w serwisie.</p>
+<p><strong>Przepływ:</strong> API/CLI → Service Layer → Repository + Domain Model.</p>
+<p>Serwis koordynuje: ładuje dane przez repo, wywołuje metody modelu, zapisuje przez repo. Nie zawiera logiki biznesowej – ta jest w modelu. Serwis to „klej”.</p>
+<hr>
+<h2 id="lekcja-7-szablon-struktury-projektu-appendix-b">Lekcja 7: Szablon struktury projektu (Appendix B)</h2>
+<h3 id="zagadnienie-6">Zagadnienie</h3>
+<p>Jak wygląda konkretna struktura katalogów w projekcie opartym o Cosmic Python?</p>
+<hr>
+<h3 id="opis-6">Opis</h3>
+<p><strong>Źródło:</strong> <a href="https://www.cosmicpython.com/book/appendix_project_structure.html">Appendix B: A Template Project Structure</a></p>
+<h4 id="drzewo-projektu">Drzewo projektu</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>.</span></span>
+<span class="line"><span>├── Dockerfile</span></span>
+<span class="line"><span>├── Makefile</span></span>
+<span class="line"><span>├── README.md</span></span>
+<span class="line"><span>├── docker-compose.yml</span></span>
+<span class="line"><span>├── requirements.txt</span></span>
+<span class="line"><span>├── src</span></span>
+<span class="line"><span>│   ├── allocation                    # moduł aplikacji</span></span>
+<span class="line"><span>│   │   ├── __init__.py</span></span>
+<span class="line"><span>│   │   ├── adapters                  # infrastruktura (ORM, repo)</span></span>
+<span class="line"><span>│   │   │   ├── orm.py</span></span>
+<span class="line"><span>│   │   │   └── repository.py</span></span>
+<span class="line"><span>│   │   ├── config.py                 # konfiguracja z env</span></span>
+<span class="line"><span>│   │   ├── domain                    # model domeny</span></span>
+<span class="line"><span>│   │   │   └── model.py</span></span>
+<span class="line"><span>│   │   ├── entrypoints               # punkty wejścia (API, CLI)</span></span>
+<span class="line"><span>│   │   │   └── flask_app.py</span></span>
+<span class="line"><span>│   │   └── service_layer             # serwisy, use case'y</span></span>
+<span class="line"><span>│   │       └── services.py</span></span>
+<span class="line"><span>│   └── setup.py                      # pip install -e</span></span>
+<span class="line"><span>└── tests</span></span>
+<span class="line"><span>    ├── conftest.py</span></span>
+<span class="line"><span>    ├── pytest.ini</span></span>
+<span class="line"><span>    ├── unit                          # testy jednostkowe (model, serwis)</span></span>
+<span class="line"><span>    ├── integration                   # testy z bazą (repo, ORM)</span></span>
+<span class="line"><span>    └── e2e                           # testy API end-to-end</span></span>
+<span class="line"><span></span></span></code></pre>
+<h4 id="kluczowe-elementy">Kluczowe elementy</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Element</th><th>Rola</th></tr></thead><tbody><tr><td><strong>src/</strong></td><td>Cały kod aplikacji w pakiecie Pythona. <code>pip install -e .</code> – importy działają.</td></tr><tr><td><strong>domain/</strong></td><td>Model domeny – encje, value objects. Zero zależności od frameworka/bazy.</td></tr><tr><td><strong>adapters/</strong></td><td>Implementacje infrastruktury – ORM, Repository (SQLAlchemy, CSV itd.).</td></tr><tr><td><strong>service_layer/</strong></td><td>Use case’y – orkiestracja repo + model.</td></tr><tr><td><strong>entrypoints/</strong></td><td>API (Flask/FastAPI), CLI – cienkie, tylko wywołują serwis.</td></tr><tr><td><strong>config.py</strong></td><td>Konfiguracja z zmiennych środowiskowych (12-factor). Funkcje zamiast stałych – pozwala na override w testach.</td></tr><tr><td><strong>tests/unit</strong></td><td>Testy modelu i serwisów – mocki/fake repo, szybkie.</td></tr><tr><td><strong>tests/integration</strong></td><td>Testy repo, ORM – prawdziwa baza.</td></tr><tr><td><strong>tests/e2e</strong></td><td>Testy API – pełna ścieżka HTTP.</td></tr></tbody></table>
+<h4 id="konfiguracja-12-factor">Konfiguracja (12-factor)</h4>
+<p>Konfiguracja przez zmienne środowiskowe. <code>config.py</code> – funkcje <code>get_postgres_uri()</code>, <code>get_api_url()</code> z <code>os.environ.get()</code>, z domyślnymi wartościami dla lokalnego dev. W Docker – <code>environment</code> w docker-compose.</p>
+<h4 id="docker">Docker</h4>
+<ul>
+<li><code>docker-compose.yml</code> – serwisy (app, postgres), zmienne env, porty, volumes.</li>
+<li><code>Dockerfile</code> – Python, requirements, <code>pip install -e</code> dla src, CMD do uruchomienia.</li>
+<li>Makefile – <code>make build</code>, <code>make test</code> – wygodne komendy dla dev i CI.</li>
+</ul>
+<hr>
+<h2 id="lekcja-8-tdd-ddd-i-architektura-event-driven">Lekcja 8: TDD, DDD i architektura event-driven</h2>
+<h3 id="zagadnienie-7">Zagadnienie</h3>
+<p>Książka łączy trzy narzędzia do zarządzania złożonością. Co robi każde?</p>
+<hr>
+<h3 id="opis-7">Opis</h3>
+<p><strong>1. TDD (Test-Driven Development)</strong> – buduje poprawny kod, umożliwia refaktoryzację bez strachu przed regresją. Pytanie: jak maksymalnie wykorzystać testy? Dużo szybkich testów jednostkowych, minimum wolnych testów E2E.</p>
+<p><strong>2. DDD (Domain-Driven Design)</strong> – skupienie na modelu domeny biznesowej. Pytanie: jak upewnić się, że model nie jest obciążony infrastrukturą i pozostaje łatwy do zmiany?</p>
+<p><strong>3. Event-driven / reactive microservices</strong> – luźno powiązane serwisy integrowane przez wiadomości. Pytanie: jak połączyć to z Flask, Django, Celery?</p>
+<p><strong>Uwaga z książki:</strong> Większość wzorców (w tym event-driven) ma zastosowanie także w monolicie – nie tylko w mikroserwisach.</p>
+<hr>
+<h2 id="lekcja-9-jak-użyć-cursora-do-wygenerowania-optymalnej-struktury-projektu">Lekcja 9: Jak użyć Cursora do wygenerowania optymalnej struktury projektu</h2>
+<h3 id="zagadnienie-8">Zagadnienie</h3>
+<p>Masz opis projektu i wiedzę z Cosmic Python. Jak krok po kroku użyć Cursora (AI), żeby stworzyć optymalną strukturę katalogów i plików?</p>
+<hr>
+<h3 id="opis-8">Opis</h3>
+<h4 id="1-przygotuj-opis-projektu">1. Przygotuj opis projektu</h4>
+<p><strong>Co zawrzeć w opisie:</strong></p>
+<ul>
+<li><strong>Domena</strong> – co system robi (np. „system zarządzania CV i generowania podsumowań przez AI”)</li>
+<li><strong>Stack</strong> – FastAPI, PostgreSQL, Pydantic, pytest, itd.</li>
+<li><strong>Główne use case’y</strong> – np. „użytkownik tworzy CV, system zapisuje do bazy, generuje podsumowanie przez OpenAI, uploaduje plik do storage”</li>
+<li><strong>Zasoby zewnętrzne</strong> – baza, storage (S3/DO Spaces), API OpenAI</li>
+<li><strong>Ograniczenia</strong> – np. „bez ORM – używamy pypika / raw SQL” – jeśli są</li>
+</ul>
+<p><strong>Przykład:</strong> „API do zarządzania CV. Użytkownik tworzy resume, zapisujemy do PostgreSQL, generujemy podsumowanie przez OpenAI, uploadujemy plik do storage. FastAPI, Pydantic, pytest. Chcę strukturę zgodną z Cosmic Python – domain, adapters, service layer, entrypoints.”</p>
+<h4 id="2-zbierz-kontekst-do-promptu">2. Zbierz kontekst do promptu</h4>
+<p><strong>Pliki do @mention w Cursorze:</strong></p>
+<ul>
+<li><code>@Edukacja/18_struktura_projektow/notatki.md</code> – wymagania Cosmic Python, szablon struktury</li>
+<li><code>@Cursor/Przewodnik_Nowy_Projekt.md</code> – AGENTS.md, rules, skills (jeśli chcesz spójność z przewodnikiem)</li>
+<li><code>@Edukacja/AGENTS.md</code> – konwencje projektu (jeśli już istnieją)</li>
+</ul>
+<h4 id="3-prompt-do-cursora">3. Prompt do Cursora</h4>
+<p><strong>Przykładowy prompt:</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Na podstawie opisu projektu:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[Wklej tutaj opis – domena, stack, use case'y]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>oraz wymagań z @Edukacja/18_struktura_projektow/notatki.md (Cosmic Python – DIP, Domain Model, Repository, Service Layer, struktura z Appendix B) zaproponuj strukturę katalogów i plików dla tego projektu.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Uwzględnij:</span></span>
+<span class="line"><span>- domain/ – model domeny bez zależności od frameworka/bazy</span></span>
+<span class="line"><span>- adapters/ – repository, klienci zewnętrzni (storage, OpenAI)</span></span>
+<span class="line"><span>- service_layer/ – serwisy, use case'y</span></span>
+<span class="line"><span>- entrypoints/ – cienkie API (FastAPI)</span></span>
+<span class="line"><span>- config.py – konfiguracja z env (12-factor)</span></span>
+<span class="line"><span>- tests/ – unit, integration, e2e</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Dla każdego katalogu/pliku podaj krótkie uzasadnienie. Jeśli mój opis jest niekompletny – zapytaj o brakujące elementy.</span></span>
+<span class="line"><span></span></span></code></pre>
+<h4 id="4-weryfikacja-po-wygenerowaniu">4. Weryfikacja po wygenerowaniu</h4>
+<p><strong>Checklist:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Punkt</th><th>Sprawdzenie</th></tr></thead><tbody><tr><td>[ ] <strong>domain/</strong></td><td>Model domeny – encje, value objects. Zero importów z FastAPI, SQLAlchemy, bazy.</td></tr><tr><td>[ ] <strong>adapters/</strong></td><td>Repository (abstrakcja + implementacja), klienci (storage, OpenAI).</td></tr><tr><td>[ ] <strong>service_layer/</strong></td><td>Serwisy zależne od abstrakcji (AbstractRepository), nie od konkretnych implementacji.</td></tr><tr><td>[ ] <strong>entrypoints/</strong></td><td>Routery/API – tylko przyjmują request, wywołują serwis, zwracają response.</td></tr><tr><td>[ ] <strong>config</strong></td><td>Konfiguracja z env (pydantic-settings lub funkcje). Brak hardcoded secrets.</td></tr><tr><td>[ ] <strong>tests/unit</strong></td><td>Testy modelu i serwisów – mocki/fake repo, bez bazy.</td></tr><tr><td>[ ] <strong>tests/integration</strong></td><td>Testy repo – prawdziwa baza.</td></tr><tr><td>[ ] <strong>tests/e2e</strong></td><td>Testy API – pełna ścieżka HTTP.</td></tr></tbody></table>
+<h4 id="5-iteracja">5. Iteracja</h4>
+<p>Jeśli AI nie uwzględniło któregoś elementu – doprecyzuj: „Dodaj brakujący katalog X” lub „W modelu domeny nie powinno być importu z Y – przenieś to do adapters.”</p>
+<h4 id="6-połączenie-z-przewodnikiem-nowy-projekt">6. Połączenie z Przewodnikiem Nowy Projekt</h4>
+<p>Po wygenerowaniu struktury możesz dodać (z <code>@Cursor/Przewodnik_Nowy_Projekt.md</code>):</p>
+<ul>
+<li><code>.cursor/rules/</code> – security, no-regression, architecture</li>
+<li><code>AGENTS.md</code> – slim roadmapa</li>
+<li><code>docs/skills/</code> – new-feature, db-migration (jeśli używasz)</li>
+</ul>
+<hr>
+<h2 id="podsumowanie--co-zapamiętać">Podsumowanie – co zapamiętać</h2>
+<ol>
+<li><strong>Big Ball of Mud</strong> – naturalny stan chaosu. Potrzebna energia i kierunek (architektura, wzorce).</li>
+<li><strong>Enkapsulacja i abstrakcja</strong> – zadania w dobrze zdefiniowanych obiektach/funkcjach. Wyższy poziom = mniej szczegółów, łatwiej testować.</li>
+<li><strong>DIP</strong> – logika biznesowa nie zależy od infrastruktury. Oba poziomy zależą od abstrakcji.</li>
+<li><strong>Domain Model</strong> – czysty Python, zero ORM/HTTP. Entity, Value Object, Domain Service.</li>
+<li><strong>Repository</strong> – abstrakcja nad magazynem. Model nie zna bazy. Testy używają FakeRepository.</li>
+<li><strong>Service Layer</strong> – orkiestracja use case’ów. Cienkie entrypoints (API, CLI) wywołują serwis.</li>
+<li><strong>Struktura:</strong> <code>src/modul/</code> z <code>domain/</code>, <code>adapters/</code>, <code>service_layer/</code>, <code>entrypoints/</code>. <code>tests/</code> z <code>unit/</code>, <code>integration/</code>, <code>e2e/</code>.</li>
+<li><strong>Konfiguracja</strong> – 12-factor, env vars, <code>config.py</code> z funkcjami.</li>
+<li><strong>Cursor:</strong> Opis projektu + @notatki + prompt → struktura. Checklist po wygenerowaniu.</li>
+</ol>
+<hr>
+<h2 id="odniesienia">Odniesienia</h2>
+<ul>
+<li><strong>Analiza projektu imprv:</strong> <code>18_struktura_projektow/analiza_imprv.md</code> – porównanie struktury <code>imprv-masterclass-testing</code> z wymaganiami Cosmic Python.</li>
+<li><a href="https://www.cosmicpython.com/book/preface.html">Cosmic Python – Preface</a></li>
+<li><a href="https://www.cosmicpython.com/book/introduction.html">Cosmic Python – Introduction</a></li>
+<li><a href="https://www.cosmicpython.com/book/chapter_01_domain_model.html">Cosmic Python – Chapter 1: Domain Modeling</a></li>
+<li><a href="https://www.cosmicpython.com/book/chapter_02_repository.html">Cosmic Python – Chapter 2: Repository Pattern</a></li>
+<li><a href="https://www.cosmicpython.com/book/appendix_project_structure.html">Cosmic Python – Appendix B: A Template Project Structure</a></li>
+<li><a href="https://github.com/cosmicpython/code">Kod przykładowy na GitHub</a> – każdy rozdział ma własny branch</li>
+</ul> </article>  </main> <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'dark',
+        fontFamily: 'Syne, sans-serif'
+      });
+      
+      // Astro renderuje kod mermaid jako zwykłe bloki <pre class="language-mermaid"><code>...
+      // Musimy je znaleźć i przekształcić na divy z klasą mermaid, żeby skrypt je wyrenderował
+      document.addEventListener('DOMContentLoaded', () => {
+        const mermaidBlocks = document.querySelectorAll('pre.astro-code.mermaid, pre.language-mermaid');
+        
+        mermaidBlocks.forEach(block => {
+          const code = block.textContent;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code;
+          block.parentNode.replaceChild(div, block);
+        });
+        
+        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      });
+    </script> </body> </html> 

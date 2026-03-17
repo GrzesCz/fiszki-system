@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const notatki = await getCollection('notatki');
+  const fiszki = await getCollection('fiszki');
+
+  const categoriesSet = new Set<string>();
+
+  notatki.forEach(n => {
+    if (n.data.category) categoriesSet.add(n.data.category);
+  });
+
+  fiszki.forEach(f => {
+    if (f.data.category) categoriesSet.add(f.data.category);
+  });
+
+  return Array.from(categoriesSet).map((category) => {
+    return {
+      params: { kategoria: category.toLowerCase().replace(/\s+/g, '-') },
+      props: { categoryName: category, notatki, fiszki },
+    };
+  });
+}
+
+const { categoryName, notatki, fiszki } = Astro.props;
+
+const categoryNotes = notatki.filter(n => n.data.category === categoryName);
+const categoryFiszki = fiszki.filter(f => f.data.category === categoryName);
+---
+<BaseLayout title={categoryName} subtitle="Materiały do nauki w tej kategorii">
+  
+  {categoryNotes.length > 0 && (
+    <div class="category-section">
+      <h2 class="section-title">📖 Notatki i Mapy Myśli</h2>
+      <div class="tiles-grid sub-tiles">
+        {categoryNotes.map((note) => (
+          <a href={`/notatki/${note.slug}`} class="tile-link">
+            <h2>{note.data.title}</h2>
+            <p class="tile-subtitle">
+              {note.data.mindmap ? '🗺️ Mapa Myśli + Notatka' : '📄 Dokument MD'}
+            </p>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {categoryFiszki.length > 0 && (
+    <div class="category-section" style="margin-top: 3rem;">
+      <h2 class="section-title">🃏 Fiszki</h2>
+      <div class="tiles-grid sub-tiles">
+        {categoryFiszki.map((fiszka) => (
+          <a href={`/tematy/${fiszka.slug}`} class="tile-link">
+            <h2>{fiszka.data.title}</h2>
+            <p class="tile-subtitle">{fiszka.data.subtitle || 'Zestaw fiszek'}</p>
+            <p class="tile-count">{fiszka.data.cards.length} fiszek</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+</BaseLayout>
+
+<style>
+  .category-section {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+  }
+</style>

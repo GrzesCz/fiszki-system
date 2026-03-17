@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const notatki = await getCollection('notatki');
+const fiszki = await getCollection('fiszki');
+
+// Pobierz wszystkie unikalne kategorie
+const categoriesSet = new Set<string>();
+
+notatki.forEach(n => {
+  if (n.data.category) categoriesSet.add(n.data.category);
+});
+
+fiszki.forEach(f => {
+  if (f.data.category) categoriesSet.add(f.data.category);
+});
+
+const categories = Array.from(categoriesSet).sort();
+---
+<BaseLayout title="Centrum Wiedzy" subtitle="Wybierz grupę tematyczną">
+  <div class="tiles-grid project-tiles">
+    {categories.map((category) => {
+      const categoryNotes = notatki.filter(n => n.data.category === category);
+      const categoryFiszki = fiszki.filter(f => f.data.category === category);
+      
+      const slug = category.toLowerCase().replace(/\s+/g, '-');
+      
+      return (
+        <a href={`/kategoria/${slug}`} class="tile-link project-tile">
+          <h2>{category}</h2>
+          <p class="tile-subtitle">
+            {categoryNotes.length} notatek · {categoryFiszki.length} zestawów fiszek
+          </p>
+        </a>
+      );
+    })}
+  </div>
+</BaseLayout>

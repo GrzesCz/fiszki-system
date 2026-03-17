@@ -1,0 +1,55 @@
+{
+  "title": "Pytest - Techniki",
+  "subtitle": "parametrize · pytest.raises · GIVEN/WHEN/THEN",
+  "cards": [
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Co to jest @pytest.mark.parametrize i po co go używamy?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Dekorator pozwalający uruchomić <b>ten sam test z wieloma zestawami danych</b> – bez kopiowania kodu.\n\nZamiast pisać 5 identycznych funkcji testowych różniących się tylko wartościami, piszesz jedną funkcję i podajesz tabelkę z przypadkami. Pytest uruchamia ją osobno dla każdego wiersza.\n\n<b>Zasada:</b> Wiersze = przypadki testowe, kolumny = argumenty funkcji.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jak wygląda składnia @pytest.mark.parametrize?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>@pytest.mark.parametrize(\"a, b, expected\", [\n    (1, 2, 3),\n    (0, 0, 0),\n    (-1, 1, 0),\n])\ndef test_add(a, b, expected):\n    assert add(a, b) == expected</code>\n\nPytest uruchomi <code>test_add</code> trzy razy. W raporcie zobaczysz: <code>test_add[1-2-3]</code>, <code>test_add[0-0-0]</code>, <code>test_add[-1-1-0]</code>. Jeśli jeden wiersz obleje, pozostałe i tak się wykonają.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Kiedy szczególnie przydaje się parametrize?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Gdy chcesz przetestować różne <b>przypadki brzegowe (edge cases)</b> tej samej logiki, np.:\n• Walidacja – dla pustego stringa błąd, dla za długiego błąd, dla poprawnego OK.\n• Ten sam endpoint API z różnym body/query params.\n• Obliczenia matematyczne z różnymi wartościami wejściowymi.\n\n<b>Zasada DRY:</b> Zamiast trzech funkcji – jedna sparametryzowana. Zero duplikacji kodu.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Po co jest pytest.raises i kiedy go używamy?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Służy do testowania, że kod <b>poprawnie rzuca wyjątek</b> w sytuacji błędu.\n\nBez <code>pytest.raises</code>: jeśli funkcja wybucha, pytest pokazuje FAILED i traktuje to jako błąd testu.\nZ <code>pytest.raises</code>: mówimy \"oczekuję, że w tym bloku wyjątek <b>zostanie</b> rzucony\" – i to jest sukces!\n\n<b>Ważna różnica:</b>\n• <code>pytest.raises</code> – sprawdza, czy MÓJ KOD rzuca właściwy wyjątek.\n• <code>side_effect = Exception(...)</code> na mocku – symuluje awarię zewnętrznego systemu.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jak wygląda składnia pytest.raises?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>with pytest.raises(ValueError) as exc_info:\n    service.create_resume(user_id=None, resume=patch)\n\nassert str(exc_info.value) == \"user_id nie może być None\"</code>\n\n• Jeśli kod <b>NIE</b> rzuci wyjątku → test FAILED.\n• Jeśli rzuci → test PASSED, a <code>exc_info.value</code> to złapany wyjątek.\n• Możesz sprawdzić: typ (<code>exc_info.type</code>), komunikat (<code>str(exc_info.value)</code>).</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Czym jest wzorzec GIVEN / WHEN / THEN?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Konwencja struktury testu</b> (znana też jako AAA: Arrange-Act-Assert). Wywodzi się z BDD (Behavior-Driven Development).\n\nNie jest to składnia Pythona ani funkcja pytest – to po prostu <b>sposób układania kodu wewnątrz testu</b> za pomocą komentarzy. Jak przepis na zupę:\n• <b># GIVEN</b> – wyciągasz garnki i kroisz marchewkę (setup)\n• <b># WHEN</b> – włączasz palnik i gotujesz (akcja)\n• <b># THEN</b> – próbujesz i oceniasz, czy dobra (asercje)</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Jakie są 3 fazy wzorca GIVEN / WHEN / THEN i co w każdej robimy?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">1. <b>GIVEN</b> (Zakładając że...) – przygotowanie stanu świata przed testem: tworzenie mocków, wstawianie danych do bazy, budowanie obiektów. \"Mamy taki a taki stan\".\n\n2. <b>WHEN</b> (Kiedy...) – wywołanie testowanej funkcji lub endpointu. To jest <b>jedna kluczowa akcja</b>, którą chcemy przetestować.\n\n3. <b>THEN</b> (Wtedy...) – asercje: sprawdzasz wynik (<code>assert result.id == 123</code>) i ewentualnie czy mocki zostały wywołane (<code>assert_called_once</code>).</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Po co w ogóle stosować wzorzec GIVEN / WHEN / THEN?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">1. <b>Czytelność:</b> Od razu widać, gdzie jest setup, gdzie akcja, a gdzie weryfikacja. Znika chaos, gdy wywoływanie funkcji przeplata się z deklarowaniem zmiennych.\n\n2. <b>Żywa dokumentacja:</b> Test sam opisuje swoje zachowanie. Każdy, kto wejdzie w kod za pół roku, od razu wie, co jest testowane i jakie są oczekiwania.\n\n3. <b>Łatwiejsze debugowanie:</b> Gdy test wywali, od razu wiesz w której fazie coś poszło nie tak (setup? akcja? asercja?).</pre>"
+    }
+  ],
+  "category": "Pytest"
+}

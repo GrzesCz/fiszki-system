@@ -1,0 +1,211 @@
+{
+  "title": "Pytest - Fundamenty",
+  "subtitle": "Asercje · Rodzaje testów · ABC · Mockowanie",
+  "cards": [
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jak zainstalować pytest?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>pip install pytest</code></pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "W jakim domyślnym katalogu pytest szuka testów?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">W katalogu <b>tests/</b> (lub test/).</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jaką konwencję nazewnictwa muszą mieć pliki testowe, żeby pytest je znalazł?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>test_*.py</code> (np. <code>test_service.py</code>). Plik bez prefiksu <code>test_</code> zostanie zignorowany przez pytest.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jaką konwencję nazewnictwa muszą mieć funkcje testowe?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Muszą zaczynać się od <code>test_</code> (np. <code>def test_create_resume():</code>). Bez tego prefiksu pytest nie uzna funkcji za test.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Do czego w teście służy słowo kluczowe assert?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Do weryfikacji, czy warunek jest <b>prawdziwy</b>. Jeśli jest fałszywy, test nie przechodzi (FAILED).</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Co oznacza PASSED (zielony) i FAILED (czerwony) w raporcie pytest?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>PASSED</b> (zielony) = wszystkie asercje w teście były prawdziwe.\n<b>FAILED</b> (czerwony) = przynajmniej jedna asercja się nie spełniła.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jaką flagę dodać do polecenia pytest, aby zobaczyć szczegółowy raport z nazwami testów?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Flagę <b>-v</b> (verbose), np. <code>pytest -v</code>.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jak uruchomić tylko jeden konkretny plik testowy?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>pytest tests/unit/test_service.py</code> — podajesz ścieżkę do pliku jako argument.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jak uruchomić tylko testy, w których nazwie jest słowo \"create_resume\"?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>pytest -k \"create_resume\"</code> — flaga <code>-k</code> filtruje testy po nazwie.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Czym jest test jednostkowy (unit test)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Test <b>jednego komponentu w izolacji</b> od reszty aplikacji. Używa <b>mocków (atrap)</b> zamiast prawdziwej bazy, API czy sieci. Działa w <b>milisekundach</b>.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Czym jest test integracyjny?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Test <b>współpracy między modułami</b> — np. czy repozytorium faktycznie zapisuje dane do prawdziwej bazy. Używa <b>TestClient</b> (w pamięci, bez serwera HTTP). Wolniejszy niż unit (sekundy).</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Czym jest test E2E (End-to-End)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Test <b>całego przepływu od początku do końca</b> — uruchamia <b>prawdziwy serwer</b> (np. FastAPI na porcie 8000) i wysyła <b>prawdziwe requesty HTTP</b>. Najwolniejszy i najdroższy typ testu.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Jakie testy są na samym dole Piramidy Testów (jest ich najwięcej)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Testy jednostkowe (Unit)</b>.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Dlaczego E2E jest na górze piramidy testów (jest ich najmniej)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Bo są <b>wolne</b> (uruchamiają cały stos) i <b>drogie</b> (wymagają prawdziwego serwera, bazy, sieci). Nie zawsze jest to potrzebne — wystarczy ich niewiele, żeby sprawdzić kluczowe przepływy.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Czym test E2E (End-to-End) różni się od testu integracyjnego w kontekście serwera HTTP?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">E2E uruchamia <b>prawdziwy serwer</b> (np. na porcie 8000), a integracyjny używa <b>atrapy serwera w pamięci</b> (np. TestClient).</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Co warto testować, a czego NIE testować?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Testuj:</b> logikę biznesową, edge cases (pusta lista, ujemna liczba), obsługę błędów, naprawione bugi (testy regresyjne).\n<b>NIE testuj:</b> getterów/setterów, kodu frameworków (FastAPI, pytest), bibliotek zewnętrznych.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Co to jest test regresyjny?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Test napisany <b>po naprawieniu buga</b>, żeby upewnić się, że ten sam bug nigdy nie wróci. Naprawiłeś błąd? Napisz test, który by go złapał.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Co to jest klasa abstrakcyjna (ABC) w Pythonie?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Kontrakt</b> (umowa) — lista metod, które klasa dziedzicząca <b>MUSI</b> zaimplementować. Sama klasa abstrakcyjna nie może być instancjonowana (nie da się z niej stworzyć obiektu). Pochodzi z wbudowanego modułu <code>abc</code>.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jak zaimportować ABC w Pythonie?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>from abc import ABC, abstractmethod</code>\nModuł <code>abc</code> jest <b>wbudowany w Pythona</b> — nie wymaga <code>pip install</code>.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Czy można stworzyć obiekt (instancję) z klasy abstrakcyjnej?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Nie.</b> Klasa abstrakcyjna to tylko kontrakt (kartka z wymaganiami). Próba <code>obj = AbstractNotifier()</code> rzuci błędem <code>TypeError</code>. Musisz najpierw stworzyć klasę, która dziedziczy po ABC i implementuje wszystkie metody z <code>@abstractmethod</code>.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Co się stanie, jeśli klasa dziedzicząca po ABC nie zaimplementuje metody oznaczonej @abstractmethod?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Python rzuci <b>błąd natychmiast</b> (<code>TypeError</code>) przy próbie stworzenia obiektu takiej klasy. Nie musisz czekać na produkcję — dowiesz się od razu.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jakiego dekoratora musisz użyć, aby wymusić na klasie dziedziczącej po ABC stworzenie konkretnej metody?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>@abstractmethod</code></pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Jaka jest główna korzyść z wstrzykiwania do klasy kontraktu (ABC) zamiast konkretnej implementacji (np. EmailSender)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Pozwala to na <b>łatwą wymianę logiki</b> (np. na SmsSender) bez konieczności zmieniania kodu głównej klasy. Klocki LEGO zamiast przyspawania.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Kiedy warto stosować ABC (klasę abstrakcyjną) w kodzie?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Gdy <b>sposób realizacji może się zmieniać</b>, ale <b>cel pozostaje ten sam</b>.\nPrzykłady:\n• Powiadomienia: cel = „powiadom klienta”, sposób = Email / SMS / Push\n• Baza danych: cel = „zapisz CV”, sposób = PostgreSQL / MongoDB / SQLite</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Co to jest mock (atrapa) w testach?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Fałszywy obiekt</b>, który udaje prawdziwy (np. bazę danych, API, storage). Dane w nim nie są pobierane z prawdziwych źródeł. Używany w testach jednostkowych, żeby testować <b>tylko logikę kodu</b>, bez bazy, sieci i zewnętrznych serwisów.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Dlaczego używamy mocków w testach jednostkowych? (podaj 4 powody)",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">1. <b>Izolacja</b> — testujesz tylko logikę, nie bazę ani sieć.\n2. <b>Szybkość</b> — milisekundy zamiast sekund (brak połączenia z bazą).\n3. <b>Taniość</b> — brak kosztów API, bazy, storage.\n4. <b>Niezawodność</b> — test działa offline, nie pada przez awarię sieci.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Skąd wziąć mocki w Pythonie? Podaj dwie opcje.",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">1. <code>unittest.mock</code> — <b>wbudowane w Pythona</b> (bez pip install).\n2. <code>pytest-mock</code> — <b>plugin</b> (<code>pip install pytest-mock</code>), daje fixture <code>mocker</code> i automatycznie sprząta po teście.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Co daje plugin pytest-mock? Czym różni się od wbudowanego unittest.mock?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Daje fixture <code>mocker</code>, który:\n• Nie wymaga importu — wpisujesz go jako parametr testu i pytest sam go wstrzykuje.\n• <b>Automatycznie sprząta</b> po teście (cofanie patch'ów).\nPrzy <code>unittest.mock</code> musiałbyś sam wywoływać <code>patch.stop()</code>.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jaki jest pełny schemat tworzenia i używania mocka z pytest-mock?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>mock = mocker.Mock(spec=AbstractResumesRepository)</code>  ← tworzy atrapę\n<code>mock.create_resume.return_value = fake_resume</code>       ← programuje odpowiedź\n<code>mock.create_resume.assert_called_once()</code>             ← sprawdza użycie</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jakiej metody mocka użyjesz, aby zamiast prawdziwej funkcji zwrócił on podaną przez Ciebie wartość?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>.return_value</code>\nPrzykład: <code>mock.daj_marchewke.return_value = \"drewniana_marchewka\"</code>\nPrawdziwa funkcja się <b>nie wykonuje</b> — mock łapie wywołanie i od razu zwraca podaną wartość.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Do czego służy metoda mocka .side_effect?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Do symulowania <b>wybuchu błędu (wyjątku)</b>, zamiast zwracania wartości.\nPrzykład: <code>mock.upload.side_effect = Exception(\"S3 timeout\")</code>\nSłuży do testowania: „co się stanie, jak coś pójdzie nie tak?”</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Do czego służy metoda mocka .assert_called_once()?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Sprawdza, czy mock został wywołany <b>dokładnie raz</b>.\n• Wywołany 1 raz → test idzie dalej (OK).\n• Wywołany 0 razy lub 2+ razy → <code>AssertionError</code> (test FAILED).\nNie zwraca True/False — to asercja, jak <code>assert</code>.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Do czego służy metoda mocka .assert_called_with(arg1, arg2)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Sprawdza, czy mock został wywołany z <b>dokładnie tymi argumentami</b>.\nPrzykład: <code>mock.create_resume.assert_called_with(user_id=456, resume=patch)</code>\nJeśli argumenty się nie zgadzają → <code>AssertionError</code> (test FAILED).</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Dlaczego używanie samego mocker.Mock() bez atrybutu spec= jest niebezpieczne?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Ponieważ taki mock pozwala wywołać <b>dowolną, nieistniejącą metodę</b> (np. przez literówkę <code>mock.create_resum()</code>), dając fałszywie \"zielony\" test. Z <code>spec=AbstractClass</code> mock zna tylko metody z kontraktu — literówka rzuca <code>AttributeError</code> natychmiast.</pre>"
+    }
+  ],
+  "category": "Pytest"
+}
