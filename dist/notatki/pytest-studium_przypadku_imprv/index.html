@@ -1,0 +1,649 @@
+<!DOCTYPE html><html lang="pl"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"><title>Studium przypadku: projekt `imprv-masterclass-testing` — Fiszki EDU</title><link rel="stylesheet" href="../../_astro/index.CdCvzWCf.css">
+<style>.navigation-bar[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;display:flex;justify-content:space-between;margin-bottom:2rem}.btn-small[data-astro-cid-lw6yg7ny]{padding:.5rem 1rem;font-size:.8rem;text-decoration:none;display:inline-flex}.markdown-body[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;color:var(--text);font-family:Syne,sans-serif;line-height:1.7;font-size:1.05rem;padding-bottom:4rem}.markdown-body[data-astro-cid-lw6yg7ny] h1,.markdown-body[data-astro-cid-lw6yg7ny] h2,.markdown-body[data-astro-cid-lw6yg7ny] h3,.markdown-body[data-astro-cid-lw6yg7ny] h4{color:var(--text);font-weight:700;margin-top:2.5rem;margin-bottom:1rem;line-height:1.3}.markdown-body[data-astro-cid-lw6yg7ny] h1{font-size:2.2rem;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.markdown-body[data-astro-cid-lw6yg7ny] h2{font-size:1.8rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}.markdown-body[data-astro-cid-lw6yg7ny] h3{font-size:1.4rem;color:var(--accent3)}.markdown-body[data-astro-cid-lw6yg7ny] p{margin-bottom:1.2rem}.markdown-body[data-astro-cid-lw6yg7ny] ul,.markdown-body[data-astro-cid-lw6yg7ny] ol{margin-bottom:1.2rem;padding-left:1.5rem}.markdown-body[data-astro-cid-lw6yg7ny] li{margin-bottom:.5rem}.markdown-body[data-astro-cid-lw6yg7ny] strong,.markdown-body[data-astro-cid-lw6yg7ny] b{color:var(--accent3);font-weight:600}.markdown-body[data-astro-cid-lw6yg7ny] em,.markdown-body[data-astro-cid-lw6yg7ny] i{color:var(--yellow);font-style:normal;font-weight:600}.markdown-body[data-astro-cid-lw6yg7ny] blockquote{border-left:4px solid var(--accent);background:#7c6af70d;padding:1rem 1.5rem;margin:1.5rem 0;border-radius:0 8px 8px 0;font-style:italic;color:var(--text-dim)}.markdown-body[data-astro-cid-lw6yg7ny] a{color:var(--accent);text-decoration:underline;text-underline-offset:4px;transition:color .2s}.markdown-body[data-astro-cid-lw6yg7ny] a:hover{color:var(--accent2)}.markdown-body[data-astro-cid-lw6yg7ny] pre{background:var(--code-bg)!important;border:1px solid var(--border);border-radius:12px;padding:1.2rem;font-family:JetBrains Mono,monospace;font-size:.85rem;overflow-x:auto;margin:1.5rem 0}.markdown-body[data-astro-cid-lw6yg7ny] code{font-family:JetBrains Mono,monospace;font-size:.85em;background:var(--code-bg);padding:.2em .4em;border-radius:4px;border:1px solid var(--border);color:#e8e8f0}.markdown-body[data-astro-cid-lw6yg7ny] pre code{background:transparent;padding:0;border:none;font-size:1em}.markdown-body[data-astro-cid-lw6yg7ny] table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.95rem}.markdown-body[data-astro-cid-lw6yg7ny] th,.markdown-body[data-astro-cid-lw6yg7ny] td{border:1px solid var(--border);padding:.75rem 1rem;text-align:left}.markdown-body[data-astro-cid-lw6yg7ny] th{background:var(--surface2);font-weight:600;color:var(--accent3)}.markdown-body[data-astro-cid-lw6yg7ny] tr:nth-child(2n){background:#ffffff05}.mindmap-container[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;margin:0 auto 3rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center}.mindmap-container[data-astro-cid-lw6yg7ny] h3[data-astro-cid-lw6yg7ny]{color:var(--accent);margin-top:0;margin-bottom:1rem;font-family:Syne,sans-serif}.mindmap-image[data-astro-cid-lw6yg7ny]{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--border);transition:transform .2s,box-shadow .2s;cursor:zoom-in}.mindmap-image[data-astro-cid-lw6yg7ny]:hover{transform:scale(1.02);box-shadow:0 8px 24px #0000004d}.mindmap-hint[data-astro-cid-lw6yg7ny]{font-size:.8rem;color:var(--text-dim);margin-top:.5rem;margin-bottom:0}
+</style></head> <body> <header> <a href="../../index.html" class="header-tag header-home">← Strona główna</a> <h1>Studium przypadku: projekt `imprv-masterclass-testing`</h1> <div class="subtitle">Kategoria: Pytest</div> </header> <main>  <div class="navigation-bar" data-astro-cid-lw6yg7ny> <a href="../../kategoria/pytest/index.html" class="btn-secondary btn-small" data-astro-cid-lw6yg7ny>
+← Wróć do kategorii
+</a> </div> <article class="markdown-body" data-astro-cid-lw6yg7ny> <h1 id="studium-przypadku-projekt-imprv-masterclass-testing">Studium przypadku: projekt <code>imprv-masterclass-testing</code></h1>
+<p><strong>Źródło:</strong> Notatki z kursu Pytest, projekt <code>TESTOWANIE - PYTEST/imprv-masterclass-testing</code>.</p>
+<p>Ten plik zawiera <strong>szczegółowe przykłady kodu i omówienie</strong> profesjonalnej struktury testów. Użyj go jako “zeszytu ćwiczeń” – po przeczytaniu teorii w <code>notatki.md</code> wróć tutaj, żeby zobaczyć, jak te koncepcje wyglądają w prawdziwym projekcie.</p>
+<hr>
+<h2 id="spis-treści-linki-wewnętrzne">Spis treści (linki wewnętrzne)</h2>
+<ul>
+<li><a href="#struktura-test%C3%B3w">Struktura testów</a></li>
+<li><a href="#om%C3%B3wienie-plik%C3%B3w-__init__py-conftestpy-factorypy">Omówienie plików <strong>init</strong>.py, conftest.py, factory.py</a></li>
+<li><a href="#wzorzec-given--when--then">Wzorzec GIVEN / WHEN / THEN</a></li>
+<li><a href="#test-jednostkowy--mockowanie-wszystkich-zale%C5%BCno%C5%9Bci">Test jednostkowy – mockowanie</a></li>
+<li><a href="#test-integracyjny--prawdziwa-baza-danych">Test integracyjny – prawdziwa baza</a></li>
+</ul>
+<hr>
+<h2 id="struktura-testów">Struktura testów</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>tests/</span></span>
+<span class="line"><span>├── __init__.py          # Klasy bazowe: BaseTestCase, BaseUnitTestCase,</span></span>
+<span class="line"><span>│                        # BaseIntegrationTestCase, BaseE2ETestCase</span></span>
+<span class="line"><span>├── conftest.py          # Wspólne fixtures: config, bootstrap, db_client,</span></span>
+<span class="line"><span>│                        # db_factory, resumes_repository, fastapi_server, itd.</span></span>
+<span class="line"><span>├── factory.py           # DbFactory – clear(), create_user() do danych w bazie</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── unit/                # Testy jednostkowe (mocki, bez bazy i HTTP)</span></span>
+<span class="line"><span>│   └── contexts/</span></span>
+<span class="line"><span>│       └── resumes/</span></span>
+<span class="line"><span>│           └── test_service__create_resume.py   # BaseUnitTestCase</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── integration/         # Testy integracyjne (prawdziwa baza, repo, bez HTTP)</span></span>
+<span class="line"><span>│   └── contexts/</span></span>
+<span class="line"><span>│       └── resumes/</span></span>
+<span class="line"><span>│           └── test_resumes_repository__create_resume.py   # BaseIntegrationTestCase</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── e2e/                 # Testy end-to-end (request → serwer → baza/storage)</span></span>
+<span class="line"><span>│   └── contexts/</span></span>
+<span class="line"><span>│       └── resumes/</span></span>
+<span class="line"><span>│           └── test_resumes_api__create_resume.py   # BaseE2ETestCase</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>└── llm/                 # Testy z modelem LLM (Deepeval + YAML)</span></span>
+<span class="line"><span>    ├── __init__.py      # LLMIntegrationTestCase(BaseIntegrationTestCase)</span></span>
+<span class="line"><span>    └── contexts/</span></span>
+<span class="line"><span>        └── ml/</span></span>
+<span class="line"><span>            ├── test_ml_service__generate_resume_summary.py</span></span>
+<span class="line"><span>            └── _assets/</span></span>
+<span class="line"><span>                └── test_ml_service__generate_resume_summary.yaml</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="podsumowanie--co-jest-po-co">Podsumowanie – co jest po co ?</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Element</th><th>Rola</th></tr></thead><tbody><tr><td><strong><code>__init__.py</code></strong></td><td>Definiuje klasy bazowe testów i to, co każdy typ testów dostaje na <code>self</code>.</td></tr><tr><td><strong><code>conftest.py</code></strong></td><td>Wspólne fixtures pytest (config, baza, bootstrap, repo, serwer).</td></tr><tr><td><strong><code>factory.py</code></strong></td><td>Helper do czyszczenia bazy i tworzenia użytkowników (integration/e2e).</td></tr><tr><td><strong><code>unit/</code></strong></td><td>Testy jednej klasy na mockach (np. ResumesService).</td></tr><tr><td><strong><code>integration/</code></strong></td><td>Testy z prawdziwą bazą i repo (np. repozytorium resumes).</td></tr><tr><td><strong><code>e2e/</code></strong></td><td>Testy pełnej ścieżki przez HTTP (API → baza/storage).</td></tr><tr><td><strong><code>llm/</code></strong></td><td>Testy z LLM + zestawy przypadków z YAML.</td></tr></tbody></table>
+<p>Ścieżki <code>contexts/resumes/</code> i <code>contexts/ml/</code> w testach odzwierciedlają moduły w aplikacji (<code>masterclass_api.contexts.resumes</code>, <code>masterclass_api.contexts.ml</code>).</p>
+<h3 id="dlaczego-taki-podział-katalogów-unit--integration--e2e--llm">Dlaczego taki podział katalogów? (unit / integration / e2e / llm)</h3>
+<p>Struktura ta wynika z <strong>dobrych praktyk i doświadczenia</strong>. Daje dwie główne korzyści:</p>
+<ol>
+<li><strong>Przejrzystość</strong> – wiadomo, gdzie są jakie testy (np. unit w <code>unit/</code>, e2e w <code>e2e/</code>), zamiast mieszania wszystkiego w jednym miejscu.</li>
+<li><strong>Selektywne uruchamianie</strong> – możliwość uruchamiania tylko wybranych typów testów (np. szybkie unit przed commitem, pełne na CI).</li>
+</ol>
+<p><strong>Przykładowy scenariusz w CI/CD:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Moment</th><th>Co uruchomić</th><th>Komenda</th></tr></thead><tbody><tr><td>Przed każdym commitem (lokalnie)</td><td>Tylko unit – szybkie</td><td><code>pytest tests/unit</code></td></tr><tr><td>Przy pushu na CI</td><td>unit → integration → e2e</td><td><code>pytest tests/unit</code> → <code>pytest tests/integration</code> → <code>pytest tests/e2e</code></td></tr><tr><td>Cyklicznie (np. codziennie rano)</td><td>Testy LLM (wolne, kosztowne)</td><td><code>pytest tests/llm</code> (np. jako job w GitHub Actions)</td></tr></tbody></table>
+<p><strong>Alternatywa:</strong> zamiast osobnego katalogu <code>llm/</code> można użyć markera: <code>@pytest.mark.llm</code> na klasie testowej i uruchamiać <code>pytest -m "llm" tests</code>. Podział na katalogi to jeden z popularnych sposobów – czytelność jest głównym celem, selektywne uruchamianie jest efektem ubocznym.</p>
+<hr>
+<h2 id="omówienie-plików-__init__py-conftestpy-factorypy">Omówienie plików <code>__init__.py</code>, conftest.py, factory.py</h2>
+<h3 id="testsinitpy--wszystkie-klasy-bazowe">tests/<strong>init</strong>.py – wszystkie klasy bazowe</h3>
+<p>No to weźmy te klasy bazowe. Po co one w ogóle są? Żeby nie powtarzać tego samego w każdym pliku testowym – jedna szafa z narzędziami, każdy typ testów bierze z niej to, czego potrzebuje.</p>
+<p><strong>Co to jest klasa bazowa?</strong></p>
+<p>Klasa, po której dziedziczą konkretne testy. Daje wspólne zachowanie (setUp, fixture’y, atrybuty na <code>self</code>) bez powtarzania kodu w każdym pliku.</p>
+<p><strong>Dziedziczenie:</strong> <code>class Dziecko(Baza)</code> – dziecko dostaje wszystko, co ma baza. Widzicie? Nie kopiujecie – dziedziczycie.</p>
+<p><strong>Hierarchia (kto od kogo):</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>IsolatedAsyncioTestCase   (unittest, biblioteka standardowa Pythona)</span></span>
+<span class="line"><span>         ↑</span></span>
+<span class="line"><span>BaseTestCase              (wspólny korzeń)</span></span>
+<span class="line"><span>         ↑</span></span>
+<span class="line"><span>    ┌────┴────┬─────────────────────┐</span></span>
+<span class="line"><span>    ↑         ↑                     ↑</span></span>
+<span class="line"><span>BaseUnitTestCase   BaseIntegrationTestCase</span></span>
+<span class="line"><span>    ↑                   ↑</span></span>
+<span class="line"><span>[testy w unit/]         ↑</span></span>
+<span class="line"><span>                 BaseE2ETestCase</span></span>
+<span class="line"><span>                       ↑</span></span>
+<span class="line"><span>                 [testy w e2e/]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>                 BaseIntegrationTestCase</span></span>
+<span class="line"><span>                       ↑</span></span>
+<span class="line"><span>                 LLMIntegrationTestCase  (w tests/llm/__init__.py)</span></span>
+<span class="line"><span>                       ↑</span></span>
+<span class="line"><span>                 [testy w llm/]</span></span>
+<span class="line"><span></span></span></code></pre>
+<hr>
+<p><strong>1. BaseTestCase</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> BaseTestCase</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">IsolatedAsyncioTestCase</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> setUp</span><span style="color:#E1E4E8">(self) -> </span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">        # Ustawia wspólny punkt w czasie dla całego testu (np. przy sprawdzaniu dat).</span></span>
+<span class="line"><span style="color:#6A737D">        # Wywoływane automatycznie przed każdą metodą testową (konwencja unittest).</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.now </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> datetime.now(timezone.utc)</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li>
+<p><strong>Z czego dziedziczy:</strong> <code>unittest.IsolatedAsyncioTestCase</code> (z modułu <code>unittest</code> – wbudowany w Pythona od 3.8).</p>
+</li>
+<li>
+<p><strong>Po co IsolatedAsyncioTestCase?</strong></p>
+<p>FastAPI i wiele komponentów w imprv używa <strong>async/await</strong> (<code>async def</code>).</p>
+<p>Gdy test wywołuje taki kod, musi sam być async – np. <code>async def test_create_resume_success(self)</code>.</p>
+<p>Zwykły <code>unittest.TestCase</code> nie umie uruchomić funkcji async – potrzebna jest <strong>pętla zdarzeń (event loop)</strong>. <code>IsolatedAsyncioTestCase</code> dostarcza tę pętlę: przed każdym testem tworzy nową, uruchamia w niej <code>await</code>, po teście sprząta. <em>Isolated</em> = każdy test ma własną pętlę – testy się nie mieszają. Dzięki temu BaseTestCase działa zarówno z testami sync (<code>def test_...</code>), jak i async (<code>async def test_...</code>). W imprv np. <code>test_create_resume_success</code> jest async – bo repository czy serwis używają await.</p>
+</li>
+<li>
+<p><strong>Potrzebny w testach:</strong> unit, integration, e2e, llm – wszyscy dziedziczą z BaseTestCase (bezpośrednio lub pośrednio).</p>
+</li>
+<li>
+<p><strong>Do czego służy:</strong> Wspólny korzeń dla wszystkich testów (unit, integration, e2e). Jedno miejsce na zachowanie wspólne dla każdego typu.</p>
+</li>
+<li>
+<p><strong>Co robi:</strong> Definiuje tylko <code>setUp(self)</code> – wywoływane automatycznie przed każdym testem (konwencja unittest). Ustawia <code>self.now = datetime.now(timezone.utc)</code> – wspólny punkt w czasie dla całego testu (np. przy sprawdzaniu dat). <em>setUp:</em> metoda z unittest – framework wywołuje ją przed każdą metodą testową. W testach unitowych często nieużywane.</p>
+</li>
+<li>
+<p><strong>Na <code>self</code>:</strong> <code>self.now</code>.</p>
+</li>
+</ul>
+<p><em>W skrócie:</em> Fundament – wszyscy stoją na tym samym. Jak wspólny dach nad całą budową testów.</p>
+<hr>
+<p><strong>2. BaseUnitTestCase</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> BaseUnitTestCase</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BaseTestCase</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#B392F0">    @pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"function"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">autouse</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> init_fixtures</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">        self,</span></span>
+<span class="line"><span style="color:#E1E4E8">        config: Config,</span></span>
+<span class="line"><span style="color:#E1E4E8">        mocker: MockerFixture,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ) -> </span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">        # autouse=True – pytest wywołuje automatycznie przed każdym testem.</span></span>
+<span class="line"><span style="color:#6A737D">        # Wstrzykuje mocker i config na self – testy mają self.mocker, self.config.</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.mocker </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> mocker</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.config </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> config</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li>
+<p><strong>Z czego dziedziczy:</strong> <code>BaseTestCase</code>.</p>
+</li>
+<li>
+<p><strong>Po co BaseUnitTestCase?</strong></p>
+<p>Test jednostkowy ma sprawdzać <strong>tylko logikę jednego komponentu</strong> – np. czy <code>ResumesService</code> poprawnie wywołuje repository, storage i ML, czy zwraca dobry wynik. Nie ma testować bazy, sieci ani OpenAI – to byłby test integracyjny. Dlatego wstrzykujecie <strong>mocki</strong> (atrapy): <code>mock_repository.create_resume.return_value = fake_resume</code>. Serwis myśli, że dostał prawdziwe obiekty – a to tylko lalki. Test trwa milisekundy, nie potrzebuje PostgreSQL ani internetu. <code>init_fixtures</code> daje tylko <code>mocker</code> (do tworzenia atrap) i <code>config</code> – nic więcej. Po co <code>db_client</code> czy <code>TestClient</code>? Testujecie funkcję Pythona, nie endpoint HTTP. <em>autouse=True</em> – fixture uruchamiany automatycznie przed każdym testem, nie wpisujecie go w parametrach.</p>
+</li>
+<li>
+<p><strong>Potrzebny w testach:</strong> tylko <strong>unit</strong> (np. <code>test_service__create_resume.py</code>).</p>
+</li>
+<li>
+<p><strong>Do czego służy:</strong> Baza dla testów <strong>jednostkowych</strong> (katalog <code>tests/unit/</code>). Testujesz jedną klasę (np. <code>ResumesService</code>) w izolacji – wszystko poza nią to mocki. Bez bazy, bez HTTP.</p>
+</li>
+<li>
+<p><strong>Co robi:</strong></p>
+<p>Ma fixture <code>init_fixtures</code> oznaczony dekoratorem <code>@pytest.fixture(scope="function", autouse=True)</code>. <code>autouse=True</code> sprawia, że pytest wywołuje ten fixture <strong>automatycznie</strong> przed każdym testem – nie trzeba go wpisywać w parametrach metody testowej.</p>
+<p>Fixture przyjmuje <code>config</code> (z <code>conftest.py</code>) i <code>mocker</code> (z pluginu <code>pytest-mock</code>). Pytest wstrzykuje te obiekty jako argumenty, a <code>init_fixtures</code> zapisuje je na <code>self</code>: <code>self.mocker = mocker</code>, <code>self.config = config</code>. Dzięki temu w każdej metodzie testowej (np. <code>def test_create_resume__success(self)</code>) masz dostęp do <code>self.mocker</code> i <code>self.config</code> bez ręcznego przekazywania – fixture wykonał się wcześniej i przypisał je do instancji testu. <em>Scope=“function”</em> oznacza, że fixture jest tworzony na nowo przed każdym testem – każdy test dostaje świeże obiekty.</p>
+</li>
+<li>
+<p><strong>Na <code>self</code>:</strong> <code>self.mocker</code> (z pytest-mock – do tworzenia atrap/mocków, np. <code>self.mocker.Mock(spec=...)</code>), <code>self.config</code> (z conftest). Plus <code>self.now</code> z BaseTestCase.</p>
+</li>
+</ul>
+<p><em>W skrócie:</em> Unit nie potrzebuje bazy ani HTTP – tylko mocker (atrapy) i config. Testujesz jeden klocek, reszta to atrapy. Szybko, tanio, w izolacji.</p>
+<hr>
+<p><strong>3. BaseIntegrationTestCase</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> BaseIntegrationTestCase</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BaseTestCase</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#B392F0">    @pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"function"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">autouse</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> init_fixtures</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">        self,</span></span>
+<span class="line"><span style="color:#E1E4E8">        mocker: MockerFixture,</span></span>
+<span class="line"><span style="color:#E1E4E8">        db_factory: DbFactory,</span></span>
+<span class="line"><span style="color:#E1E4E8">        config: Config,</span></span>
+<span class="line"><span style="color:#E1E4E8">        db_client: DBClient,</span></span>
+<span class="line"><span style="color:#E1E4E8">        data_do_space_client,</span></span>
+<span class="line"><span style="color:#E1E4E8">        resumes_repository: AbstractResumesRepository,</span></span>
+<span class="line"><span style="color:#E1E4E8">        ml_service: AbstractMLService,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ) -> </span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">        # Wstrzykuje fixtures z conftest na self – prawdziwa baza, repo, serwisy.</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.mocker </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> mocker</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.config </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> config</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.db_client </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> db_client</span></span>
+<span class="line"><span style="color:#6A737D">        # ... (reszta przypisań na self)</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> setUp</span><span style="color:#E1E4E8">(self) -> </span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">        # Przed każdym testem: czysta baza, sprzątanie storage, TestClient w pamięci.</span></span>
+<span class="line"><span style="color:#79B8FF">        super</span><span style="color:#E1E4E8">().setUp()</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.db_factory.clear()</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.clear_test_files_from_do_spaces()</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.client </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> TestClient(</span><span style="color:#FFAB70">app</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">api)</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li>
+<p><strong>Z czego dziedziczy:</strong> <code>BaseTestCase</code>.</p>
+</li>
+<li>
+<p><strong>Po co BaseIntegrationTestCase?</strong></p>
+<p>Test jednostkowy sprawdza serwis na mockach – ale czy <code>ResumesRepository</code> faktycznie zapisuje do bazy? Czy SQL jest poprawny? Czy transakcje działają? Tego mock nie pokaże. Test integracyjny łączy <strong>prawdziwe komponenty</strong>: repository + baza PostgreSQL + storage (DO Spaces).</p>
+<p>Wywołujecie <code>self.resumes_repository.create_resume(...)</code> – to prawdziwy INSERT. Potem <code>SELECT</code> i sprawdzacie, czy dane są w tabeli. <em>Bez żywego serwera HTTP</em> – nie startujecie uvicorn na porcie 8000. Zamiast tego <code>TestClient(app=api)</code> – FastAPI w pamięci, requesty idą „wewnętrznie”, bez sieci. Szybsze niż e2e, ale sprawdza realną współpracę repo ↔ baza ↔ storage. <code>setUp</code> przed każdym testem: <code>db_factory.clear()</code> (pusta tabela), <code>clear_test_files_from_do_spaces()</code> (sprzątanie plików), <code>TestClient</code> – świeży stan, zero śladów po poprzednim teście.</p>
+</li>
+<li>
+<p><strong>Potrzebny w testach:</strong> <strong>integration</strong> (np. <code>test_resumes_repository__create_resume.py</code>), <strong>e2e</strong> (dziedziczy BaseE2ETestCase → BaseIntegrationTestCase), <strong>llm</strong> (LLMIntegrationTestCase dziedziczy z BaseIntegrationTestCase).</p>
+</li>
+<li>
+<p><strong>Do czego służy:</strong> Baza dla testów <strong>integracyjnych</strong> (katalog <code>tests/integration/</code>). Prawdziwa baza, prawdziwe repozytorium, bez uruchamiania serwera HTTP. Sprawdza, czy komponenty (repo, baza) ze sobą działają.</p>
+</li>
+<li>
+<p><strong>Co robi:</strong> Fixture <code>init_fixtures</code> wstrzykuje na <code>self</code>: mocker, config, db_client, db_factory, resumes_repository, ml_service, data_do_space_client. Metoda <code>setUp()</code> wywołuje <code>super().setUp()</code>, czyści tabelę (<code>db_factory.clear()</code>), sprząta pliki w DO Spaces, tworzy <code>self.client = TestClient(app=api)</code>. Dodatkowe metody: <code>clear_test_files_from_do_spaces()</code>, <code>generate_random_test_path()</code>, <code>cleanup_test_file()</code>.</p>
+</li>
+<li>
+<p><strong>Na <code>self</code>:</strong> <code>self.mocker</code>, <code>self.config</code>, <code>self.db_client</code>, <code>self.db_factory</code>, <code>self.resumes_repository</code>, <code>self.ml_service</code>, <code>self.data_do_space_client</code>, <code>self.client</code> (TestClient). Plus <code>self.now</code> z BaseTestCase.</p>
+</li>
+<li>
+<p><strong>Po co mocker w Integration?</strong> W imprv testy integration, e2e i llm <strong>nie używają</strong> mocków – mają prawdziwą bazę, repo, storage. Mocker jest w <code>init_fixtures</code> prawdopodobnie dla spójności (wszystkie klasy bazowe mają podobną strukturę) albo na wypadek edge case: np. test integracyjny z prawdziwą bazą, ale zmockowanym zewnętrznym API (OpenAI, płatności). W typowym teście integracyjnym <code>self.mocker</code> nie jest używany – można go traktować jako opcjonalny.</p>
+</li>
+</ul>
+<p><em>W skrócie:</em> Prawdziwa baza, prawdziwe repo, prawdziwy storage. TestClient w pamięci – bez portu 8000. Sprawdzacie, czy klocki ze sobą gadają. Wolniej niż unit, szybciej niż e2e.</p>
+<hr>
+<p><strong>4. BaseE2ETestCase</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> BaseE2ETestCase</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BaseIntegrationTestCase</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#B392F0">    @pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"function"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">autouse</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> init_e2e_fixtures</span><span style="color:#E1E4E8">(self, fastapi_server) -> </span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">        # Wstrzykuje żywy serwer (localhost:8000) – testy wysyłają prawdziwe HTTP.</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.fastapi_server </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> fastapi_server</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> url</span><span style="color:#E1E4E8">(self, path: </span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">) -> </span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">        # Buduje pełny URL do API – np. url("/resumes") → http://localhost:8000/api/v0/resumes</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#F97583"> f</span><span style="color:#9ECBFF">"http://localhost:8000/api/v0</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">path</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#6A737D">    # api_post(), api_get(), api_put(), api_patch(), api_delete() ...</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li>
+<p><strong>Z czego dziedziczy:</strong> <code>BaseIntegrationTestCase</code> (więc ma wszystko z Integration).</p>
+</li>
+<li>
+<p><strong>Po co BaseE2ETestCase?</strong></p>
+<p>Test integracyjny wywołuje repository czy serwis <strong>bezpośrednio</strong> – nie przez HTTP. Ale w produkcji użytkownik wysyła POST do <code>/api/v0/resumes</code>.</p>
+<p><strong>Czy router poprawnie parsuje body?</strong>
+<strong>Czy middleware działa?</strong>
+<strong>Czy autoryzacja (Bearer token) przechodzi?</strong></p>
+<p>Tego integration nie sprawdzi. E2E uruchamia <strong>żywy serwer</strong> (uvicorn na localhost:8000) i wysyła <strong>prawdziwe requesty HTTP</strong> – jak w Postmanie. Cała ścieżka: sieć → FastAPI → router → serwis → repo → baza → storage. Fixture <code>fastapi_server</code> startuje serwer w osobnym procesie (conftest), <code>init_e2e_fixtures</code> wstrzykuje go na <code>self</code>.</p>
+<p>Metody <code>api_post()</code>, <code>api_get()</code> – helpery z nagłówkiem Authorization (token z <code>get_auth_token</code>) i URL przez <code>url(path)</code>. Najwolniejszy typ testów, ale jedyny, który sprawdza cały stos.</p>
+</li>
+<li>
+<p><strong>Potrzebny w testach:</strong> tylko <strong>e2e</strong> (np. <code>test_resumes_api__create_resume.py</code>).</p>
+</li>
+<li>
+<p><strong>Do czego służy:</strong> Baza dla testów <strong>end-to-end</strong> (katalog <code>tests/e2e/</code>). Pełna ścieżka: wysyłanie prawdziwych requestów HTTP do działającego serwera (localhost:8000), odpowiedź, baza, storage.</p>
+</li>
+<li>
+<p><strong>Co robi:</strong> Fixture <code>init_e2e_fixtures</code> wstrzykuje <code>fastapi_server</code> (żywy serwer). Metody pomocnicze: <code>url(path)</code> – pełny URL do API, <code>get_auth_token(user_id)</code> – token do nagłówka Authorization, <code>api_post()</code>, <code>api_get()</code>, <code>api_put()</code>, <code>api_patch()</code>, <code>api_delete()</code> – wysyłanie requestów z autoryzacją. <em>get_auth_token:</em> koduje user_id w base64 – uproszczona autoryzacja w testach (Bearer token).</p>
+</li>
+<li>
+<p><strong>Na <code>self</code>:</strong> Wszystko z BaseIntegrationTestCase plus <code>self.fastapi_server</code> (z fixture’a). Używa się głównie <code>self.api_post()</code>, <code>self.api_get()</code> itd. oraz <code>self.db_factory</code>, <code>self.url()</code>.</p>
+</li>
+</ul>
+<p><em>W skrócie:</em> Żywy serwer, prawdziwe HTTP, cały stos. Jak użytkownik – wysyłasz request, sprawdzasz odpowiedź i dane w bazie. Najwolniejsze, ale najpełniejsze.</p>
+<hr>
+<p><strong>5. LLMIntegrationTestCase</strong> (w pliku <code>tests/llm/__init__.py</code>, nie w <code>tests/__init__.py</code>)</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> LLMIntegrationTestCase</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BaseIntegrationTestCase</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#B392F0">    @</span><span style="color:#79B8FF">staticmethod</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> load_test_cases</span><span style="color:#E1E4E8">(current_file: Path, file_name: </span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">) -> list[</span><span style="color:#79B8FF">dict</span><span style="color:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#6A737D">        # Ładuje przypadki testowe z pliku YAML w _assets/ – nie w kodzie.</span></span>
+<span class="line"><span style="color:#79B8FF">        ...</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> model_for_evaluations</span><span style="color:#E1E4E8">(self, model_name: </span><span style="color:#79B8FF">str</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "gpt-4o-mini"</span><span style="color:#E1E4E8">) -> DeepEvalBaseLLM:</span></span>
+<span class="line"><span style="color:#6A737D">        # Zwraca model LLM do ewaluacji (Deepeval) – np. GPT do generowania podsumowań.</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> GPTModel(</span><span style="color:#FFAB70">model</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">model_name, </span><span style="color:#FFAB70">api_key</span><span style="color:#F97583">=</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.config.openai.api_key)</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Z czego dziedziczy:</strong> <code>BaseIntegrationTestCase</code>.</li>
+<li><strong>Po co LLMIntegrationTestCase?</strong> Testowanie modeli AI (LLM) jest inne niż zwykła logika: wynik z GPT nie jest deterministyczny – ten sam prompt może dać różne odpowiedzi. Zamiast <code>assert result == "dokładnie ten tekst"</code> używa się <strong>ewaluacji semantycznej</strong> – czy odpowiedź jest sensowna, czy spełnia kryteria. <strong>Deepeval</strong> to biblioteka do testów LLM: definiujecie przypadki (input → oczekiwane kryteria) i Deepeval ocenia output modelu. W imprv przypadki są w plikach <strong>YAML</strong> w <code>_assets/</code> – nie w kodzie. Łatwo dodać nowy przypadek bez pisania Pythona. <code>load_test_cases()</code> ładuje te pliki. <code>model_for_evaluations()</code> zwraca model (np. GPT-4o-mini) skonfigurowany pod Deepeval – test wywołuje <code>ml_service.generate_resume_summary()</code>, Deepeval ocenia jakość. Dziedziczy z BaseIntegrationTestCase – ma prawdziwą bazę, prawdziwy ML service, prawdziwe wywołania do OpenAI. Wolne (API OpenAI kosztuje), często uruchamiane osobno (<code>@pytest.mark.llm</code>).</li>
+<li><strong>Potrzebny w testach:</strong> tylko <strong>llm</strong> (np. <code>test_ml_service__generate_resume_summary.py</code>).</li>
+<li><strong>Do czego służy:</strong> Testy z modelem LLM (Deepeval) – np. generowanie podsumowań CV. Korzysta z zestawów przypadków w plikach YAML w <code>_assets/</code>.</li>
+<li><strong>Co robi:</strong> <code>load_test_cases(current_file, file_name)</code> – ładuje przypadki z YAML. <code>model_for_evaluations()</code> – zwraca model do ewaluacji (np. GPT). Konkretne testy w <code>tests/llm/contexts/ml/</code>.</li>
+</ul>
+<p><em>W skrócie:</em> Integration + LLM + Deepeval. Przypadki w YAML, ewaluacja semantyczna zamiast exact match. Wolne, często z markerem <code>@pytest.mark.llm</code>.</p>
+<hr>
+<h3 id="testsconftestpy--fixtures-pytest">tests/conftest.py – fixtures pytest</h3>
+<p>Pytest ładuje ten plik <strong>automatycznie</strong> – nie trzeba go importować. To jak szafa na początku korytarza: każdy test może z niej skorzystać, podając nazwę fixture’a w parametrze. Wszystkie „przygotowacze” w jednym miejscu.</p>
+<p><strong>W imprv</strong> w <code>tests/conftest.py</code> są m.in.:</p>
+<ol>
+<li><code>config</code> (konfiguracja testowa),</li>
+<li><code>bootstrap</code> (composition root – baza, repo, serwisy),</li>
+<li><code>db_client</code>, <code>db_factory</code> (helper do danych w bazie),</li>
+<li><code>resumes_repository</code>,
+5 <code>fastapi_server</code> (dla e2e), <code>data_do_space_client</code>, <code>openai_client</code>, <code>ml_service</code>. Testy unit, integration, e2e i llm biorą stąd to, czego potrzebują (przez <code>init_fixtures</code> w klasach bazowych albo bezpośrednio).</li>
+</ol>
+<p><strong>Hierarchia zależności (kto od kogo):</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>config</span></span>
+<span class="line"><span>  ↑</span></span>
+<span class="line"><span>bootstrap(config)</span></span>
+<span class="line"><span>  ↑</span></span>
+<span class="line"><span>db_client(bootstrap)     data_do_space_client(bootstrap)    openai_client(bootstrap)    ml_service(bootstrap)</span></span>
+<span class="line"><span>  ↑</span></span>
+<span class="line"><span>db_factory(db_client)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>resumes_repository(bootstrap)   ← scope="function" (osobno)</span></span>
+<span class="line"><span>fastapi_server                  ← osobno, dla e2e</span></span>
+<span class="line"><span></span></span></code></pre>
+<hr>
+<p><strong>1. config</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#B392F0">@pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"session"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> config</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#6A737D">    # Konfiguracja testowa – debug=True (szczegółowe błędy). Session = raz na całą sesję.</span></span>
+<span class="line"><span style="color:#E1E4E8">    config </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Config()</span></span>
+<span class="line"><span style="color:#E1E4E8">    config.debug </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> True</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> config</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Tworzy obiekt <code>Config</code> (z .env), ustawia <code>debug=True</code> dla testów. <em>debug=True:</em> włącza tryb deweloperski – bardziej szczegółowe błędy, pełne stack trace’e zamiast krótkich komunikatów (gdyby aplikacja z tego korzystała).</li>
+<li><strong>Potrzebny w testach:</strong> unit, integration, e2e, llm – wszyscy (przez init_fixtures lub zależności).</li>
+<li><strong>Scope:</strong> <code>session</code> – jedna instancja na całe uruchomienie pytest (nie przed każdym testem). Oszczędność – nie ładujemy konfiguracji wielokrotnie.</li>
+<li><strong>Skąd się bierze:</strong> Z pliku <code>masterclass_api/config.py</code> – <code>Config</code> dziedziczy z BaseSettings (Pydantic), czyta zmienne env.</li>
+</ul>
+<p><em>W skrócie:</em> Jedna konfiguracja testowa na całą sesję. Fundament – reszta fixtures z niego korzysta.</p>
+<hr>
+<p><strong>2. bootstrap</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#B392F0">@pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"session"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> bootstrap</span><span style="color:#E1E4E8">(config: Config):</span></span>
+<span class="line"><span style="color:#6A737D">    # Composition root – składa całą aplikację (baza, repo, serwisy). Przyjmuje config.</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> Bootstrap(</span><span style="color:#FFAB70">config</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">config)</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Tworzy <strong>Bootstrap</strong> – „szef budowy”, który składa całą aplikację (baza, repo, serwisy, klienty). Jedno miejsce, gdzie wszystko się łączy. <em>Composition root:</em> wzorzec – jedna klasa tworzy i łączy wszystkie zależności.</li>
+<li><strong>Potrzebny w testach:</strong> integration, e2e, llm (nie unit – unit ma tylko config i mocker).</li>
+<li><strong>Zależność:</strong> Przyjmuje <code>config</code> – pytest najpierw wywołuje fixture <code>config</code>, wynik przekazuje tutaj.</li>
+<li><strong>Scope:</strong> <code>session</code> – Bootstrap jest drogi do postawienia (baza, klienty, repo), więc raz na sesję. <em>session:</em> fixture żyje przez całe uruchomienie pytest.</li>
+</ul>
+<p><strong>Po co w ogóle Bootstrap?</strong> Problem: <code>ResumesService</code> potrzebuje <code>ml_service</code>, <code>resumes_repository</code>, <code>storage_client</code>, <code>resumes_config</code>. <code>ResumesRepository</code> potrzebuje <code>db_client</code>. <code>DBClient</code> potrzebuje <code>ConnectionPool</code>. I tak dalej – łańcuch zależności. Gdyby router sam tworzył <code>ResumesService</code>, musiałby znać cały ten łańcuch i budować go ręcznie. Duplikacja, łatwo o błąd. <strong>Bootstrap</strong> – jedna klasa w <code>masterclass_api/bootstrap.py</code> – tworzy i łączy wszystko: <code>db_connection_pool</code> (psycopg_pool) → <code>db_client</code> → <code>data_do_space_client</code>, <code>openai_client</code> → <code>resumes_repository</code>, <code>ml_service</code> → <code>resumes_service</code>. Jedno miejsce, jedna logika.</p>
+<p><strong>Gdzie jest używany?</strong> (1) <strong>W aplikacji:</strong> FastAPI ma <code>get_resumes_service(bootstrap: Bootstrap = Depends(get_bootstrap))</code> – endpoint dostaje gotowy <code>ResumesService</code> przez dependency injection. (2) <strong>W testach:</strong> fixture <code>bootstrap(config)</code> – testy dostają ten sam Bootstrap, ale z config testową (np. <code>debug=True</code>, baza testowa). Z niego biorą <code>db_client</code>, <code>resumes_repository</code>, <code>ml_service</code> itd. Widzicie? Aplikacja i testy – ta sama struktura, inna konfiguracja. Proste jak budowa cepa.</p>
+<p><strong>Co dokładnie tworzy Bootstrap?</strong> (plik <code>masterclass_api/bootstrap.py</code>): <code>db_connection_pool</code> (ConnectionPool z psycopg_pool – pula połączeń do PostgreSQL), <code>db_client</code> (DBClient), <code>data_do_space_client</code> (storage S3/DO Spaces), <code>openai_client</code>, <code>resumes_repository</code> (ResumesRepository), <code>ml_service</code> (MLService), <code>resumes_service</code> (ResumesService). Wszystko z <code>_config</code> – host bazy, klucze API, itd.</p>
+<p><em>W skrócie:</em> Bootstrap = composition root. Jedna fabryka – wiele produktów. Bez niego: każdy test musiałby ręcznie tworzyć ConnectionPool, DBClient, repo, serwisy. Z Bootstrapem: <code>bootstrap(config)</code> – i macie cały świat aplikacji.</p>
+<hr>
+<p><strong>3. db_client</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#B392F0">@pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"session"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> db_client</span><span style="color:#E1E4E8">(bootstrap: Bootstrap):</span></span>
+<span class="line"><span style="color:#6A737D">    # Zwraca klienta bazy z Bootstrapa – prawdziwe połączenie do bazy testowej.</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> bootstrap.db_client</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Zwraca klienta bazy danych z Bootstrapa. Prawdziwe połączenie do bazy testowej.</li>
+<li><strong>Potrzebny w testach:</strong> integration, e2e, llm (przez db_factory i bezpośrednio).</li>
+<li><strong>Zależność:</strong> <code>bootstrap</code> – musi być najpierw Bootstrap.</li>
+<li><strong>Scope:</strong> <code>session</code>.</li>
+</ul>
+<p><em>W skrócie:</em> Prawdziwa baza. Używane w integration i e2e – do zapytań, transakcji, db_factory.</p>
+<hr>
+<p><strong>4. db_factory</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#B392F0">@pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"session"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> db_factory</span><span style="color:#E1E4E8">(db_client: DBClient):</span></span>
+<span class="line"><span style="color:#6A737D">    # Tworzy DbFactory – helper do clear() i create_user() w testach integration/e2e.</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> DbFactory(</span><span style="color:#FFAB70">db_client</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">db_client)</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Tworzy <code>DbFactory</code> – helper do testów: <code>clear()</code> (czyści tabele), <code>create_user()</code> (tworzy użytkownika w bazie). <em>DbFactory:</em> narzędzie do przygotowania danych testowych – zamiast pisać SQL ręcznie, wywołujecie <code>create_user()</code> i macie użytkownika.</li>
+<li><strong>Potrzebny w testach:</strong> integration, e2e, llm (do clear() w setUp i create_user() w testach).</li>
+<li><strong>Zależność:</strong> <code>db_client</code> – factory potrzebuje klienta do wykonywania zapytań.</li>
+<li><strong>Scope:</strong> <code>session</code>. Sam factory jest lekki; dane w bazie czyścicie w <code>setUp</code> testów (db_factory.clear()).</li>
+</ul>
+<p><em>W skrócie:</em> Narzędzie do przygotowania danych w bazie. <code>create_user()</code> – i macie użytkownika. <code>clear()</code> – czysta tabela przed testem.</p>
+<hr>
+<p><strong>5. resumes_repository</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#B392F0">@pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"function"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> resumes_repository</span><span style="color:#E1E4E8">(bootstrap: Bootstrap) -> AbstractResumesRepository:</span></span>
+<span class="line"><span style="color:#6A737D">    # Prawdziwe repo (nie mock) – pisze do bazy. Scope function = świeży przed każdym testem.</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> bootstrap.resumes_repository</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Zwraca prawdziwe repozytorium resumes z Bootstrapa. Nie mock – prawdziwy obiekt, który pisze do bazy. <em>Repository:</em> warstwa dostępu do danych – <code>create_resume()</code> robi prawdziwy INSERT.</li>
+<li><strong>Potrzebny w testach:</strong> integration, llm (e2e używa API, ale BaseIntegrationTestCase ma init_fixtures z resumes_repository – więc e2e też go dostaje).</li>
+<li><strong>Zależność:</strong> <code>bootstrap</code>.</li>
+<li><strong>Scope:</strong> <code>function</code> – przed każdym testem można dostać „świeży” repo <em>function:</em> fixture tworzony na nowo przed każdym testem (w przeciwieństwie do session – raz na całą sesję).</li>
+</ul>
+<p><em>W skrócie:</em> Prawdziwe repo. Testy integracyjne go używają – <code>self.resumes_repository.create_resume(...)</code> to prawdziwy INSERT.</p>
+<hr>
+<p><strong>6. fastapi_server</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#B392F0">@pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"session"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> fastapi_server</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#6A737D">    # Uruchamia serwer FastAPI w osobnym procesie. Kod przed yield = setup, po yield = teardown.</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> is_port_in_use(</span><span style="color:#79B8FF">8000</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">        yield</span><span style="color:#6A737D">  # Port zajęty – nic nie robi, tylko yield</span></span>
+<span class="line"><span style="color:#F97583">    else</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        proc </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Process(</span><span style="color:#FFAB70">target</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">run_server, </span><span style="color:#FFAB70">args</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">(), </span><span style="color:#FFAB70">daemon</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        proc.start()</span></span>
+<span class="line"><span style="color:#E1E4E8">        sleep(</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">        yield</span><span style="color:#6A737D">  # Serwer działa – testy się wykonują – potem proc.kill()</span></span>
+<span class="line"><span style="color:#E1E4E8">        proc.kill()</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Uruchamia <strong>żywy serwer</strong> FastAPI na localhost:8000 (w osobnym procesie). Dla testów e2e – wysyłacie prawdziwe requesty HTTP. Jeśli port 8000 już zajęty (np. ręcznie odpalony serwer) – nic nie robi, tylko yield.</li>
+<li><strong>Potrzebny w testach:</strong> tylko <strong>e2e</strong> (fixture init_e2e_fixtures w BaseE2ETestCase).</li>
+</ul>
+<p><strong>Yield w fixture – co robi?</strong> W fixture z <code>yield</code> pytest traktuje to jak generator: <strong>kod przed yield</strong> = setup (uruchamiany przed testami), <strong>yield</strong> = pauza (oddaje kontrolę pytestowi), <strong>kod po yield</strong> = teardown (uruchamiany po zakończeniu testów). <code>yield</code> nie czeka na zakończenie procesu serwera – serwer działa w tle. <code>yield</code> wstrzymuje <strong>fixture</strong>, nie proces. Pytest uruchamia testy (serwer już działa), gdy testy się skończą – pytest wznawia fixture i wykonuje kod po yield (np. <code>proc.kill()</code>). Dzięki temu serwer jest wyłączany po testach. <em>Dlaczego yield a nie return?</em> Z <code>return</code> nie byłoby kiedy wywołać <code>proc.kill()</code> – teardown musi być po testach, więc potrzebny jest yield.</p>
+<ul>
+<li><strong>Scope:</strong> <code>session</code> – serwer startuje raz, wszystkie testy e2e go współdzielą.</li>
+<li><strong>Skąd się bierze:</strong> <code>uvicorn.run(api, port=8000)</code> w osobnym procesie (multiprocessing). <em>uvicorn:</em> serwer ASGI – uruchamia aplikację FastAPI na podanym porcie.</li>
+</ul>
+<p><em>W skrócie:</em> Dla e2e. Żywy serwer na 8000. Bez tego testy e2e nie miałyby dokąd wysłać requesta.</p>
+<hr>
+<p><strong>7. data_do_space_client, openai_client, ml_service</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#B392F0">@pytest.fixture</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scope</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"session"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> data_do_space_client</span><span style="color:#E1E4E8">(bootstrap: Bootstrap):</span></span>
+<span class="line"><span style="color:#6A737D">    # Klient storage (S3/DO Spaces) z Bootstrapa – do uploadu plików w testach.</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> bootstrap.data_do_space_client</span></span>
+<span class="line"><span style="color:#6A737D"># openai_client, ml_service – analogicznie</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Zwracają klienta storage (DO Spaces/S3), klienta OpenAI, serwis ML – wszystko z Bootstrapa. <em>DO Spaces:</em> usługa storage (kompatybilna z S3). <em>OpenAI:</em> serwis AI – generowanie podsumowań CV.</li>
+<li><strong>Potrzebny w testach:</strong> integration, e2e, llm (ml_service – llm; data_do_space_client – integration, e2e; openai_client – llm).</li>
+<li><strong>Zależność:</strong> <code>bootstrap</code>.</li>
+<li><strong>Scope:</strong> <code>session</code>.</li>
+</ul>
+<p><em>W skrócie:</em> Prawdziwe zewnętrzne serwisy. Integration i e2e ich używają – upload plików, wywołania AI itd.</p>
+<hr>
+<h3 id="testsfactorypy--dbfactory">tests/factory.py – DbFactory</h3>
+<p>No to factory. DbFactory to <strong>helper do przygotowania danych w bazie</strong> – zamiast pisać SQL ręcznie w każdym teście, wywołujecie <code>create_user()</code> i macie użytkownika. Albo <code>clear()</code> – i tabela jest pusta. Proste jak budowa cepa.</p>
+<p><strong>Potrzebny w testach:</strong> integration, e2e, llm (przez fixture <code>db_factory</code> w conftest, wstrzykowany do <code>BaseIntegrationTestCase</code>). Unit go nie używa – unit nie ma bazy.</p>
+<hr>
+<p><strong>Klasa DbFactory</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> DbFactory</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, db_client: DBClient):</span></span>
+<span class="line"><span style="color:#6A737D">        # Przyjmuje klienta bazy i Faker (do losowych danych). Używane w integration/e2e.</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.db_client </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> db_client</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.faker </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Faker()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> clear</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#6A737D">        # Czyści tabele resumes i users – przed każdym testem (w BaseIntegrationTestCase.setUp).</span></span>
+<span class="line"><span style="color:#F97583">        with</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.db_client.within_transaction() </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> db_client:</span></span>
+<span class="line"><span style="color:#E1E4E8">            db_client.execute(Query.from_(resumes).delete())</span></span>
+<span class="line"><span style="color:#E1E4E8">            db_client.execute(Query.from_(users).delete())</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> create_user</span><span style="color:#E1E4E8">(self, email: </span><span style="color:#79B8FF">str</span><span style="color:#F97583"> |</span><span style="color:#79B8FF"> None</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> None</span><span style="color:#E1E4E8">) -> </span><span style="color:#79B8FF">dict</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">        # INSERT do users, zwraca dict z id, email. Bez email – Faker generuje losowy.</span></span>
+<span class="line"><span style="color:#79B8FF">        ...</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Z czego się składa:</strong> Przyjmuje <code>db_client</code> (DBClient – połączenie do bazy) i <code>Faker</code> (biblioteka do generowania fake’owych danych, np. losowy email). <em>Faker:</em> generuje realistyczne dane testowe – <code>faker.email()</code> daje np. <code>"jan.kowalski@example.com"</code>.</li>
+<li><strong>Skąd się bierze w testach:</strong> Fixture <code>db_factory(db_client)</code> w conftest – tworzy <code>DbFactory(db_client=db_client)</code>. Testy dostają <code>self.db_factory</code> przez <code>init_fixtures</code> w <code>BaseIntegrationTestCase</code>.</li>
+</ul>
+<hr>
+<p><strong>1. clear()</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> clear</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#6A737D">    # Usuwa wszystkie wiersze z resumes i users. Transakcja – albo oba DELETE, albo rollback.</span></span>
+<span class="line"><span style="color:#F97583">    with</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.db_client.within_transaction() </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> db_client:</span></span>
+<span class="line"><span style="color:#E1E4E8">        db_client.execute(Query.from_(resumes).delete())</span></span>
+<span class="line"><span style="color:#E1E4E8">        db_client.execute(Query.from_(users).delete())</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Czyści tabele <code>resumes</code> i <code>users</code> – usuwa wszystkie wiersze. <em>within_transaction:</em> kontekst transakcji – albo oba DELETE się wykonają, albo żaden (rollback przy błędzie). <em>Query.from_(resumes).delete():</em> pypika – generuje SQL <code>DELETE FROM resumes</code>.</li>
+<li><strong>Kiedy używane:</strong> W <code>BaseIntegrationTestCase.setUp()</code> – przed każdym testem integracyjnym i e2e wywoływane jest <code>self.db_factory.clear()</code>. Dzięki temu każdy test startuje z pustą bazą – żadnych śladów po poprzednim teście.</li>
+</ul>
+<p><em>W skrócie:</em> Czysta tabela przed testem. Bez tego dane z testu A mogłyby wpływać na test B.</p>
+<hr>
+<p><strong>2. create_user(email=None)</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> create_user</span><span style="color:#E1E4E8">(self, email: </span><span style="color:#79B8FF">str</span><span style="color:#F97583"> |</span><span style="color:#79B8FF"> None</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> None</span><span style="color:#E1E4E8">) -> </span><span style="color:#79B8FF">dict</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">    # INSERT do users (email lub losowy z Faker), RETURNING id, potem SELECT – zwraca dict.</span></span>
+<span class="line"><span style="color:#6A737D">    # Używane w testach: user = self.db_factory.create_user(); user["id"]</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> user  </span><span style="color:#6A737D"># dict z id, email, itd.</span></span>
+<span class="line"></span></code></pre>
+<ul>
+<li><strong>Co robi:</strong> Tworzy użytkownika w tabeli <code>users</code>. Jeśli <code>email</code> podane – używa go; jeśli nie – generuje losowy przez <code>self.faker.email()</code>. Wstawia wiersz, odczytuje go, zwraca dict (np. <code>{"id": 1, "email": "..."}</code>).</li>
+<li><strong>Kiedy używane:</strong> W testach integration i e2e – gdy potrzebujecie użytkownika (np. <code>user = self.db_factory.create_user()</code>, potem <code>user["id"]</code> do tworzenia resume lub autoryzacji). Zamiast ręcznego INSERT + SELECT – jedna linijka.</li>
+</ul>
+<p><em>W skrócie:</em> <code>create_user()</code> – i macie użytkownika w bazie. Bez pisania SQL. Widzicie? Helper – nie fixture, zwykła klasa – ale używana w testach przez <code>self.db_factory</code>.</p>
+<hr>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" checked disabled> <strong>tests/<strong>init</strong>.py</strong> – klasy bazowe (opis powyżej).</li>
+<li class="task-list-item"><input type="checkbox" checked disabled> <strong>tests/conftest.py</strong> – fixtures (opis powyżej).</li>
+<li class="task-list-item"><input type="checkbox" checked disabled> <strong>tests/factory.py</strong> – DbFactory (opis powyżej).</li>
+<li class="task-list-item"><input type="checkbox" disabled> <strong>tests/unit/</strong> – testy jednostkowe</li>
+<li class="task-list-item"><input type="checkbox" disabled> <strong>tests/integration/</strong> – testy integracyjne</li>
+<li class="task-list-item"><input type="checkbox" disabled> <strong>tests/e2e/</strong> – testy end-to-end</li>
+<li class="task-list-item"><input type="checkbox" disabled> <strong>tests/llm/</strong> – testy z modelem LLM</li>
+</ul>
+<hr>
+<h2 id="wzorzec-given--when--then">Wzorzec GIVEN / WHEN / THEN</h2>
+<p>Słuchajcie, jeśli mielibyście zapamiętać z pisania testów tylko jedną, jedyną rzecz – taką najważniejszą, która odróżnia kod amatora od kodu profesjonalisty – to jest to właśnie wzorzec <strong>GIVEN / WHEN / THEN</strong>. To nie jest żadna skomplikowana funkcja Pythona, to nie jest dekorator z pytesta. To jest po prostu <strong>konwencja</strong>, czyli umowny sposób na to, jak układamy kod wewnątrz naszej funkcji testowej.</p>
+<p><strong>Po co nam to?</strong> Wyobraźcie sobie, że wchodzicie do kuchni, żeby ugotować zupę.</p>
+<ol>
+<li><strong>GIVEN (Zakładając że / Przygotowanie)</strong> – Najpierw wyciągacie garnki, kroicie marchewkę, układacie mięso na blacie, odmierzacie wodę. To jest Wasz <em>setup</em>. W teście to moment, w którym tworzycie mocki, wstawiacie testowego użytkownika do bazy danych, przygotowujecie fałszywe obiekty. “Zakładamy, że mamy taki a taki stan świata”.</li>
+<li><strong>WHEN (Kiedy / Akcja)</strong> – Włączacie palnik i wrzucacie to wszystko do garnka. To jest akcja. W kodzie testowym to jest ten jeden, kluczowy moment, w którym wywołujecie funkcję, którą chcecie przetestować (np. <code>service.create_resume()</code>). “Kiedy kliknę ten przycisk…”.</li>
+<li><strong>THEN (Wtedy / Weryfikacja)</strong> – Zupa jest gotowa, próbujecie jej i mówicie: “O, dobra, słona, pomidorowa”. To są asercje. Tutaj sprawdzacie efekty. “Wtedy oczekuję, że w bazie jest nowy rekord i że zwrócono id równe 123”.</li>
+</ol>
+<p><strong>Dlaczego to jest takie genialne?</strong>
+Bo test staje się “żywą dokumentacją”. Każdy, kto wejdzie w Wasz kod za pół roku, widzi tę strukturę i od razu wie, o co chodzi. Znika chaos, w którym wywoływanie funkcji przeplata się z deklarowaniem zmiennych i asercjami. Kod jest czysty, poukładany i <strong>prosty jak budowa cepa</strong>. Zobaczcie sami w przykładach testu jednostkowego i integracyjnego poniżej – w każdym z nich te trzy zielone komentarze ładnie segregują nam bloki kodu!</p>
+<hr>
+<h2 id="test-jednostkowy--mockowanie-wszystkich-zależności">Test jednostkowy – mockowanie wszystkich zależności</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># tests/unit/contexts/resumes/test_service__create_resume.py</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> tests </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> BaseUnitTestCase</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> TestResumesServiceCreateResume</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BaseUnitTestCase</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#6A737D">    # Dziedziczy BaseUnitTestCase – ma self.mocker, self.config. Testuje serwis w izolacji.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> test_create_resume__success</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#6A737D">        # GIVEN - przygotuj mocki (fałszywe obiekty)</span></span>
+<span class="line"><span style="color:#E1E4E8">        mock_repository </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.mocker.Mock(</span><span style="color:#FFAB70">spec</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">AbstractResumesRepository)</span></span>
+<span class="line"><span style="color:#E1E4E8">        mock_storage_client </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.mocker.Mock(</span><span style="color:#FFAB70">spec</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">AbstractStorageClient)</span></span>
+<span class="line"><span style="color:#E1E4E8">        mock_ml_service </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.mocker.Mock(</span><span style="color:#FFAB70">spec</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">AbstractMLService)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # Mock zwraca fake resume</span></span>
+<span class="line"><span style="color:#E1E4E8">        created_resume </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Resume(</span><span style="color:#FFAB70">id</span><span style="color:#F97583">=</span><span style="color:#79B8FF">123</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">user_id</span><span style="color:#F97583">=</span><span style="color:#79B8FF">456</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">summary</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Original text"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        mock_repository.create_resume.return_value </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> created_resume</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # Mock zwraca fake AI summary</span></span>
+<span class="line"><span style="color:#E1E4E8">        ai_summary </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "AI generated summary"</span></span>
+<span class="line"><span style="color:#E1E4E8">        mock_ml_service.generate_resume_summary.return_value </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ai_summary</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # Serwis dostaje mocki (NIE prawdziwe obiekty!)</span></span>
+<span class="line"><span style="color:#E1E4E8">        service </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ResumesService(</span></span>
+<span class="line"><span style="color:#FFAB70">            ml_service</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">mock_ml_service,</span></span>
+<span class="line"><span style="color:#FFAB70">            resumes_repository</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">mock_repository,</span></span>
+<span class="line"><span style="color:#FFAB70">            storage_client</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">mock_storage_client,</span></span>
+<span class="line"><span style="color:#FFAB70">            resumes_config</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">mock_config</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#E1E4E8">        create_patch </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ResumeCreatePatchSchema(</span><span style="color:#FFAB70">summary</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Original text"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">user_id</span><span style="color:#F97583">=</span><span style="color:#79B8FF">456</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # WHEN - wywołaj funkcję</span></span>
+<span class="line"><span style="color:#E1E4E8">        result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> service.create_resume(</span><span style="color:#FFAB70">user_id</span><span style="color:#F97583">=</span><span style="color:#79B8FF">456</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">resume</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">create_patch)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # THEN - sprawdź wynik i wywołania mocków</span></span>
+<span class="line"><span style="color:#F97583">        assert</span><span style="color:#E1E4E8"> result.id </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 123</span></span>
+<span class="line"><span style="color:#F97583">        assert</span><span style="color:#E1E4E8"> result.summary </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> ai_summary</span></span>
+<span class="line"><span style="color:#E1E4E8">        mock_repository.create_resume.assert_called_once_with(</span><span style="color:#FFAB70">user_id</span><span style="color:#F97583">=</span><span style="color:#79B8FF">456</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">resume</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">create_patch)</span></span>
+<span class="line"><span style="color:#E1E4E8">        mock_ml_service.generate_resume_summary.assert_called_once_with(</span><span style="color:#FFAB70">resume_text</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Original text"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Co tu się dzieje (krok po kroku):</strong></p>
+<ol>
+<li><strong>GIVEN</strong> (przygotowanie) – tworzymy mocki (fałszywe obiekty) zamiast prawdziwych. Mówimy mockom: “jak ktoś wywoła <code>create_resume()</code>, zwróć fake obiekt Resume”. Nie łączymy się z bazą!</li>
+<li><strong>WHEN</strong> (akcja) – wywołujemy funkcję, którą testujemy. Serwis myśli, że dostał prawdziwe obiekty – a to tylko atrapy.</li>
+<li><strong>THEN</strong> (weryfikacja) – sprawdzamy wynik (<code>assert result.id == 123</code>) i czy serwis wywołał mocki (<code>assert_called_once</code>). Testujemy <strong>tylko logikę serwisu</strong> – czy poprawnie wywołuje repository i ML service, czy zwraca dobry wynik.</li>
+</ol>
+<p><strong>Dlaczego mocki?</strong> Bo to test jednostkowy – w izolacji, bez bazy, bez sieci, bez AI. Szybko, bezpiecznie, tanio.</p>
+<hr>
+<h2 id="test-integracyjny--prawdziwa-baza-danych">Test integracyjny – prawdziwa baza danych</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># tests/integration/contexts/resumes/test_resumes_repository__create_resume.py</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> tests </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> BaseIntegrationTestCase</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> TestResumesRepositoryCreateResume</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BaseIntegrationTestCase</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#6A737D">    # Dziedziczy BaseIntegrationTestCase – prawdziwa baza, db_factory, resumes_repository.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    async</span><span style="color:#F97583"> def</span><span style="color:#B392F0"> test_create_resume_success</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#6A737D">        # GIVEN - stwórz prawdziwego użytkownika w testowej bazie</span></span>
+<span class="line"><span style="color:#E1E4E8">        user </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.db_factory.create_user()</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#E1E4E8">        new_resume </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ResumeCreatePatch(</span></span>
+<span class="line"><span style="color:#FFAB70">            summary</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"Test resume"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">            storage_path</span><span style="color:#F97583">=</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.generate_random_test_path(),</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # WHEN - wywołaj repository (prawdziwe zapytanie do bazy!)</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.resumes_repository.create_resume(</span><span style="color:#FFAB70">user_id</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">user[</span><span style="color:#9ECBFF">"id"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">resume</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">new_resume)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # THEN - sprawdź w bazie, czy resume się zapisało</span></span>
+<span class="line"><span style="color:#E1E4E8">        resumes </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.db_client.execute_with_output(</span></span>
+<span class="line"><span style="color:#E1E4E8">            Query.from_(resumes_table).select(resumes_table.star)</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#F97583">        assert</span><span style="color:#E1E4E8"> resumes </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> [{</span></span>
+<span class="line"><span style="color:#9ECBFF">            "id"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">ANY</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "summary"</span><span style="color:#E1E4E8">: new_resume.summary,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "storage_path"</span><span style="color:#E1E4E8">: new_resume.storage_path,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "user_id"</span><span style="color:#E1E4E8">: user[</span><span style="color:#9ECBFF">"id"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">        }]</span></span>
+<span class="line"></span></code></pre>
+<p><strong>Różnice (test integracyjny vs jednostkowy):</strong></p>
+<ul>
+<li>NIE ma mocków – używamy prawdziwego <code>resumes_repository</code>, które faktycznie pisze do bazy.</li>
+<li>Prawdziwa baza danych (testowa, ale rzeczywista struktura SQL). To już nie atrapy – to prawdziwe INSERT-y.</li>
+<li><code>db_factory.create_user()</code> – helper do tworzenia danych testowych w bazie (prawdziwe dane).</li>
+<li>Sprawdzamy bezpośrednio w bazie, czy dane się zapisały – wybieramy SELECT-em i patrzymy, czy jest.</li>
+</ul>
+<p>Widzicie różnicę? Test jednostkowy = wszystko na atrapach, błyskawiczny. Test integracyjny = prawdziwa baza, wolniejszy, ale sprawdza czy komponenty ze sobą gadają. Oba są potrzebne – najpierw sprawdzasz klocki osobno, potem składasz i patrzysz czy pasują.</p> </article>  </main> <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'dark',
+        fontFamily: 'Syne, sans-serif'
+      });
+      
+      // Astro renderuje kod mermaid jako zwykłe bloki <pre class="language-mermaid"><code>...
+      // Musimy je znaleźć i przekształcić na divy z klasą mermaid, żeby skrypt je wyrenderował
+      document.addEventListener('DOMContentLoaded', () => {
+        const mermaidBlocks = document.querySelectorAll('pre.astro-code.mermaid, pre.language-mermaid');
+        
+        mermaidBlocks.forEach(block => {
+          const code = block.textContent;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code;
+          block.parentNode.replaceChild(div, block);
+        });
+        
+        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      });
+    </script> </body> </html> 

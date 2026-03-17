@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="pl"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"><title>Pytest — Fiszki EDU</title><link rel="stylesheet" href="../../_astro/index.CdCvzWCf.css">
+<style>.category-section[data-astro-cid-stsmp6mm]{width:100%;max-width:760px;margin:0 auto}.section-title[data-astro-cid-stsmp6mm]{font-family:JetBrains Mono,monospace;font-size:1.2rem;color:var(--accent);margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);padding-bottom:.5rem}
+</style></head> <body> <header> <a href="../../index.html" class="header-tag header-home">← Strona główna</a> <h1>Pytest</h1> <div class="subtitle">Materiały do nauki w tej kategorii</div> </header> <main> <div class="category-section" data-astro-cid-stsmp6mm> <h2 class="section-title" data-astro-cid-stsmp6mm>📖 Notatki i Mapy Myśli</h2> <div class="tiles-grid sub-tiles" data-astro-cid-stsmp6mm> <a href="../../notatki/pytest-abc-mock-fixture-polaczenie/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>ABC + Mock + Fixture – jak to się łączy w jedną całość</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm> 📄 Dokument MD </p> </a><a href="../../notatki/pytest-kompendium_technik_pytest/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>Kompendium: Techniki Pytest</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm> 📄 Dokument MD </p> </a><a href="../../notatki/pytest-notatki-copy/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>Notatki: Pytest – testy, fixtures, mocking | Moduł 3: Web Framework</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm> 📄 Dokument MD </p> </a><a href="../../notatki/pytest-notatki/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>Notatki: Pytest – testy, fixtures, mocking | Moduł 3: Web Framework</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm> 📄 Dokument MD </p> </a><a href="../../notatki/pytest-progres_nauki/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>Progres Nauki</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm> 📄 Dokument MD </p> </a><a href="../../notatki/pytest-studium_przypadku_imprv/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>Studium przypadku: projekt `imprv-masterclass-testing`</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm> 📄 Dokument MD </p> </a><a href="../../notatki/pytest-zadania/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>Zadania praktyczne: Pytest | Moduł 3: Web Framework</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm> 📄 Dokument MD </p> </a> </div> </div><div class="category-section" style="margin-top: 3rem;" data-astro-cid-stsmp6mm> <h2 class="section-title" data-astro-cid-stsmp6mm>🃏 Fiszki</h2> <div class="tiles-grid sub-tiles" data-astro-cid-stsmp6mm> <a href="../../tematy/undefined/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>Pytest - Fundamenty</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm>Asercje · Rodzaje testów · ABC · Mockowanie</p> <p class="tile-count" data-astro-cid-stsmp6mm>34 fiszek</p> </a><a href="../../tematy/undefined/index.html" class="tile-link" data-astro-cid-stsmp6mm> <h2 data-astro-cid-stsmp6mm>Pytest - Techniki</h2> <p class="tile-subtitle" data-astro-cid-stsmp6mm>parametrize · pytest.raises · GIVEN/WHEN/THEN</p> <p class="tile-count" data-astro-cid-stsmp6mm>8 fiszek</p> </a> </div> </div> </main> <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'dark',
+        fontFamily: 'Syne, sans-serif'
+      });
+      
+      // Astro renderuje kod mermaid jako zwykłe bloki <pre class="language-mermaid"><code>...
+      // Musimy je znaleźć i przekształcić na divy z klasą mermaid, żeby skrypt je wyrenderował
+      document.addEventListener('DOMContentLoaded', () => {
+        const mermaidBlocks = document.querySelectorAll('pre.astro-code.mermaid, pre.language-mermaid');
+        
+        mermaidBlocks.forEach(block => {
+          const code = block.textContent;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code;
+          block.parentNode.replaceChild(div, block);
+        });
+        
+        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      });
+    </script> </body> </html> 

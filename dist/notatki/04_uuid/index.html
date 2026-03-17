@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="pl"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"><title>Notatki: uuid – generowanie unikalnych identyfikatorów | Moduł 1: Fundamenty — Fiszki EDU</title><link rel="stylesheet" href="../../_astro/index.CdCvzWCf.css">
+<style>.navigation-bar[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;display:flex;justify-content:space-between;margin-bottom:2rem}.btn-small[data-astro-cid-lw6yg7ny]{padding:.5rem 1rem;font-size:.8rem;text-decoration:none;display:inline-flex}.markdown-body[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;color:var(--text);font-family:Syne,sans-serif;line-height:1.7;font-size:1.05rem;padding-bottom:4rem}.markdown-body[data-astro-cid-lw6yg7ny] h1,.markdown-body[data-astro-cid-lw6yg7ny] h2,.markdown-body[data-astro-cid-lw6yg7ny] h3,.markdown-body[data-astro-cid-lw6yg7ny] h4{color:var(--text);font-weight:700;margin-top:2.5rem;margin-bottom:1rem;line-height:1.3}.markdown-body[data-astro-cid-lw6yg7ny] h1{font-size:2.2rem;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.markdown-body[data-astro-cid-lw6yg7ny] h2{font-size:1.8rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}.markdown-body[data-astro-cid-lw6yg7ny] h3{font-size:1.4rem;color:var(--accent3)}.markdown-body[data-astro-cid-lw6yg7ny] p{margin-bottom:1.2rem}.markdown-body[data-astro-cid-lw6yg7ny] ul,.markdown-body[data-astro-cid-lw6yg7ny] ol{margin-bottom:1.2rem;padding-left:1.5rem}.markdown-body[data-astro-cid-lw6yg7ny] li{margin-bottom:.5rem}.markdown-body[data-astro-cid-lw6yg7ny] strong,.markdown-body[data-astro-cid-lw6yg7ny] b{color:var(--accent3);font-weight:600}.markdown-body[data-astro-cid-lw6yg7ny] em,.markdown-body[data-astro-cid-lw6yg7ny] i{color:var(--yellow);font-style:normal;font-weight:600}.markdown-body[data-astro-cid-lw6yg7ny] blockquote{border-left:4px solid var(--accent);background:#7c6af70d;padding:1rem 1.5rem;margin:1.5rem 0;border-radius:0 8px 8px 0;font-style:italic;color:var(--text-dim)}.markdown-body[data-astro-cid-lw6yg7ny] a{color:var(--accent);text-decoration:underline;text-underline-offset:4px;transition:color .2s}.markdown-body[data-astro-cid-lw6yg7ny] a:hover{color:var(--accent2)}.markdown-body[data-astro-cid-lw6yg7ny] pre{background:var(--code-bg)!important;border:1px solid var(--border);border-radius:12px;padding:1.2rem;font-family:JetBrains Mono,monospace;font-size:.85rem;overflow-x:auto;margin:1.5rem 0}.markdown-body[data-astro-cid-lw6yg7ny] code{font-family:JetBrains Mono,monospace;font-size:.85em;background:var(--code-bg);padding:.2em .4em;border-radius:4px;border:1px solid var(--border);color:#e8e8f0}.markdown-body[data-astro-cid-lw6yg7ny] pre code{background:transparent;padding:0;border:none;font-size:1em}.markdown-body[data-astro-cid-lw6yg7ny] table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.95rem}.markdown-body[data-astro-cid-lw6yg7ny] th,.markdown-body[data-astro-cid-lw6yg7ny] td{border:1px solid var(--border);padding:.75rem 1rem;text-align:left}.markdown-body[data-astro-cid-lw6yg7ny] th{background:var(--surface2);font-weight:600;color:var(--accent3)}.markdown-body[data-astro-cid-lw6yg7ny] tr:nth-child(2n){background:#ffffff05}.mindmap-container[data-astro-cid-lw6yg7ny]{width:100%;max-width:760px;margin:0 auto 3rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center}.mindmap-container[data-astro-cid-lw6yg7ny] h3[data-astro-cid-lw6yg7ny]{color:var(--accent);margin-top:0;margin-bottom:1rem;font-family:Syne,sans-serif}.mindmap-image[data-astro-cid-lw6yg7ny]{max-width:100%;height:auto;border-radius:8px;border:1px solid var(--border);transition:transform .2s,box-shadow .2s;cursor:zoom-in}.mindmap-image[data-astro-cid-lw6yg7ny]:hover{transform:scale(1.02);box-shadow:0 8px 24px #0000004d}.mindmap-hint[data-astro-cid-lw6yg7ny]{font-size:.8rem;color:var(--text-dim);margin-top:.5rem;margin-bottom:0}
+</style></head> <body> <header> <a href="../../index.html" class="header-tag header-home">← Strona główna</a> <h1>Notatki: uuid – generowanie unikalnych identyfikatorów | Moduł 1: Fundamenty</h1> <div class="subtitle">Kategoria: Ogólne</div> </header> <main>  <div class="navigation-bar" data-astro-cid-lw6yg7ny> <a href="../../kategoria/ogólne/index.html" class="btn-secondary btn-small" data-astro-cid-lw6yg7ny>
+← Wróć do kategorii
+</a> </div> <article class="markdown-body" data-astro-cid-lw6yg7ny> <h1 id="notatki-uuid--generowanie-unikalnych-identyfikatorów--moduł-1-fundamenty">Notatki: uuid – generowanie unikalnych identyfikatorów | Moduł 1: Fundamenty</h1>
+<p>Źródła: oficjalna dokumentacja Python (uuid), rozmowa z mentorem.</p>
+<p><strong>Temat:</strong> Moduł <code>uuid</code> – generowanie unikalnych identyfikatorów (UUID) w Pythonie.</p>
+<hr>
+<p><em>Notatki uzupełniane po każdej lekcji.</em></p> </article>  </main> <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'dark',
+        fontFamily: 'Syne, sans-serif'
+      });
+      
+      // Astro renderuje kod mermaid jako zwykłe bloki <pre class="language-mermaid"><code>...
+      // Musimy je znaleźć i przekształcić na divy z klasą mermaid, żeby skrypt je wyrenderował
+      document.addEventListener('DOMContentLoaded', () => {
+        const mermaidBlocks = document.querySelectorAll('pre.astro-code.mermaid, pre.language-mermaid');
+        
+        mermaidBlocks.forEach(block => {
+          const code = block.textContent;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code;
+          block.parentNode.replaceChild(div, block);
+        });
+        
+        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      });
+    </script> </body> </html> 

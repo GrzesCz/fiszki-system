@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="pl"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"><title>Centrum Wiedzy — Fiszki EDU</title><link rel="stylesheet" href="_astro/index.CdCvzWCf.css"></head> <body> <header>  <h1>Centrum Wiedzy</h1> <div class="subtitle">Wybierz grupę tematyczną</div> </header> <main>  <div class="tiles-grid project-tiles"> <a href="kategoria/flyer-engine/index.html" class="tile-link project-tile"> <h2>Flyer Engine</h2> <p class="tile-subtitle"> 0 notatek · 2 zestawów fiszek
+</p> </a><a href="kategoria/ogólne/index.html" class="tile-link project-tile"> <h2>Ogólne</h2> <p class="tile-subtitle"> 19 notatek · 1 zestawów fiszek
+</p> </a><a href="kategoria/pytest/index.html" class="tile-link project-tile"> <h2>Pytest</h2> <p class="tile-subtitle"> 7 notatek · 2 zestawów fiszek
+</p> </a><a href="kategoria/struktura-projektow/index.html" class="tile-link project-tile"> <h2>Struktura Projektow</h2> <p class="tile-subtitle"> 2 notatek · 0 zestawów fiszek
+</p> </a> </div>  </main> <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ 
+        startOnLoad: true, 
+        theme: 'dark',
+        fontFamily: 'Syne, sans-serif'
+      });
+      
+      // Astro renderuje kod mermaid jako zwykłe bloki <pre class="language-mermaid"><code>...
+      // Musimy je znaleźć i przekształcić na divy z klasą mermaid, żeby skrypt je wyrenderował
+      document.addEventListener('DOMContentLoaded', () => {
+        const mermaidBlocks = document.querySelectorAll('pre.astro-code.mermaid, pre.language-mermaid');
+        
+        mermaidBlocks.forEach(block => {
+          const code = block.textContent;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = code;
+          block.parentNode.replaceChild(div, block);
+        });
+        
+        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      });
+    </script> </body> </html>
