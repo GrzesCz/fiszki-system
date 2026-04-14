@@ -2,16 +2,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-export async function getStaticPaths() {
-  const fiszki = await getCollection('fiszki');
-  return fiszki.map((f) => {
-    // Odcięcie '.json' z końca id
-    const slug = f.id.replace(/\.json$/, '');
-    return { params: { slug }, props: { fiszka: f } };
-  });
+const { slug } = Astro.params;
+const fiszki = await getCollection('fiszki');
+const fiszka = fiszki.find(f => f.id === slug);
+
+if (!fiszka) {
+  return Astro.redirect('/');
 }
 
-const { fiszka } = Astro.props;
 const { title, subtitle, cards, category } = fiszka.data;
 
 // Zbuduj slug powiązanej kategorii, by móc łatwo wrócić

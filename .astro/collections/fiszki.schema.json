@@ -1,55 +1,57 @@
 {
-  "$ref": "#/definitions/fiszki",
-  "definitions": {
-    "fiszki": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "subtitle": {
-          "type": "string"
-        },
-        "category": {
-          "type": "string"
-        },
-        "cards": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "cat": {
-                "type": "string"
-              },
-              "catLabel": {
-                "type": "string"
-              },
-              "q": {
-                "type": "string"
-              },
-              "a": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "cat",
-              "catLabel",
-              "q",
-              "a"
-            ],
-            "additionalProperties": false
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "status": {
+      "default": "planowane",
+      "type": "string",
+      "enum": [
+        "planowane",
+        "w_trakcie",
+        "zrobione"
+      ]
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "cat": {
+            "type": "string"
+          },
+          "catLabel": {
+            "type": "string"
+          },
+          "q": {
+            "type": "string"
+          },
+          "a": {
+            "type": "string"
           }
         },
-        "$schema": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "title",
-        "cards"
-      ],
-      "additionalProperties": false
+        "required": [
+          "cat",
+          "catLabel",
+          "q",
+          "a"
+        ]
+      }
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "required": [
+    "title",
+    "cards"
+  ]
 }

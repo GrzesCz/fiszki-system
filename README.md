@@ -38,6 +38,24 @@ System korzysta z **Astro Content Collections**.
 - Pliki `.png`, `.jpg` lub `.svg` wrzucaj do folderu: `public/maps/`
 - Następnie wskaż je we Frontmatterze w notatkach za pomocą pola `mindmap: "nazwa-pliku.png"`.
 
+## 🐳 Docker (produkcja lokalna, http://localhost:4321)
+
+1. **Docker Desktop** – w *Settings → General* włącz **Start Docker Desktop when you sign in to your computer** (żeby Docker startował z systemem).
+2. **Pierwszy raz** – zbuduj i uruchom kontener:
+   ```bash
+   docker compose up -d --build
+   ```
+3. **Autostart aplikacji po włączeniu laptopa** – jednorazowo w PowerShell (z katalogu projektu):
+   ```powershell
+   Set-ExecutionPolicy -Scope CurrentUser RemoteSigned -Force
+   .\scripts\install-windows-autostart.ps1
+   ```
+   Tworzy zadanie harmonogramu *CentrumWiedzy-Docker*, które po zalogowaniu odpala `scripts\docker-start.ps1` (czeka na gotowość Dockera, potem `docker compose up -d`).
+4. Adres: **http://localhost:4321/**  
+   Kontener ma `restart: always` – po restarcie Dockera kontener wraca.
+
+Usunięcie autostartu: `.\scripts\uninstall-windows-autostart.ps1` albo w *Harmonogram zadań* usuń zadanie `CentrumWiedzy-Docker`.
+
 ## 🛠 Uruchomienie i budowanie
 
 ### 1. Serwer deweloperski (podczas pisania/dodawania treści)

@@ -51,5 +51,6 @@
       "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">1. <b>Czytelność:</b> Od razu widać, gdzie jest setup, gdzie akcja, a gdzie weryfikacja. Znika chaos, gdy wywoływanie funkcji przeplata się z deklarowaniem zmiennych.\n\n2. <b>Żywa dokumentacja:</b> Test sam opisuje swoje zachowanie. Każdy, kto wejdzie w kod za pół roku, od razu wie, co jest testowane i jakie są oczekiwania.\n\n3. <b>Łatwiejsze debugowanie:</b> Gdy test wywali, od razu wiesz w której fazie coś poszło nie tak (setup? akcja? asercja?).</pre>"
     }
   ],
-  "category": "Pytest"
+  "category": "Pytest",
+  "status": "zrobione"
 }

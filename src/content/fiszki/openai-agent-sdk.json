@@ -1,0 +1,50 @@
+{
+  "title": "OpenAI Agent SDK",
+  "subtitle": "Podstawy, Tools, Hand-offs i Guardrails",
+  "cards": [
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Czym głównym różni się działanie Agenta od zwykłego zapytania do modelu (API call)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Agent to <b>autonomiczny system działający w pętli</b>.\n\nZwykłe zapytanie API odpowiada tylko raz i na tym kończy pracę (jak SMS \"nie wiem\"). Agent dostaje zadanie, <b>sam decyduje</b> jakich narzędzi użyć (np. wyszukać coś w sieci), uruchamia je, zbiera wyniki i iteruje, aż zadanie zostanie wykonane (jak asystent wysłany na miasto załatwić sprawę).</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "Jakie dwa podstawowe elementy z biblioteki `openai-agents` są potrzebne do uruchomienia Agenta?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">1. <b><code>Agent</code></b> – klasa definiująca kim jest agent (jego <code>name</code>, <code>instructions</code>, dozwolone <code>tools</code>, model).\n\n2. <b><code>Runner</code></b> – klasa służąca do faktycznego uruchomienia instancji agenta i przekazania mu zadania, np. poprzez <code>await Runner.run(agent, \"treść zadania\")</code>.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Do czego służy Structured Output (`output_type`) i z jakiej biblioteki w tym celu korzysta?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Służy do wymuszenia na agencie, aby zwrócił <b>dane o ścisłej strukturze</b>, a nie luźny tekst.\n\nKorzysta z biblioteki <b>Pydantic</b>. Definiujemy klasę dziedziczącą po <code>BaseModel</code>, podpinamy pod <code>output_type</code> w agencie. Dzięki temu wynik (<code>result.final_output</code>) to gotowy do użycia w kodzie obiekt z konkretnymi polami, a nie string, z którego trzeba parsować dane.</pre>"
+    },
+    {
+      "cat": "kod",
+      "catLabel": "💻 Kod",
+      "q": "W jaki sposób zamienić dowolną funkcję napisaną w Pythonie w Narzędzie (Tool) używane przez Agenta?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Wystarczy użyć dekoratora <b><code>@function_tool</code></b> tuż nad definicją funkcji.\n\nNależy zadbać o <b>typowanie parametrów</b> (type hints) i koniecznie dodać jasny <b>docstring</b> (komentarz pod definicją funkcji), ponieważ to na ich podstawie model LLM dowiaduje się, do czego służy dane narzędzie i kiedy go użyć.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Na czym polega wzorzec architektoniczny Hand-offs (Triage / Router)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Polega na stworzeniu <b>agenta-dystrybutora (recepcjonisty)</b>, który sam nie rozwiązuje zadań.\n\nJego jedynym celem jest analiza intencji użytkownika i <b>przekazanie konwersacji</b> (hand-off) do wyspecjalizowanego <b>agenta-eksperta</b> (np. od matematyki, historii, obsługi zwrotów). Robi się to podając ekspertów na liście <code>handoffs=[...]</code> z opisanym parametrem <code>handoff_description</code>.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Czym są Guardrails (bariery ochronne) i jakie wyróżniamy ich dwa główne typy?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">To zabezpieczenia zapobiegające nadużyciom i halucynacjom. Typy to:\n\n1. <b>Input Guardrail</b> – weryfikuje zapytanie od użytkownika ZANIM trafi do agenta docelowego (czy nie łamie regulaminu, czy jest na temat).\n2. <b>Output Guardrail</b> – weryfikuje odpowiedź wygenerowaną przez agenta ZANIM zostanie zwrócona użytkownikowi (np. czy nie zdradza tajemnicy firmy).</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "💡 Pojęcie",
+      "q": "Jaka jest kluczowa różnica między przekazaniem zadania przez Hand-off, a potraktowaniem innego Agenta jako narzędzia (`as_tool`)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">W <b>Hand-off</b> agent całkowicie oddaje pałeczkę ekspertowi – ekspert przejmuje rozmowę i to on odpowiada bezpośrednio użytkownikowi (jak recepcjonistka i księgowa).\n\nW przypadku <b>Agenta jako narzędzia</b>, główny agent \"zleca\" podzadanie i czeka na zwrotny wynik, a następnie to główny agent formuje ostateczną odpowiedź dla użytkownika (jak dyrektor zbierający raport od pracownika).</pre>"
+    }
+  ],
+  "category": "Agenci AI",
+  "status": "zrobione"
+}

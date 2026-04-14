@@ -207,5 +207,6 @@
       "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Ponieważ taki mock pozwala wywołać <b>dowolną, nieistniejącą metodę</b> (np. przez literówkę <code>mock.create_resum()</code>), dając fałszywie \"zielony\" test. Z <code>spec=AbstractClass</code> mock zna tylko metody z kontraktu — literówka rzuca <code>AttributeError</code> natychmiast.</pre>"
     }
   ],
-  "category": "Pytest"
+  "category": "Pytest",
+  "status": "zrobione"
 }

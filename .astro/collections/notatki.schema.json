@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "related_flashcards": {
+      "type": "string"
+    },
+    "mindmap": {
+      "type": "string"
+    },
+    "mindmap_rotation": {
+      "default": 0,
+      "type": "number"
+    },
+    "mindmap_zoom": {
+      "default": 100,
+      "type": "number"
+    },
+    "mindmaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "rotation": {
+            "default": 0,
+            "type": "number"
+          },
+          "zoom": {
+            "default": 100,
+            "type": "number"
+          }
+        },
+        "required": [
+          "file"
+        ]
+      }
+    },
+    "type": {
+      "default": "notatka",
+      "type": "string",
+      "enum": [
+        "notatka",
+        "mapa"
+      ]
+    },
+    "status": {
+      "default": "planowane",
+      "type": "string",
+      "enum": [
+        "planowane",
+        "w_trakcie",
+        "zrobione"
+      ]
+    },
+    "hidden": {
+      "default": false,
+      "type": "boolean"
+    },
+    "next_review_date": {
+      "type": "string"
+    },
+    "review_count": {
+      "default": 0,
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

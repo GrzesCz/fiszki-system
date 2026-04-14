@@ -1,0 +1,625 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const notatki = await getCollection('notatki');
+const fiszki = await getCollection('fiszki');
+
+const allCategories = Array.from(new Set([
+  ...notatki.map(n => n.data.category).filter(Boolean),
+  ...fiszki.map(f => f.data.category).filter(Boolean),
+])).sort() as string[];
+
+const statusLabel = { zrobione: '✓ Zrobione', w_trakcie: '⟳ W trakcie', planowane: '○ Planowane' };
+const statusClass = { zrobione: 'status-done', w_trakcie: 'status-progress', planowane: 'status-planned' };
+
+// Funkcja pomocnicza do obliczania globalnego statusu kategorii/akordeonu
+function getCategoryStatus(notes: any[], fiszkis: any[]) {
+  const allItems = [...notes, ...fiszkis];
+  if (allItems.length === 0) return 'planowane';
+  
+  const allDone = allItems.every(i => i.data.status === 'zrobione');
+  if (allDone) return 'zrobione';
+  
+  const hasInProgress = allItems.some(i => i.data.status === 'w_trakcie' || i.data.status === 'zrobione');
+  if (hasInProgress) return 'w_trakcie';
+  
+  return 'planowane';
+}
+---
+<BaseLayout title="Panel Zarządzania" subtitle="Centrum Wiedzy – Administracja">
+
+  <div class="admin-nav">
+    <a href="/" class="btn-secondary btn-small">← Widok ucznia</a>
+    <a href="/admin/nowy-temat" class="btn-primary btn-small">+ Nowy temat</a>
+    <a href="/admin/upload-notatka" class="btn-primary btn-small">+ Dodaj notatkę</a>
+  </div>
+
+  <!-- Modal potwierdzenia usunięcia -->
+  <div id="deleteModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-icon">🗑</div>
+      <h3 class="modal-title">Usuń element</h3>
+      <p class="modal-msg" id="modalMsg"></p>
+      <p class="modal-warning">Tej operacji nie można cofnąć.</p>
+      <div class="modal-actions">
+        <button id="modalCancel" class="btn-modal-cancel">Anuluj</button>
+        <button id="modalConfirm" class="btn-modal-confirm">Usuń</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-accordion-group">
+    {allCategories.map(category => {
+      const catNotes = notatki.filter(n => n.data.category === category);
+      const catFiszki = fiszki.filter(f => f.data.category === category);
+      const overallStatus = getCategoryStatus(catNotes, catFiszki);
+      
+      return (
+        <details class="admin-accordion">
+          <summary class="accordion-summary">
+            <div class="summary-content">
+              <h2 class="summary-title">{category}</h2>
+              <span class={`status-pill ${statusClass[overallStatus]}`}>
+                {statusLabel[overallStatus]}
+              </span>
+            </div>
+            <div class="summary-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </summary>
+          
+          <div class="accordion-body">
+            {catNotes.length > 0 && (
+              <div class="admin-section">
+                <h3 class="section-label">📖 Notatki Główne</h3>
+                <div class="admin-list">
+                  {catNotes.filter(n => !n.data.hidden).map(note => {
+                    const s = note.data.status || 'planowane';
+                    const slug = note.id.replace(/\.md$/, '');
+                    return (
+                      <div class="admin-item main-note-item">
+                        <div class="item-info">
+                          <span class="item-title">{note.data.title}</span>
+                          <span class={`status-pill ${statusClass[s as keyof typeof statusClass]}`}>
+                            {statusLabel[s as keyof typeof statusLabel]}
+                          </span>
+                          {note.data.mindmap && <span class="badge-mini" title="Posiada mapę myśli">🗺️</span>}
+                        </div>
+                        <div class="item-actions">
+                          <select class="status-select" data-type="notatka" data-slug={slug} value={s}>
+                            <option value="planowane" selected={s === 'planowane'}>Planowane</option>
+                            <option value="w_trakcie" selected={s === 'w_trakcie'}>W trakcie</option>
+                            <option value="zrobione" selected={s === 'zrobione'}>Zrobione</option>
+                          </select>
+                          <a href={`/admin/mapa/${slug}`} class="btn-icon" title="Zarządzaj mapą myśli">🗺️</a>
+                          <a href={`/notatki/${slug}`} class="btn-icon" title="Podgląd">👁</a>
+                          <button class="btn-icon btn-delete" data-type="notatka" data-slug={slug} title="Usuń">🗑</button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                {catNotes.filter(n => n.data.hidden).length > 0 && (
+                  <>
+                    <h3 class="section-label" style="margin-top: 1.5rem;">🔗 Notatki Pomocnicze (ukryte)</h3>
+                    <div class="admin-list">
+                      {catNotes.filter(n => n.data.hidden).map(note => {
+                        const s = note.data.status || 'planowane';
+                        const slug = note.id.replace(/\.md$/, '');
+                        return (
+                          <div class="admin-item hidden-note-item">
+                            <div class="item-info">
+                              <span class="item-title">{note.data.title}</span>
+                              <span class={`status-pill ${statusClass[s as keyof typeof statusClass]}`}>
+                                {statusLabel[s as keyof typeof statusLabel]}
+                              </span>
+                            </div>
+                            <div class="item-actions">
+                              <select class="status-select" data-type="notatka" data-slug={slug} value={s}>
+                                <option value="planowane" selected={s === 'planowane'}>Planowane</option>
+                                <option value="w_trakcie" selected={s === 'w_trakcie'}>W trakcie</option>
+                                <option value="zrobione" selected={s === 'zrobione'}>Zrobione</option>
+                              </select>
+                              <a href={`/notatki/${slug}`} class="btn-icon" title="Podgląd">👁</a>
+                              <button class="btn-icon btn-delete" data-type="notatka" data-slug={slug} title="Usuń">🗑</button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
+            {catFiszki.length > 0 && (
+              <div class="admin-section">
+                <h3 class="section-label">🃏 Fiszki</h3>
+                <div class="admin-list">
+                  {catFiszki.map(fiszka => {
+                    const s = fiszka.data.status || 'planowane';
+                    return (
+                      <div class="admin-item">
+                        <div class="item-info">
+                          <span class="item-title">{fiszka.data.title}</span>
+                          <span class="item-count">{fiszka.data.cards.length} kart</span>
+                          <span class={`status-pill ${statusClass[s as keyof typeof statusClass]}`}>
+                            {statusLabel[s as keyof typeof statusLabel]}
+                          </span>
+                        </div>
+                        <div class="item-actions">
+                          <select class="status-select" data-type="fiszka" data-slug={fiszka.id} value={s}>
+                            <option value="planowane" selected={s === 'planowane'}>Planowane</option>
+                            <option value="w_trakcie" selected={s === 'w_trakcie'}>W trakcie</option>
+                            <option value="zrobione" selected={s === 'zrobione'}>Zrobione</option>
+                          </select>
+                          <a href={`/admin/fiszki/${fiszka.id}`} class="btn-icon" title="Edytuj fiszki">✏️</a>
+                          <a href={`/tematy/${fiszka.id}`} class="btn-icon" title="Podgląd">👁</a>
+                          <button class="btn-icon btn-delete" data-type="fiszka" data-slug={fiszka.id} title="Usuń">🗑</button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </details>
+      );
+    })}
+  </div>
+
+</BaseLayout>
+
+<script is:inline>
+  // Zmiana statusu
+  document.querySelectorAll('.status-select').forEach(select => {
+    select.addEventListener('change', async (e) => {
+      const el = e.target;
+      const type = el.dataset.type;
+      const slug = el.dataset.slug;
+      const status = el.value;
+      const apiPath =
+        type === 'notatka'
+          ? `/api/notatki/${slug.split('/').map(encodeURIComponent).join('/')}`
+          : `/api/fiszki/${encodeURIComponent(slug)}`;
+      const url = apiPath;
+      const method = 'PUT';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok) {
+        location.reload();
+      } else {
+        alert(json.error || `Błąd podczas zmiany statusu (${res.status})`);
+      }
+    });
+  });
+
+  // Modal usuwania
+  const modal = document.getElementById('deleteModal');
+  const modalMsg = document.getElementById('modalMsg');
+  const modalConfirm = document.getElementById('modalConfirm');
+  const modalCancel = document.getElementById('modalCancel');
+  let pendingDelete = null;
+
+  function openModal(name, url, itemEl) {
+    modalMsg.textContent = `„${name}"`;
+    pendingDelete = { url, itemEl };
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+    pendingDelete = null;
+  }
+
+  modalCancel.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  modalConfirm.addEventListener('click', async () => {
+    if (!pendingDelete) return;
+    const { url, itemEl } = pendingDelete;
+    modalConfirm.textContent = 'Usuwanie...';
+    modalConfirm.disabled = true;
+    const res = await fetch(url, { method: 'DELETE' });
+    if (res.ok) {
+      itemEl.remove();
+      closeModal();
+    } else {
+      modalConfirm.textContent = 'Usuń';
+      modalConfirm.disabled = false;
+      modalMsg.textContent = 'Błąd podczas usuwania. Spróbuj ponownie.';
+    }
+  });
+
+  document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      const slug = btn.dataset.slug;
+      const name = btn.closest('.admin-item').querySelector('.item-title').textContent;
+      const url =
+        type === 'notatka'
+          ? `/api/notatki/${slug.split('/').map(encodeURIComponent).join('/')}`
+          : `/api/fiszki/${encodeURIComponent(slug)}`;
+      openModal(name, url, btn.closest('.admin-item'));
+    });
+  });
+</script>
+
+<style>
+  .admin-nav {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid var(--accent);
+    background: rgba(124,106,247,0.12);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: rgba(124,106,247,0.25); }
+
+  .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .admin-category {
+    width: 100%;
+    max-width: 760px;
+    margin-bottom: 3rem;
+  }
+
+  .category-heading {
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .admin-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .admin-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    flex-wrap: wrap;
+  }
+
+  .item-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+  }
+
+  .hidden-note-item {
+    opacity: 0.7;
+    border-style: dashed;
+    background: transparent;
+  }
+  .hidden-note-item:hover {
+    opacity: 1;
+    background: var(--surface);
+  }
+
+  .main-note-item {
+    border-left: 3px solid var(--accent);
+  }
+
+  .badge-mini {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .item-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .status-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 100px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+  .status-done { color: var(--green); }
+  .status-progress { color: var(--yellow); }
+  .status-planned { color: var(--text-dim); }
+
+  .item-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .status-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .btn-icon:hover { background: var(--surface2); }
+  .btn-delete {
+    color: var(--red);
+  }
+  .btn-delete:hover {
+    background: rgba(247,74,106,0.2);
+    color: var(--red);
+  }
+
+  /* ── MODAL ── */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.15s ease;
+  }
+  .modal-backdrop.hidden { display: none; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem 2rem 1.5rem;
+    max-width: 400px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    animation: slideUp 0.2s ease;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-icon {
+    font-size: 2rem;
+    background: rgba(247,74,106,0.12);
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .modal-msg {
+    font-size: 0.95rem;
+    color: var(--accent2);
+    font-weight: 600;
+    word-break: break-word;
+    max-width: 320px;
+  }
+
+  .modal-warning {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 0.1rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .btn-modal-cancel {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-modal-cancel:hover { border-color: var(--accent); color: var(--text); }
+
+  .btn-modal-confirm {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(247,74,106,0.5);
+    background: rgba(247,74,106,0.12);
+    color: var(--red);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-modal-confirm:hover { background: rgba(247,74,106,0.25); border-color: var(--red); }
+  .btn-modal-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ------------------- AKORDEON ------------------- */
+  .admin-accordion-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 4rem;
+    width: 100%;
+    max-width: 760px;
+  }
+  
+  .admin-accordion {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .accordion-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    list-style: none; /* Ukrywa domyślny trójkąt w niektórych przeglądarkach */
+    transition: background-color 0.2s;
+  }
+  
+  .accordion-summary::-webkit-details-marker {
+    display: none; /* Ukrywa domyślny trójkąt w Safari/Chrome */
+  }
+  
+  .accordion-summary:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  .summary-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .summary-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0;
+  }
+  
+  .summary-icon {
+    color: var(--text-dim);
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Obrót ikonki gdy akordeon jest otwarty */
+  .admin-accordion[open] .summary-icon {
+    transform: rotate(180deg);
+  }
+  
+  .accordion-body {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .admin-section {
+    margin-top: 1.5rem;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }

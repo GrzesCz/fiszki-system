@@ -1,0 +1,13 @@
+services:
+  centrum-wiedzy:
+    build: .
+    ports:
+      - "4321:4321"
+    volumes:
+      - ./src/content:/app/src/content
+      - ./public/maps:/app/public/maps
+      - ./public/maps:/app/dist/client/maps
+    environment:
+      - HOST=0.0.0.0
+      - PORT=4321
+    restart: always

@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const url = Astro.url;
+const file = url.searchParams.get('file') || '';
+const rotation = parseInt(url.searchParams.get('rotation') || '0', 10);
+const zoom = parseInt(url.searchParams.get('zoom') || '100', 10);
+const back = url.searchParams.get('back') || '/';
+
+const safeFile = file.replace(/[^a-zA-Z0-9._-]/g, '');
+const validRotation = [0, 90, 180, 270].includes(rotation) ? rotation : 0;
+const validZoom = [50, 75, 100, 125, 150].includes(zoom) ? zoom : 100;
+---
+<BaseLayout title="Mapa myśli – pełny rozmiar" subtitle="">
+  <div class="viewer-container">
+    <a href={back} class="viewer-back">← Wróć</a>
+    {safeFile ? (
+      <div class="viewer-image-wrap" style={`transform: rotate(${validRotation}deg) scale(${validZoom / 100})`}>
+        <img src={`/maps/${safeFile}`} alt="Mapa myśli" class="viewer-image" />
+      </div>
+    ) : (
+      <p class="viewer-error">Brak pliku mapy.</p>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .viewer-container {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--bg);
+  }
+  .viewer-back {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-decoration: none;
+    z-index: 10;
+  }
+  .viewer-back:hover {
+    text-decoration: underline;
+  }
+  .viewer-image-wrap {
+    transform-origin: center center;
+    max-width: 95vw;
+    max-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .viewer-image {
+    max-width: 100%;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+  .viewer-error {
+    color: var(--text-dim);
+    font-size: 1rem;
+  }
+</style>

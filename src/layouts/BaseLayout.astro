@@ -13,14 +13,17 @@ const { title, subtitle } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <title>{title} — Fiszki EDU</title>
   </head>
   <body>
     <header>
-      {Astro.url.pathname !== '/' && (
-        <a href="/" class="header-tag header-home">← Strona główna</a>
-      )}
+      <div class="header-top-row">
+        {Astro.url.pathname !== '/' && (
+          <a href="/" class="header-tag header-home">← Strona główna</a>
+        )}
+        <a href="/admin" class="admin-link header-tag">⚙ Panel</a>
+      </div>
       <h1>{title}</h1>
       {subtitle && <div class="subtitle">{subtitle}</div>}
     </header>

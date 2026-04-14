@@ -1,82 +1,1065 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import { getMindmapsFromFrontmatter } from '../../lib/mindmaps-frontmatter';
 
-export async function getStaticPaths() {
-  const notatki = await getCollection('notatki');
-  const fiszki = await getCollection('fiszki');
+const { kategoria } = Astro.params;
+const notatki = await getCollection('notatki');
+const fiszki = await getCollection('fiszki');
 
-  const categoriesSet = new Set<string>();
+// Znajdź kategorię na podstawie sluga
+const allCategories = [
+  ...notatki.map(n => n.data.category).filter(Boolean),
+  ...fiszki.map(f => f.data.category).filter(Boolean),
+];
+const categoryName = allCategories.find(
+  cat => cat!.toLowerCase().replace(/\s+/g, '-') === kategoria
+);
 
-  notatki.forEach(n => {
-    if (n.data.category) categoriesSet.add(n.data.category);
-  });
-
-  fiszki.forEach(f => {
-    if (f.data.category) categoriesSet.add(f.data.category);
-  });
-
-  return Array.from(categoriesSet).map((category) => {
-    return {
-      params: { kategoria: category.toLowerCase().replace(/\s+/g, '-') },
-      props: { categoryName: category, notatki, fiszki },
-    };
-  });
+if (!categoryName) {
+  return Astro.redirect('/');
 }
 
-const { categoryName, notatki, fiszki } = Astro.props;
-
+// Główna notatka to ta, która NIE jest ukryta (hidden !== true)
 const categoryNotes = notatki.filter(n => n.data.category === categoryName);
+const mainNote = categoryNotes.find(n => !n.data.hidden);
 const categoryFiszki = fiszki.filter(f => f.data.category === categoryName);
----
-<BaseLayout title={categoryName} subtitle="Materiały do nauki w tej kategorii">
+
+let Content;
+let mindmaps: { file: string; rotation?: number; zoom?: number }[] = [];
+let noteSlug = '';
+let backUrl = '';
+/** Z pliku .md — getCollection bywa nieaktualny po zapisie z API */
+let liveNextReviewDate: string | undefined;
+let liveReviewCount = 0;
+if (mainNote) {
+  liveNextReviewDate = mainNote.data.next_review_date;
+  liveReviewCount = mainNote.data.review_count ?? 0;
+
+  const rendered = await render(mainNote);
+  Content = rendered.Content;
   
-  {categoryNotes.length > 0 && (
-    <div class="category-section">
-      <h2 class="section-title">📖 Notatki i Mapy Myśli</h2>
-      <div class="tiles-grid sub-tiles">
-        {categoryNotes.map((note) => (
-          <a href={`/notatki/${note.slug}`} class="tile-link">
-            <h2>{note.data.title}</h2>
-            <p class="tile-subtitle">
-              {note.data.mindmap ? '🗺️ Mapa Myśli + Notatka' : '📄 Dokument MD'}
-            </p>
-          </a>
-        ))}
+  try {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const matter = (await import('gray-matter')).default;
+    const notatkiDir = path.join(process.cwd(), 'src', 'content', 'notatki');
+    
+    // Upewnijmy się, że rozszerzenie .md jest obecne (Astro 5+ nie zawiera go w id)
+    const fileName = mainNote.id.endsWith('.md') ? mainNote.id : `${mainNote.id}.md`;
+    const filePath = path.join(notatkiDir, fileName);
+    
+    const raw = await fs.readFile(filePath, 'utf-8');
+    const { data } = matter(raw);
+    const d = data as Record<string, unknown>;
+    mindmaps = getMindmapsFromFrontmatter(d);
+    if (typeof d.next_review_date === 'string') liveNextReviewDate = d.next_review_date;
+    if (typeof d.review_count === 'number') liveReviewCount = d.review_count;
+  } catch (e) {
+    console.error("Błąd podczas odczytu pliku na żywo:", e);
+    mindmaps = getMindmapsFromFrontmatter(mainNote.data as Record<string, unknown>);
+  }
+
+  noteSlug = mainNote.id.replace(/\.md$/, '');
+  backUrl = '/kategoria/' + (categoryName || '').toLowerCase().replace(/\s+/g, '-');
+}
+---
+<BaseLayout title={categoryName} subtitle="Centrum Dowodzenia Tematem">
+  
+  {!mainNote && (
+    <div class="empty-state">
+      <div class="empty-icon">📝</div>
+      <p>Brak głównej notatki dla tej kategorii.</p>
+      <p class="empty-hint">Dodaj notatkę w panelu i upewnij się, że nie ma flagi "hidden: true".</p>
+      <a href="/admin/upload-notatka" class="btn-to-admin">Wgraj Notatkę →</a>
+    </div>
+  )}
+
+  {mainNote && (() => {
+    const today = new Date().toISOString().split('T')[0];
+    const needsReview = !liveNextReviewDate || liveNextReviewDate <= today;
+
+    return (
+      <div class="main-note-container" id="mainLayout">
+        
+        {/* Pasek z przyciskiem powtórki */}
+        <div class="review-bar">
+          {needsReview ? (
+            <button class="btn-review-done" id="btnReviewDone" data-slug={mainNote.id} data-count={liveReviewCount}>
+              ✓ Oznacz jako powtórzone
+            </button>
+          ) : (
+            <span class="review-scheduled">
+              ✅ Powtórka zaplanowana na: <strong>{liveNextReviewDate}</strong>
+            </span>
+          )}
+        </div>
+      
+      {/* Pasek narzędzi układu */}
+      <div class="layout-controls">
+        <div class="layout-tabs">
+          <button class="layout-btn" id="btnLayoutLeft" title="Tylko notatki">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><rect x="3" y="3" width="6" height="18" fill="currentColor" opacity="0.3"/></svg>
+          </button>
+          <button class="layout-btn active" id="btnLayoutSplit" title="Podział ekranu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18"/></svg>
+          </button>
+          <button class="layout-btn" id="btnLayoutRight" title="Tylko mapa">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/><rect x="15" y="3" width="6" height="18" fill="currentColor" opacity="0.3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="split-view">
+        {/* 1. SEKCJA GŁÓWNEJ NOTATKI (LEWA) */}
+        <div class="split-col" id="colNotes">
+          <div class="category-section text-section">
+            <h2 class="section-title">📖 Notatki</h2>
+            <article class="markdown-body">
+              <Content />
+            </article>
+          </div>
+        </div>
+
+        {/* 2. SEKCJA MAPY MYŚLI (PRAWA) */}
+        <div class="split-col" id="colMap">
+          <div class="category-section map-section">
+            <div class="map-header">
+              <h2 class="section-title">🗺️ Mapy Myśli</h2>
+            </div>
+            {mindmaps.length > 0 && (
+              <div class="mindmaps-thumbnails" id="mindmapsThumbnails" data-mindmaps={JSON.stringify(mindmaps)} data-slug={noteSlug} title="Przeciągnij miniatury, aby zmienić kolejność. Kliknij, aby przewinąć do mapy.">
+                {mindmaps.map((m, idx) => (
+                  <div class="thumb-item" data-map-index={idx} draggable="true" title={`Mapa ${idx + 1} – przeciągnij lub kliknij`}>
+                    <img src={`/maps/${m.file}`} alt="" draggable="false" style={`transform: rotate(${m.rotation ?? 0}deg)`} />
+                    <span class="thumb-num">{idx + 1}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {mindmaps.length > 0 && (
+              <div class="mindmaps-list" id="mindmapsList" data-mindmaps={JSON.stringify(mindmaps)} data-slug={noteSlug}>
+                {mindmaps.map((m, idx) => (
+                  <div class="map-card map-card-draggable" id={"map-card-" + idx} data-map-index={idx} draggable="true">
+                    <div class="map-card-toolbar">
+                      <span class="map-drag-handle" title="Przeciągnij, aby zmienić kolejność">⋮⋮</span>
+                      <button class="btn-secondary btn-small map-rotate" data-slug={noteSlug} data-map-index={idx} data-rotation={m.rotation ?? 0} data-direction="-90" title="Obróć w lewo">↺ Obróć w lewo</button>
+                      <button class="btn-secondary btn-small map-rotate" data-slug={noteSlug} data-map-index={idx} data-rotation={m.rotation ?? 0} data-direction="90" title="Obróć w prawo">↻ Obróć w prawo</button>
+                      <button class="btn-secondary btn-small map-replace" data-map-index={idx}>🔄 Zmień</button>
+                      <button class="btn-secondary btn-small btn-danger map-delete" data-slug={noteSlug} data-map-index={idx} title="Usuń mapę">🗑️ Usuń</button>
+                    </div>
+                    <div class="map-showcase">
+                      <div class="mindmap-img-wrap" style={`transform: rotate(${m.rotation ?? 0}deg)`}>
+                        <a href={`/viewer?file=${encodeURIComponent(m.file)}&rotation=${m.rotation ?? 0}&zoom=${m.zoom ?? 100}&back=${encodeURIComponent(backUrl)}`} target="_blank" rel="noopener noreferrer" title="Kliknij, aby otworzyć w pełnym rozmiarze">
+                          <img src={`/maps/${m.file}`} alt={`Mapa myśli ${idx + 1} - ${categoryName}`} class="mindmap-image" draggable="false" />
+                        </a>
+                      </div>
+                      <p class="mindmap-hint">Kliknij, aby otworzyć w pełnym rozmiarze</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div class="map-placeholder map-add-more" id="dropZoneAdd">
+              <p>+ <strong>Dodaj kolejną mapę</strong> – upuść plik lub kliknij</p>
+              <input type="file" id="mapFileInputAdd" style="display: none;" accept="image/png,image/jpeg,image/svg+xml,image/webp" />
+              <button class="btn-secondary btn-small" onclick="document.getElementById('mapFileInputAdd').click()">
+                Wybierz plik
+              </button>
+            </div>
+            <form id="uploadMapForm" style="display: none;">
+              <input type="hidden" name="noteSlug" value={noteSlug} />
+              <input type="file" name="file" id="hiddenFileInput" />
+            </form>
+            <div id="uploadMsg" class="form-msg hidden"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+    );
+  })()}
+
+  {/* 3. SEKCJA FISZEK NA DOLE (PEŁNA SZEROKOŚĆ) */}
+  {categoryFiszki.length > 0 && (
+    <div class="fiszki-section-wrapper">
+      <div class="category-section fiszki-section">
+        <h2 class="section-title">🃏 Fiszki do przećwiczenia</h2>
+        <div class="tiles-grid sub-tiles">
+          {categoryFiszki.map((fiszka) => (
+            <a href={`/tematy/${fiszka.id}`} class="tile-link">
+              <h2>{fiszka.data.title}</h2>
+              <p class="tile-subtitle">{fiszka.data.subtitle || 'Zestaw fiszek'}</p>
+              <p class="tile-count">{fiszka.data.cards.length} fiszek</p>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   )}
 
-  {categoryFiszki.length > 0 && (
-    <div class="category-section" style="margin-top: 3rem;">
-      <h2 class="section-title">🃏 Fiszki</h2>
-      <div class="tiles-grid sub-tiles">
-        {categoryFiszki.map((fiszka) => (
-          <a href={`/tematy/${fiszka.slug}`} class="tile-link">
-            <h2>{fiszka.data.title}</h2>
-            <p class="tile-subtitle">{fiszka.data.subtitle || 'Zestaw fiszek'}</p>
-            <p class="tile-count">{fiszka.data.cards.length} fiszek</p>
-          </a>
-        ))}
-      </div>
-    </div>
-  )}
 </BaseLayout>
 
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    function apiNotatkiUrl(s) {
+      return '/api/notatki/' + s.split('/').map(encodeURIComponent).join('/');
+    }
+    // --- PRZYCISK OZNACZ JAKO POWTÓRZONE ---
+    const btnReview = document.getElementById('btnReviewDone');
+    if (btnReview) {
+      btnReview.addEventListener('click', async () => {
+        const slug = btnReview.getAttribute('data-slug');
+        const currentCount = parseInt(btnReview.getAttribute('data-count') || '0', 10);
+        
+        const intervals = [1, 3, 7, 14, 30, 60, 90];
+        const nextInterval = intervals[Math.min(currentCount, intervals.length - 1)];
+        
+        const nextDate = new Date();
+        nextDate.setDate(nextDate.getDate() + nextInterval);
+        const nextDateString = nextDate.toISOString().split('T')[0];
+        
+        btnReview.textContent = '⏳ Zapisywanie...';
+        btnReview.style.opacity = '0.5';
+        
+        try {
+          const res = await fetch(apiNotatkiUrl(slug), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              next_review_date: nextDateString,
+              review_count: currentCount + 1
+            })
+          });
+          
+          if (res.ok) {
+            btnReview.outerHTML = `<span class="review-scheduled">✅ Powtórka zaplanowana na: <strong>${nextDateString}</strong></span>`;
+          } else {
+            btnReview.textContent = '❌ Błąd zapisu';
+            btnReview.style.opacity = '1';
+          }
+        } catch (err) {
+          console.error(err);
+          btnReview.textContent = '❌ Błąd zapisu';
+          btnReview.style.opacity = '1';
+        }
+      });
+    }
+
+    // --- LAYOUT TOGGLES ---
+    const layoutWrapper = document.getElementById('mainLayout');
+    const colNotes = document.getElementById('colNotes');
+    const colMap = document.getElementById('colMap');
+    
+    const btnLeft = document.getElementById('btnLayoutLeft');
+    const btnSplit = document.getElementById('btnLayoutSplit');
+    const btnRight = document.getElementById('btnLayoutRight');
+
+    // Odczytaj preferencję
+    const savedLayout = localStorage.getItem('fiszki_layout') || 'split';
+    
+    function setLayout(mode) {
+      if (!layoutWrapper) return;
+      
+      // Reset
+      [btnLeft, btnSplit, btnRight].forEach(b => b.classList.remove('active'));
+      colNotes.style.display = '';
+      colMap.style.display = '';
+      layoutWrapper.className = 'main-note-container';
+
+      if (mode === 'left') {
+        btnLeft.classList.add('active');
+        colMap.style.display = 'none';
+        layoutWrapper.classList.add('layout-single');
+      } else if (mode === 'right') {
+        btnRight.classList.add('active');
+        colNotes.style.display = 'none';
+        layoutWrapper.classList.add('layout-single');
+      } else {
+        btnSplit.classList.add('active');
+        // split to domyślny css
+      }
+      
+      localStorage.setItem('fiszki_layout', mode);
+    }
+
+    setLayout(savedLayout);
+
+    btnLeft?.addEventListener('click', () => setLayout('left'));
+    btnSplit?.addEventListener('click', () => setLayout('split'));
+    btnRight?.addEventListener('click', () => setLayout('right'));
+
+
+    // --- DRAG & DROP UPLOAD MAPY ---
+    const dropZone = document.getElementById('dropZone');
+    const hiddenInput = document.getElementById('hiddenFileInput');
+    const visibleInput = document.getElementById('mapFileInput');
+    const uploadForm = document.getElementById('uploadMapForm');
+    const uploadMsg = document.getElementById('uploadMsg');
+
+    async function handleUpload(file) {
+      if (!file) return;
+      
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      hiddenInput.files = dataTransfer.files;
+
+      uploadMsg.className = 'form-msg';
+      uploadMsg.textContent = 'Wgrywanie mapy...';
+      
+      const formData = new FormData(uploadForm);
+      try {
+        const res = await fetch('/api/upload-map', { method: 'POST', body: formData });
+        const json = await res.json();
+        if (res.ok) {
+          uploadMsg.className = 'form-msg success';
+          uploadMsg.textContent = 'Wgrano pomyślnie! Odświeżanie...';
+          setTimeout(() => location.reload(), 800);
+        } else {
+          uploadMsg.className = 'form-msg error';
+          uploadMsg.textContent = `Błąd: ${json.error}`;
+        }
+      } catch (err) {
+        uploadMsg.className = 'form-msg error';
+        uploadMsg.textContent = 'Wystąpił błąd podczas wgrywania.';
+      }
+    }
+
+    if (dropZone) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-active'), false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-active'), false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const file = e.dataTransfer.files[0];
+        handleUpload(file);
+      });
+    }
+
+    if (visibleInput) {
+      visibleInput.addEventListener('change', (e) => {
+        handleUpload(e.target.files[0]);
+      });
+    }
+    
+    // --- DROP ZONE "DODAJ KOLEJNĄ" ---
+    const dropZoneAdd = document.getElementById('dropZoneAdd');
+    const mapFileInputAdd = document.getElementById('mapFileInputAdd');
+    if (dropZoneAdd) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => dropZoneAdd.addEventListener(ev, (e) => { e.preventDefault(); e.stopPropagation(); }));
+      ['dragenter', 'dragover'].forEach(ev => dropZoneAdd.addEventListener(ev, () => dropZoneAdd.classList.add('drag-active')));
+      ['dragleave', 'drop'].forEach(ev => dropZoneAdd.addEventListener(ev, () => dropZoneAdd.classList.remove('drag-active')));
+      dropZoneAdd.addEventListener('drop', (e) => handleUpload(e.dataTransfer?.files?.[0]));
+      dropZoneAdd.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+           mapFileInputAdd?.click();
+        }
+      });
+    }
+    if (mapFileInputAdd) {
+      mapFileInputAdd.addEventListener('change', (e) => handleUpload(e.target.files[0]));
+    }
+
+    // --- ZMIANA MAPY (Zmień) – event delegation ---
+    document.addEventListener('click', (e) => {
+      const replaceBtn = e.target.closest('.map-replace');
+      if (replaceBtn && uploadForm) {
+        const mapIndex = replaceBtn.getAttribute('data-map-index');
+        const tempInput = document.createElement('input');
+        tempInput.type = 'file';
+        tempInput.accept = 'image/png,image/jpeg,image/svg+xml,image/webp';
+        tempInput.onchange = async (ev) => {
+          const file = ev.target.files[0];
+          if (!file) return;
+          const formData = new FormData(uploadForm);
+          formData.set('file', file);
+          if (mapIndex !== null) formData.set('replaceMapIndex', mapIndex);
+          uploadMsg.className = 'form-msg';
+          uploadMsg.textContent = 'Wgrywanie...';
+          try {
+            const res = await fetch('/api/upload-map', { method: 'POST', body: formData });
+            const json = await res.json();
+            if (res.ok) {
+              uploadMsg.className = 'form-msg success';
+              uploadMsg.textContent = 'Wgrano! Odświeżanie...';
+              setTimeout(() => location.reload(), 600);
+            } else {
+              uploadMsg.className = 'form-msg error';
+              uploadMsg.textContent = json.error || 'Błąd';
+            }
+          } catch {
+            uploadMsg.className = 'form-msg error';
+            uploadMsg.textContent = 'Błąd wgrywania.';
+          }
+        };
+        tempInput.click();
+      }
+    });
+
+    // --- OBRÓT MAPY (event delegation) – bez przeładowania, aktualizacja DOM ---
+    document.addEventListener('click', async (e) => {
+      const rotateBtn = e.target.closest('.map-rotate');
+      if (!rotateBtn) return;
+      const card = rotateBtn.closest('.map-card');
+      const slug = rotateBtn.getAttribute('data-slug');
+      const idx = rotateBtn.getAttribute('data-map-index');
+      const current = parseInt(rotateBtn.getAttribute('data-rotation') || '0', 10);
+      const direction = parseInt(rotateBtn.getAttribute('data-direction') || '90', 10);
+      const next = ((current + direction) % 360 + 360) % 360;
+      const origText = rotateBtn.textContent;
+      rotateBtn.textContent = '⏳...';
+      try {
+        const res = await fetch(apiNotatkiUrl(slug), {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mindmap_index: parseInt(idx || '0', 10), mindmap_rotation: next })
+        });
+        if (res.ok) {
+          card.querySelectorAll('.map-rotate').forEach(btn => btn.setAttribute('data-rotation', String(next)));
+          const wrap = card.querySelector('.mindmap-img-wrap');
+          if (wrap) wrap.style.transform = 'rotate(' + next + 'deg)';
+          const link = card.querySelector('a[href*="/viewer"]');
+          if (link) {
+            const url = new URL(link.href);
+            url.searchParams.set('rotation', String(next));
+            link.href = url.toString();
+          }
+          const list = document.getElementById('mindmapsList');
+          const thumbs = document.getElementById('mindmapsThumbnails');
+          if (list) {
+            try {
+              const maps = JSON.parse(list.getAttribute('data-mindmaps') || '[]');
+              if (maps[parseInt(idx || '0', 10)]) {
+                maps[parseInt(idx || '0', 10)].rotation = next;
+                const newStr = JSON.stringify(maps);
+                list.setAttribute('data-mindmaps', newStr);
+                if (thumbs) {
+                  thumbs.setAttribute('data-mindmaps', newStr);
+                  const thumbImg = thumbs.querySelector(`[data-map-index="${idx}"] img`);
+                  if (thumbImg) thumbImg.style.transform = 'rotate(' + next + 'deg)';
+                }
+              }
+            } catch {}
+          }
+        }
+        rotateBtn.textContent = origText;
+      } catch {
+        rotateBtn.textContent = origText;
+      }
+    });
+
+    // --- USUWANIE MAPY (event delegation) ---
+    document.addEventListener('click', async (e) => {
+      const deleteBtn = e.target.closest('.map-delete');
+      if (!deleteBtn) return;
+      if (!confirm('Czy na pewno chcesz usunąć tę mapę? Plik zostanie trwale usunięty.')) return;
+      const slug = deleteBtn.getAttribute('data-slug');
+      const mapIndex = parseInt(deleteBtn.getAttribute('data-map-index') || '0', 10);
+      deleteBtn.textContent = '⏳...';
+      deleteBtn.disabled = true;
+      try {
+        const res = await fetch('/api/delete-map', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ noteSlug: slug, mapIndex })
+        });
+        if (res.ok) {
+          sessionStorage.setItem('mindmapsScrollTo', String(Math.max(0, mapIndex - 1)));
+          location.reload();
+        } else {
+          deleteBtn.textContent = '🗑️ Usuń';
+          deleteBtn.disabled = false;
+        }
+      } catch {
+        deleteBtn.textContent = '🗑️ Usuń';
+        deleteBtn.disabled = false;
+      }
+    });
+
+    // --- MINIATURY – klik przewija do mapy, drag zmienia kolejność ---
+    const thumbnails = document.getElementById('mindmapsThumbnails');
+    if (thumbnails) {
+      let justDragged = false;
+      thumbnails.querySelectorAll('.thumb-item').forEach((thumb, i) => {
+        thumb.addEventListener('click', (e) => {
+          if (justDragged) return;
+          const card = document.getElementById('map-card-' + i);
+          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      });
+      let thumbDraggedIdx = null;
+      thumbnails.addEventListener('dragstart', (e) => {
+        const item = e.target.closest('.thumb-item');
+        if (!item) return;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', item.getAttribute('data-map-index') || '0');
+        item.classList.add('dragging');
+        thumbDraggedIdx = parseInt(item.getAttribute('data-map-index') || '0', 10);
+      });
+      thumbnails.addEventListener('dragend', (e) => {
+        thumbnails.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('dragging', 'drag-over'));
+        thumbDraggedIdx = null;
+      });
+      thumbnails.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const item = e.target.closest('.thumb-item');
+        if (item && thumbDraggedIdx !== null) {
+          thumbnails.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('drag-over'));
+          item.classList.add('drag-over');
+        }
+      });
+      thumbnails.addEventListener('dragleave', (e) => {
+        if (!thumbnails.contains(e.relatedTarget)) {
+          thumbnails.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('drag-over'));
+        }
+      });
+      thumbnails.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        justDragged = true;
+        setTimeout(() => { justDragged = false; }, 100);
+        const item = e.target.closest('.thumb-item');
+        if (!item) return;
+        const fromIdx = parseInt(e.dataTransfer.getData('text/plain') || '0', 10);
+        const toIdx = parseInt(item.getAttribute('data-map-index') || '0', 10);
+        if (fromIdx === toIdx) return;
+        const dataStr = thumbnails.getAttribute('data-mindmaps');
+        const slug = thumbnails.getAttribute('data-slug');
+        if (!dataStr || !slug) return;
+        let maps;
+        try {
+          maps = JSON.parse(dataStr);
+        } catch { return; }
+        const [moved] = maps.splice(fromIdx, 1);
+        maps.splice(toIdx, 0, moved);
+        thumbnails.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('drag-over'));
+        try {
+          const res = await fetch(apiNotatkiUrl(slug), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mindmaps: maps })
+          });
+          if (res.ok) {
+            sessionStorage.setItem('mindmapsScrollTo', String(Math.min(toIdx, maps.length - 1)));
+            location.reload();
+          }
+        } catch {}
+      });
+    }
+
+    // --- PRZESTAWIANIE KOLEJNOŚCI MAP (drag & drop na kartach) ---
+    const mindmapsList = document.getElementById('mindmapsList');
+    if (mindmapsList && mindmapsList.querySelectorAll('.map-card-draggable').length > 1) {
+      let draggedIdx = null;
+      mindmapsList.addEventListener('dragstart', (e) => {
+        const card = e.target.closest('.map-card-draggable');
+        if (!card) return;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', card.getAttribute('data-map-index') || '0');
+        e.dataTransfer.setData('application/json', JSON.stringify({ index: parseInt(card.getAttribute('data-map-index') || '0', 10) }));
+        card.classList.add('dragging');
+        draggedIdx = parseInt(card.getAttribute('data-map-index') || '0', 10);
+      });
+      mindmapsList.addEventListener('dragend', (e) => {
+        const card = e.target.closest('.map-card-draggable');
+        if (card) card.classList.remove('dragging');
+        mindmapsList.querySelectorAll('.map-card-draggable').forEach(c => c.classList.remove('drag-over'));
+        draggedIdx = null;
+      });
+      mindmapsList.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const card = e.target.closest('.map-card-draggable');
+        if (card && draggedIdx !== null) {
+          mindmapsList.querySelectorAll('.map-card-draggable').forEach(c => c.classList.remove('drag-over'));
+          card.classList.add('drag-over');
+        }
+      });
+      mindmapsList.addEventListener('dragleave', (e) => {
+        if (!mindmapsList.contains(e.relatedTarget)) {
+          mindmapsList.querySelectorAll('.map-card-draggable').forEach(c => c.classList.remove('drag-over'));
+        }
+      });
+      mindmapsList.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        const card = e.target.closest('.map-card-draggable');
+        if (!card) return;
+        const fromIdx = parseInt(e.dataTransfer.getData('text/plain') || '0', 10);
+        const toIdx = parseInt(card.getAttribute('data-map-index') || '0', 10);
+        if (fromIdx === toIdx) return;
+        const dataStr = mindmapsList.getAttribute('data-mindmaps');
+        const slug = mindmapsList.getAttribute('data-slug');
+        if (!dataStr || !slug) return;
+        let maps;
+        try {
+          maps = JSON.parse(dataStr);
+        } catch {
+          return;
+        }
+        const [moved] = maps.splice(fromIdx, 1);
+        maps.splice(toIdx, 0, moved);
+        mindmapsList.querySelectorAll('.map-card-draggable').forEach(c => c.classList.remove('drag-over'));
+        try {
+          const res = await fetch(apiNotatkiUrl(slug), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mindmaps: maps })
+          });
+          if (res.ok) {
+            sessionStorage.setItem('mindmapsScrollTo', String(Math.min(toIdx, maps.length - 1)));
+            location.reload();
+          }
+        } catch {}
+      });
+    }
+
+    // --- Przewijanie do mapy po przeładowaniu (delete/reorder) ---
+    const scrollTo = sessionStorage.getItem('mindmapsScrollTo');
+    if (scrollTo !== null) {
+      sessionStorage.removeItem('mindmapsScrollTo');
+      requestAnimationFrame(() => {
+        const el = document.getElementById('map-card-' + scrollTo);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+  });
+</script>
+
 <style>
-  .category-section {
+  /* Zmiana max-width aby pomieścić dwie kolumny */
+  main {
+    max-width: 1600px !important;
     width: 100%;
-    max-width: 760px;
+    padding: 0 2rem;
+  }
+  
+  header {
+    max-width: 1600px !important;
+    margin: 0 auto 2.5rem auto;
+    padding: 0 1rem;
+  }
+
+  .main-note-container {
+    width: 100%;
+    margin-bottom: 4rem;
+  }
+
+  /* Pasek powtórki */
+  .review-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+  }
+  .btn-review-done {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.85rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid var(--yellow);
+    background: transparent;
+    color: var(--yellow);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-review-done:hover {
+    background: rgba(247, 212, 74, 0.1);
+  }
+  .review-scheduled {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.85rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 400;
+    color: var(--green);
+    background: rgba(74, 247, 154, 0.05);
+    border: 1px solid rgba(74, 247, 154, 0.3);
+    border-radius: 8px;
+  }
+
+  /* --- LAYOUT & SPLIT --- */
+  .layout-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+  }
+
+  .layout-tabs {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.2rem;
+    gap: 0.2rem;
+  }
+
+  .layout-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .layout-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+  .layout-btn.active { color: var(--accent); background: rgba(124,106,247,0.15); }
+
+  .split-view {
+    display: flex;
+    gap: 3rem;
+    align-items: stretch;
+    height: calc(100vh - 140px);
+    min-height: 600px;
+  }
+
+  .split-col {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* Kolumna notatek – pełna wysokość + przewijanie wewnątrz */
+  #colNotes .category-section.text-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #colNotes .markdown-body {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  /* Kolumna mapy – ta sama wysokość */
+  #colMap .category-section.map-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* W trybie single jedna kolumna ma ograniczenie szerokości żeby było czytelnie */
+  .layout-single .split-col {
+    max-width: 900px;
     margin: 0 auto;
   }
+
+  .layout-single .split-view {
+    height: auto;
+    min-height: auto;
+  }
+
+  .layout-single #colNotes .category-section.text-section,
+  .layout-single #colNotes .markdown-body {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  @media (max-width: 1024px) {
+    .split-view {
+      flex-direction: column;
+      height: auto;
+      min-height: auto;
+    }
+    #colNotes .category-section.text-section,
+    #colNotes .markdown-body,
+    #colMap .category-section.map-section {
+      height: auto;
+      min-height: auto;
+      overflow: visible;
+    }
+    .layout-controls {
+      display: none; /* ukrywamy przełączniki na komórkach */
+    }
+    main { padding: 0 1rem; }
+  }
+
+  /* --- ZMIANY W SEKCJI --- */
+  .category-section {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  }
+  
+  .fiszki-section-wrapper {
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   .section-title {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 1.2rem;
-    color: var(--accent);
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     border-bottom: 1px solid var(--border);
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
   }
+
+  .map-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+  .map-header .section-title {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .map-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  /* Sekcja Mapy */
+  .map-showcase {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    overflow: auto;
+    min-height: 0;
+  }
+  .mindmap-image {
+    max-width: 100%;
+    max-height: 60vh;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: zoom-in;
+  }
+  .mindmap-image:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+  .mindmap-hint {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+  }
+  .mindmap-img-wrap {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+  }
+  .map-toolbar .btn-small {
+    font-size: 0.75rem;
+  }
+  .btn-danger {
+    color: var(--red) !important;
+    border-color: var(--red) !important;
+  }
+  .btn-danger:hover {
+    background: rgba(247, 74, 106, 0.1) !important;
+  }
+  .mindmaps-thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .thumb-item {
+    flex-shrink: 0;
+    width: 72px;
+    height: 54px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    cursor: grab;
+    position: relative;
+    background: var(--surface2);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .thumb-item:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(124, 106, 247, 0.3);
+  }
+  .thumb-item:active {
+    cursor: grabbing;
+  }
+  .thumb-item.dragging {
+    opacity: 0.6;
+    border-color: var(--accent);
+  }
+  .thumb-item.drag-over {
+    border-color: var(--green);
+    box-shadow: 0 0 0 2px rgba(74, 247, 154, 0.4);
+  }
+  .thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .thumb-item .thumb-num {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    padding: 1px 4px;
+    border-radius: 4px;
+  }
+  .mindmaps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+  }
+  .map-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  .map-card-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .map-drag-handle {
+    cursor: grab;
+    color: var(--text-dim);
+    font-size: 1rem;
+    padding: 0.2rem 0.4rem;
+    user-select: none;
+    margin-right: 0.25rem;
+  }
+  .map-drag-handle:hover {
+    color: var(--accent);
+  }
+  .map-drag-handle:active {
+    cursor: grabbing;
+  }
+  .map-card-draggable.dragging {
+    opacity: 0.5;
+    border-color: var(--accent);
+  }
+  .map-card-draggable.drag-over {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(124, 106, 247, 0.3);
+  }
+  .map-placeholder {
+    background: rgba(124, 106, 247, 0.05);
+    border: 1px dashed var(--accent);
+    border-radius: 12px;
+    padding: 2.5rem;
+    text-align: center;
+    color: var(--text-dim);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .map-placeholder.map-add-more {
+    padding: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .map-placeholder.map-add-more:hover {
+    background: rgba(124, 106, 247, 0.1);
+  }
+  .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    text-decoration: none;
+    display: inline-flex;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .btn-small:hover { border-color: var(--accent); }
+
+  /* Sekcja Notatki (wzięte z dawnej notatki/[slug].astro) */
+  .markdown-body {
+    width: 100%;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+  .markdown-body > :global(h1:first-of-type) { display: none; }
+  .markdown-body :global(h1), 
+  .markdown-body :global(h2), 
+  .markdown-body :global(h3), 
+  .markdown-body :global(h4) {
+    color: var(--text);
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+  .markdown-body :global(h1) { font-size: 2.2rem; background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .markdown-body :global(h2) { font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  .markdown-body :global(h3) { font-size: 1.4rem; color: var(--accent3); }
+  .markdown-body :global(p) { margin-bottom: 1.2rem; }
+  .markdown-body :global(ul), .markdown-body :global(ol) { margin-bottom: 1.2rem; padding-left: 1.5rem; }
+  .markdown-body :global(li) { margin-bottom: 0.5rem; }
+  .markdown-body :global(strong), .markdown-body :global(b) { color: var(--accent3); font-weight: 600; }
+  .markdown-body :global(em), .markdown-body :global(i) { color: var(--yellow); font-style: normal; font-weight: 600; }
+  .markdown-body :global(blockquote) { border-left: 4px solid var(--accent); background: rgba(124, 106, 247, 0.05); padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; font-style: italic; color: var(--text-dim); }
+  .markdown-body :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; transition: color 0.2s; }
+  .markdown-body :global(a:hover) { color: var(--accent2); }
+  .markdown-body :global(pre) { background: var(--code-bg) !important; border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; overflow-x: auto; margin: 1.5rem 0; }
+  .markdown-body :global(code) { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; background: var(--code-bg); padding: 0.2em 0.4em; border-radius: 4px; border: 1px solid var(--border); color: #e8e8f0; }
+  .markdown-body :global(pre code) { background: transparent; padding: 0; border: none; font-size: 1em; }
+  .markdown-body :global(table) { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.95rem; }
+  .markdown-body :global(th), .markdown-body :global(td) { border: 1px solid var(--border); padding: 0.75rem 1rem; text-align: left; }
+  .markdown-body :global(th) { background: var(--surface2); font-weight: 600; color: var(--accent3); }
+  .markdown-body :global(tr:nth-child(even)) { background: rgba(255, 255, 255, 0.02); }
+
+  .drag-active {
+    border-color: var(--green);
+    background: rgba(74,247,154,0.05);
+  }
+
+  /* Empty State */
+  .empty-state { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 4rem 2rem; text-align: center; color: var(--text-dim); max-width: 400px; margin: 0 auto; }
+  .empty-icon { font-size: 3rem; }
+  .empty-hint { font-size: 0.85rem; line-height: 1.6; }
+  .btn-to-admin { margin-top: 0.5rem; padding: 0.6rem 1.4rem; border-radius: 10px; border: 1px solid var(--accent); background: rgba(124,106,247,0.1); color: var(--accent); font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+  .btn-to-admin:hover { background: rgba(124,106,247,0.22); }
 </style>

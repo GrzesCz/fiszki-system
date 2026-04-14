@@ -1,0 +1,198 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const notatki = await getCollection('notatki');
+const fiszki = await getCollection('fiszki');
+
+const allCategories = Array.from(new Set([
+  ...notatki.map(n => n.data.category).filter(Boolean),
+  ...fiszki.map(f => f.data.category).filter(Boolean),
+])).sort() as string[];
+---
+<BaseLayout title="Dodaj Notatkę" subtitle="Wgraj plik Markdown (.md)">
+
+  <div class="admin-nav">
+    <a href="/admin" class="btn-secondary btn-small">← Panel zarządzania</a>
+  </div>
+
+  <form id="uploadForm" class="admin-form" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="file">Plik Markdown (.md) *</label>
+      <div class="file-drop" id="fileDrop">
+        <input type="file" id="file" name="file" accept=".md" required />
+        <div class="drop-hint">
+          <span class="drop-icon">📄</span>
+          <span>Kliknij lub przeciągnij plik .md</span>
+          <span id="fileName" class="file-name"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Kategoria *</label>
+      <input type="text" id="category" name="category" required placeholder="np. Python"
+             list="categoryList" />
+      <datalist id="categoryList">
+        {allCategories.map(cat => <option value={cat} />)}
+      </datalist>
+      <p class="hint">Jeśli plik już ma frontmatter z kategorią, pole to jest ignorowane</p>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="planowane">○ Planowane</option>
+        <option value="w_trakcie">⟳ W trakcie</option>
+        <option value="zrobione">✓ Zrobione</option>
+      </select>
+    </div>
+
+    <div id="formMsg" class="form-msg hidden"></div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">Wgraj notatkę</button>
+      <a href="/admin" class="btn-secondary">Anuluj</a>
+    </div>
+  </form>
+
+</BaseLayout>
+
+<script is:inline>
+  const fileInput = document.getElementById('file');
+  const fileName = document.getElementById('fileName');
+
+  fileInput.addEventListener('change', () => {
+    fileName.textContent = fileInput.files[0]?.name || '';
+  });
+
+  document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('category', form.category.value.trim());
+    formData.append('status', form.status.value);
+
+    const msg = document.getElementById('formMsg');
+    msg.className = 'form-msg';
+    msg.textContent = 'Wgrywanie...';
+
+    const res = await fetch('/api/notatki', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const json = await res.json();
+    if (res.ok) {
+      msg.className = 'form-msg success';
+      msg.textContent = `✓ Notatka "${json.filename}" wgrana pomyślnie!`;
+      form.reset();
+      fileName.textContent = '';
+    } else {
+      msg.className = 'form-msg error';
+      msg.textContent = `Błąd: ${json.error}`;
+    }
+  });
+</script>
+
+<style>
+  .admin-nav {
+    width: 100%;
+    max-width: 760px;
+    margin-bottom: 2rem;
+  }
+  .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    text-decoration: none;
+    display: inline-flex;
+  }
+  .admin-form {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  label {
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  input[type="text"], select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  input[type="text"]:focus, select:focus { border-color: var(--accent); }
+  .hint { font-size: 0.75rem; color: var(--text-dim); }
+
+  .file-drop {
+    position: relative;
+    background: var(--surface);
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .file-drop:hover { border-color: var(--accent); }
+  .file-drop input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .drop-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    pointer-events: none;
+    color: var(--text-dim);
+  }
+  .drop-icon { font-size: 2rem; }
+  .file-name { color: var(--accent); font-size: 0.9rem; margin-top: 0.25rem; }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid var(--accent);
+    background: rgba(124,106,247,0.12);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: rgba(124,106,247,0.25); }
+  .form-msg { padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; }
+  .form-msg.hidden { display: none; }
+  .form-msg.success { background: rgba(74,247,154,0.1); color: var(--green); border: 1px solid var(--green); }
+  .form-msg.error { background: rgba(247,74,106,0.1); color: var(--red); border: 1px solid var(--red); }
+</style>

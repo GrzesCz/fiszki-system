@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ReviewSuggestion from '../components/ReviewSuggestion.astro';
 import { getCollection } from 'astro:content';
 
 const notatki = await getCollection('notatki');
@@ -17,23 +18,199 @@ fiszki.forEach(f => {
 });
 
 const categories = Array.from(categoriesSet).sort();
+
+// Dla widoku ucznia: kategoria jest aktywna jeśli ma choć jeden element w_trakcie lub zrobione
+function categoryIsActive(category: string) {
+  const notes = notatki.filter(n => n.data.category === category);
+  const fiszkiCat = fiszki.filter(f => f.data.category === category);
+  const allItems = [...notes, ...fiszkiCat];
+  return allItems.some(i => i.data.status === 'w_trakcie' || i.data.status === 'zrobione');
+}
+
+const activeCategories = categories.filter(categoryIsActive);
+
+/** Najwcześniejsza next_review_date wśród notatek kategorii (ISO yyyy-mm-dd). */
+function earliestReviewInCategory(notes: typeof notatki) {
+  const dates = notes
+    .map((n) => n.data.next_review_date)
+    .filter((d): d is string => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}/.test(d.trim()));
+  if (dates.length === 0) return undefined;
+  return dates.reduce((a, b) => (a <= b ? a : b));
+}
+
+function formatReviewDatePl(iso: string) {
+  const s = iso.trim().slice(0, 10);
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+  if (!m) return iso;
+  return `${m[3]}.${m[2]}.${m[1]}`;
+}
 ---
 <BaseLayout title="Centrum Wiedzy" subtitle="Wybierz grupę tematyczną">
+
+  <ReviewSuggestion />
+
+  {activeCategories.length === 0 && (
+    <div class="empty-state">
+      <div class="empty-icon">📚</div>
+      <p>Brak aktywnych tematów.</p>
+      <p class="empty-hint">Dodaj tematy i oznacz je jako „W trakcie" lub „Zrobione" w panelu zarządzania.</p>
+      <a href="/admin" class="btn-to-admin">Przejdź do panelu →</a>
+    </div>
+  )}
+
   <div class="tiles-grid project-tiles">
-    {categories.map((category) => {
+    {activeCategories.map((category) => {
       const categoryNotes = notatki.filter(n => n.data.category === category);
+      const pureNotes = categoryNotes.filter(n => n.data.type !== 'mapa' && !n.data.mindmap);
+      const mindMaps = categoryNotes.filter(n => n.data.type === 'mapa' || !!n.data.mindmap);
       const categoryFiszki = fiszki.filter(f => f.data.category === category);
       
+      const allItems = [...categoryNotes, ...categoryFiszki];
+      const hasInProgress = allItems.some(i => i.data.status === 'w_trakcie');
+      const allDone = allItems.length > 0 && allItems.every(i => i.data.status === 'zrobione');
+      const allPlanned = allItems.length > 0 && allItems.every(i => i.data.status === 'planowane');
+
+      let statusClass: string;
+      let statusBadge: string;
+      if (allDone) {
+        statusClass = 'status-done';
+        statusBadge = '✓ Zrobione';
+      } else if (hasInProgress) {
+        statusClass = 'status-progress';
+        statusBadge = '⟳ W trakcie';
+      } else if (allPlanned) {
+        statusClass = 'status-planned';
+        statusBadge = '○ Planowane';
+      } else {
+        // np. mieszanka planowane + zrobione bez „w trakcie”
+        statusClass = 'status-progress';
+        statusBadge = '⟳ W trakcie';
+      }
+
       const slug = category.toLowerCase().replace(/\s+/g, '-');
-      
+      const nextReviewRaw = allDone ? earliestReviewInCategory(categoryNotes) : undefined;
+      const nextReviewLabel = nextReviewRaw ? formatReviewDatePl(nextReviewRaw) : null;
+
       return (
-        <a href={`/kategoria/${slug}`} class="tile-link project-tile">
-          <h2>{category}</h2>
+        <a href={`/kategoria/${slug}`} class={`tile-link project-tile ${statusClass}`}>
+          <div class="tile-header">
+            <h2>{category}</h2>
+            <div class="tile-header-right">
+              <span class={`status-badge ${statusClass}`}>{statusBadge}</span>
+              {allDone && (
+                nextReviewLabel ? (
+                  <span class="tile-next-review" title="Następna powtórka (harmonogram według krzywej zapominania)">
+                    🔄 {nextReviewLabel}
+                  </span>
+                ) : (
+                  <span class="tile-next-review tile-next-review--muted" title="Ustal datę powtórki na stronie tematu (przycisk powtórki)">
+                    🔄 —
+                  </span>
+                )
+              )}
+            </div>
+          </div>
           <p class="tile-subtitle">
-            {categoryNotes.length} notatek · {categoryFiszki.length} zestawów fiszek
+            Baza wiedzy · {categoryFiszki.length} zestawów fiszek
           </p>
         </a>
       );
     })}
   </div>
 </BaseLayout>
+
+<style>
+  .tile-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .tile-header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    max-width: 55%;
+    text-align: right;
+  }
+
+  .tile-next-review {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    color: var(--green);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .tile-next-review--muted {
+    color: var(--text-dim);
+    opacity: 0.85;
+  }
+
+  .status-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 100px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    border: 1px solid currentColor;
+  }
+
+  .status-done {
+    border-color: var(--green) !important;
+  }
+  .status-done .status-badge {
+    color: var(--green);
+  }
+
+  .status-progress {
+    border-color: var(--yellow) !important;
+  }
+  .status-progress .status-badge {
+    color: var(--yellow);
+  }
+
+  .status-planned {
+    border-color: var(--text-dim) !important;
+  }
+  .status-planned .status-badge {
+    color: var(--text-dim);
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--text-dim);
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .empty-icon { font-size: 3rem; }
+  .empty-hint { font-size: 0.85rem; line-height: 1.6; }
+  .btn-to-admin {
+    margin-top: 0.5rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 10px;
+    border: 1px solid var(--accent);
+    background: rgba(124,106,247,0.1);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-to-admin:hover { background: rgba(124,106,247,0.22); }
+</style>
