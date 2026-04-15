@@ -1,38 +1,16 @@
 ---
-import { getCollection } from 'astro:content';
-import fs from 'fs/promises';
-import path from 'path';
-import matter from 'gray-matter';
+import { getNotatki } from '../lib/read-content';
 
-const notatki = await getCollection('notatki');
-const notatkiDir = path.join(process.cwd(), 'src', 'content', 'notatki');
+const notatki = await getNotatki();
+const today   = new Date().toISOString().split('T')[0];
 
-// Pobieramy dzisiejszą datę w formacie YYYY-MM-DD
-const today = new Date().toISOString().split('T')[0];
-
-/** Aktualna data powtórki z pliku .md — getCollection bywa niezsynchronizowany po PUT z API */
-async function liveNextReviewDate(n: (typeof notatki)[number]): Promise<string | undefined> {
-  try {
-    const fileName = n.id.endsWith('.md') ? n.id : `${n.id}.md`;
-    const filePath = path.join(notatkiDir, fileName);
-    const raw = await fs.readFile(filePath, 'utf-8');
-    const { data } = matter(raw);
-    return (data as { next_review_date?: string }).next_review_date;
-  } catch {
-    return n.data.next_review_date;
-  }
-}
-
-const withLiveDates = await Promise.all(
-  notatki.map(async (n) => ({ n, next: await liveNextReviewDate(n) }))
+// Notatki z zaległą powtórką – dane zawsze live
+const toReview = notatki.filter(
+  n => n.data.next_review_date != null &&
+       n.data.next_review_date !== '' &&
+       n.data.next_review_date <= today
 );
 
-// Szukamy notatek, które wymagają powtórki: next_review_date dzisiaj lub w przeszłości
-const toReview = withLiveDates
-  .filter(({ next }) => next != null && next !== '' && next <= today)
-  .map(({ n }) => n);
-
-// Zamiast pokazywać wszystkie, weź pierwszą, by nie przytłoczyć użytkownika
 const suggestion = toReview.length > 0 ? toReview[0] : null;
 ---
 

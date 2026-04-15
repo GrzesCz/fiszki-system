@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getNotatki, getFiszki } from '../../lib/read-content';
 
-const notatki = await getCollection('notatki');
-const fiszki = await getCollection('fiszki');
+const notatki = await getNotatki();
+const fiszki  = await getFiszki();
 
 const allCategories = Array.from(new Set([
   ...notatki.map(n => n.data.category).filter(Boolean),

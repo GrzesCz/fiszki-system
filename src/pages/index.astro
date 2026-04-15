@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ReviewSuggestion from '../components/ReviewSuggestion.astro';
-import { getCollection } from 'astro:content';
+import { getNotatki, getFiszki } from '../lib/read-content';
 
-const notatki = await getCollection('notatki');
-const fiszki = await getCollection('fiszki');
+const notatki = await getNotatki();
+const fiszki = await getFiszki();
 
 // Pobierz wszystkie unikalne kategorie
 const categoriesSet = new Set<string>();

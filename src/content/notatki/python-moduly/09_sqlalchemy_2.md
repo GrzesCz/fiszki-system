@@ -1,6 +1,8 @@
 ---
-title: "Notatki: SQLAlchemy 2.0 – ORM, Core, sesje | Moduł 2: Walidacja i Dane"
-category: "SQLAlchemy 2"
+title: 'Notatki: SQLAlchemy 2.0 – ORM, Core, sesje | Moduł 2: Walidacja i Dane'
+category: SQLAlchemy 2
+status: planowane
+mindmaps: []
 ---
 # Notatki: SQLAlchemy 2.0 – ORM, Core, sesje | Moduł 2: Walidacja i Dane
 

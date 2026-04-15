@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getNotatki } from '../../../lib/read-content';
 
 const slugParam = Astro.params.slug ?? '';
 const cleanSlug = slugParam.replace(/\.md$/, '');
-const notatki = await getCollection('notatki');
-const entry = notatki.find(n => n.id.replace(/\.md$/, '') === cleanSlug);
+const notatki   = await getNotatki();
+const entry     = notatki.find(n => n.id.replace(/\.md$/, '') === cleanSlug);
 const slug = cleanSlug;
 
 if (!entry) {

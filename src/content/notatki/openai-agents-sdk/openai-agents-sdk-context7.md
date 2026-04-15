@@ -1,7 +1,7 @@
 ---
 title: 'Szczegóły: Context7 i Outlook MCP (krok po kroku)'
 category: Agenci AI
-status: w_trakcie
+status: zrobione
 type: notatka
 hidden: true
 mindmaps: []

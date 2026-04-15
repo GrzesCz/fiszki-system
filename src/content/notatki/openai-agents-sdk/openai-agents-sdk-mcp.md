@@ -1,7 +1,7 @@
 ---
-title: 'Model Context Protocol (MCP) i narzędzia zewnętrzne'
+title: Model Context Protocol (MCP) i narzędzia zewnętrzne
 category: Agenci AI
-status: w_trakcie
+status: zrobione
 type: notatka
 hidden: true
 mindmaps: []

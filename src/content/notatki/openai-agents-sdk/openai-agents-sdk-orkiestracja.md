@@ -1,7 +1,7 @@
 ---
-title: 'Orkiestracja i wzorce zrównoleglania (OpenAI Agents SDK)'
+title: Orkiestracja i wzorce zrównoleglania (OpenAI Agents SDK)
 category: Agenci AI
-status: w_trakcie
+status: zrobione
 type: notatka
 hidden: true
 mindmaps: []

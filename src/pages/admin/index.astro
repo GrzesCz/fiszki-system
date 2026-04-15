@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getNotatki, getFiszki } from '../../lib/read-content';
 
-const notatki = await getCollection('notatki');
-const fiszki = await getCollection('fiszki');
+const notatki = await getNotatki();
+const fiszki = await getFiszki();
 
 const allCategories = Array.from(new Set([
   ...notatki.map(n => n.data.category).filter(Boolean),
@@ -64,8 +64,16 @@ function getCategoryStatus(notes: any[], fiszkis: any[]) {
                 {statusLabel[overallStatus]}
               </span>
             </div>
-            <div class="summary-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <div class="summary-right">
+              <button
+                class="btn-icon btn-delete-category"
+                data-category={category}
+                title="Usuń całą kategorię"
+                onclick="event.preventDefault(); event.stopPropagation();"
+              >🗑</button>
+              <div class="summary-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
             </div>
           </summary>
           
@@ -174,31 +182,57 @@ function getCategoryStatus(notes: any[], fiszkis: any[]) {
 </BaseLayout>
 
 <script is:inline>
-  // Zmiana statusu
+  const STATUS_CLASS = { planowane: 'status-planned', w_trakcie: 'status-progress', zrobione: 'status-done' };
+  const STATUS_LABEL = { planowane: '○ Planowane', w_trakcie: '⟳ W trakcie', zrobione: '✓ Zrobione' };
+
+  function updateAccordionBadge(accordion) {
+    const selects = Array.from(accordion.querySelectorAll('.status-select'));
+    const statuses = selects.map(s => s.value);
+    const allDone    = statuses.length > 0 && statuses.every(s => s === 'zrobione');
+    const hasActive  = statuses.some(s => s === 'w_trakcie' || s === 'zrobione');
+    const newStatus  = allDone ? 'zrobione' : hasActive ? 'w_trakcie' : 'planowane';
+    const badge = accordion.querySelector('.accordion-summary .status-pill');
+    if (badge) {
+      badge.className = `status-pill ${STATUS_CLASS[newStatus]}`;
+      badge.textContent = STATUS_LABEL[newStatus];
+    }
+  }
+
+  // Zmiana statusu – aktualizacja UI w miejscu (bez location.reload)
   document.querySelectorAll('.status-select').forEach(select => {
     select.addEventListener('change', async (e) => {
       const el = e.target;
-      const type = el.dataset.type;
-      const slug = el.dataset.slug;
+      const type   = el.dataset.type;
+      const slug   = el.dataset.slug;
       const status = el.value;
       const apiPath =
         type === 'notatka'
           ? `/api/notatki/${slug.split('/').map(encodeURIComponent).join('/')}`
           : `/api/fiszki/${encodeURIComponent(slug)}`;
-      const url = apiPath;
-      const method = 'PUT';
-      const res = await fetch(url, {
-        method,
+      const res  = await fetch(apiPath, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
       const json = await res.json().catch(() => ({}));
       if (res.ok) {
-        location.reload();
+        // Zaktualizuj pigułkę statusu przy elemencie
+        const item = el.closest('.admin-item');
+        const pill = item?.querySelector('.status-pill');
+        if (pill) {
+          pill.className = `status-pill ${STATUS_CLASS[status]}`;
+          pill.textContent = STATUS_LABEL[status];
+        }
+        // Zaktualizuj odznakę statusu na nagłówku akordeonu
+        const accordion = el.closest('.admin-accordion');
+        if (accordion) updateAccordionBadge(accordion);
       } else {
+        el.value = el.dataset.prevValue || el.value; // cofnij zmianę w UI
         alert(json.error || `Błąd podczas zmiany statusu (${res.status})`);
       }
     });
+    // Zapamiętaj poprzednią wartość (na wypadek błędu API)
+    select.addEventListener('mousedown', (e) => { e.target.dataset.prevValue = e.target.value; });
   });
 
   // Modal usuwania
@@ -232,8 +266,12 @@ function getCategoryStatus(notes: any[], fiszkis: any[]) {
     modalConfirm.disabled = true;
     const res = await fetch(url, { method: 'DELETE' });
     if (res.ok) {
-      itemEl.remove();
-      closeModal();
+      if (itemEl) {
+        itemEl.remove();
+        closeModal();
+      } else {
+        location.reload();
+      }
     } else {
       modalConfirm.textContent = 'Usuń';
       modalConfirm.disabled = false;
@@ -251,6 +289,18 @@ function getCategoryStatus(notes: any[], fiszkis: any[]) {
           ? `/api/notatki/${slug.split('/').map(encodeURIComponent).join('/')}`
           : `/api/fiszki/${encodeURIComponent(slug)}`;
       openModal(name, url, btn.closest('.admin-item'));
+    });
+  });
+
+  document.querySelectorAll('.btn-delete-category').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.dataset.category;
+      const url = `/api/kategoria/${encodeURIComponent(category)}`;
+      const accordion = btn.closest('.admin-accordion');
+      modalMsg.textContent = `„${category}" — wszystkie notatki i fiszki z tej kategorii zostaną usunięte.`;
+      pendingDelete = { url, itemEl: null };
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     });
   });
 </script>
@@ -588,6 +638,12 @@ function getCategoryStatus(notes: any[], fiszkis: any[]) {
     margin: 0;
   }
   
+  .summary-right {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
   .summary-icon {
     color: var(--text-dim);
     transition: transform 0.3s ease;
@@ -595,10 +651,19 @@ function getCategoryStatus(notes: any[], fiszkis: any[]) {
     align-items: center;
     justify-content: center;
   }
-  
+
   /* Obrót ikonki gdy akordeon jest otwarty */
   .admin-accordion[open] .summary-icon {
     transform: rotate(180deg);
+  }
+
+  .btn-delete-category {
+    color: var(--red);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .admin-accordion:hover .btn-delete-category {
+    opacity: 1;
   }
   
   .accordion-body {

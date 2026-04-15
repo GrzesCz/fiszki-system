@@ -2,10 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 import { getMindmapsFromFrontmatter } from '../../lib/mindmaps-frontmatter';
+import { getNotatki, getFiszki } from '../../lib/read-content';
 
 const { kategoria } = Astro.params;
-const notatki = await getCollection('notatki');
-const fiszki = await getCollection('fiszki');
+const notatki = await getNotatki();   // live – aktualne dane z plików
+const fiszki  = await getFiszki();    // live – aktualne dane z plików
 
 // Znajdź kategorię na podstawie sluga
 const allCategories = [
@@ -33,35 +34,27 @@ let backUrl = '';
 let liveNextReviewDate: string | undefined;
 let liveReviewCount = 0;
 if (mainNote) {
+  // Dane frontmattera – live z getNotatki() (brak problemu zamrożonych danych)
   liveNextReviewDate = mainNote.data.next_review_date;
-  liveReviewCount = mainNote.data.review_count ?? 0;
+  liveReviewCount    = mainNote.data.review_count ?? 0;
+  mindmaps           = getMindmapsFromFrontmatter(mainNote.data as Record<string, unknown>);
+  noteSlug           = mainNote.id.replace(/\.md$/, '');
+  backUrl            = '/kategoria/' + (categoryName || '').toLowerCase().replace(/\s+/g, '-');
 
-  const rendered = await render(mainNote);
-  Content = rendered.Content;
-  
+  // render() wymaga entry z Astro content collection (nie plain object)
   try {
-    const fs = await import('fs/promises');
-    const path = await import('path');
-    const matter = (await import('gray-matter')).default;
-    const notatkiDir = path.join(process.cwd(), 'src', 'content', 'notatki');
-    
-    // Upewnijmy się, że rozszerzenie .md jest obecne (Astro 5+ nie zawiera go w id)
-    const fileName = mainNote.id.endsWith('.md') ? mainNote.id : `${mainNote.id}.md`;
-    const filePath = path.join(notatkiDir, fileName);
-    
-    const raw = await fs.readFile(filePath, 'utf-8');
-    const { data } = matter(raw);
-    const d = data as Record<string, unknown>;
-    mindmaps = getMindmapsFromFrontmatter(d);
-    if (typeof d.next_review_date === 'string') liveNextReviewDate = d.next_review_date;
-    if (typeof d.review_count === 'number') liveReviewCount = d.review_count;
+    const allCollection = await getCollection('notatki');
+    const mainId = mainNote.id.replace(/\.md$/, '');
+    const collectionEntry = allCollection.find(
+      n => n.id.replace(/\.md$/, '') === mainId
+    );
+    if (collectionEntry) {
+      const rendered = await render(collectionEntry);
+      Content = rendered.Content;
+    }
   } catch (e) {
-    console.error("Błąd podczas odczytu pliku na żywo:", e);
-    mindmaps = getMindmapsFromFrontmatter(mainNote.data as Record<string, unknown>);
+    console.error('Błąd renderowania notatki:', e);
   }
-
-  noteSlug = mainNote.id.replace(/\.md$/, '');
-  backUrl = '/kategoria/' + (categoryName || '').toLowerCase().replace(/\s+/g, '-');
 }
 ---
 <BaseLayout title={categoryName} subtitle="Centrum Dowodzenia Tematem">

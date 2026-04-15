@@ -8,7 +8,8 @@ const fiszkiDir = join(process.cwd(), 'src', 'content', 'fiszki');
 export const PUT: APIRoute = async ({ params, request }) => {
   try {
     const { slug } = params;
-    const filepath = join(fiszkiDir, `${slug}.json`);
+    const slugBase = (slug ?? '').replace(/\.json$/, '');
+    const filepath = join(fiszkiDir, `${slugBase}.json`);
     const body = await request.json();
 
     let existing: Record<string, unknown> = {};
@@ -37,7 +38,8 @@ export const PUT: APIRoute = async ({ params, request }) => {
 export const DELETE: APIRoute = async ({ params }) => {
   try {
     const { slug } = params;
-    const filepath = join(fiszkiDir, `${slug}.json`);
+    const slugBase = (slug ?? '').replace(/\.json$/, '');
+    const filepath = join(fiszkiDir, `${slugBase}.json`);
     await unlink(filepath);
     return new Response(JSON.stringify({ success: true }), {
       status: 200,

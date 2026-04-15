@@ -1,23 +1,34 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
+import { getNotatki } from '../../lib/read-content';
 
 const { slug } = Astro.params;
-const notatki = await getCollection('notatki');
-
-// Zabezpieczenie przed podwójnym rozszerzeniem (na wypadek gdyby slug był np. "szczegoly/plik.md")
 const cleanSlug = slug?.replace(/\.md$/, '');
-const entry = notatki.find(n => n.id.replace(/\.md$/, '') === cleanSlug);
 
-if (!entry) {
+// Dane live (review_count, next_review_date itp.)
+const allNotatki = await getNotatki();
+const liveEntry  = allNotatki.find(n => n.id.replace(/\.md$/, '') === cleanSlug);
+
+if (!liveEntry) {
   return Astro.redirect('/');
 }
 
-const { Content } = await render(entry);
+// render() wymaga entry z Astro collection – użyj tylko do wyrenderowania treści Markdown
+const allCollection = await getCollection('notatki');
+const collectionEntry = allCollection.find(n => n.id.replace(/\.md$/, '') === cleanSlug);
 
-const categorySlug = entry.data.category ? entry.data.category.toLowerCase().replace(/\s+/g, '-') : '';
+if (!collectionEntry) {
+  return Astro.redirect('/');
+}
+
+const { Content } = await render(collectionEntry);
+
+const categorySlug = liveEntry.data.category
+  ? liveEntry.data.category.toLowerCase().replace(/\s+/g, '-')
+  : '';
 ---
-<BaseLayout title={entry.data.title} subtitle={`Kategoria: ${entry.data.category || 'Ogólne'}`}>
+<BaseLayout title={liveEntry.data.title} subtitle={`Kategoria: ${liveEntry.data.category || 'Ogólne'}`}>
   
   <div class="navigation-bar">
     {categorySlug && (
@@ -25,16 +36,16 @@ const categorySlug = entry.data.category ? entry.data.category.toLowerCase().rep
         ← Wróć do kategorii
       </a>
     )}
-    <button class="btn-secondary btn-small" id="btn-review-done" data-slug={slug} data-count={entry.data.review_count || 0}>
+    <button class="btn-secondary btn-small" id="btn-review-done" data-slug={slug} data-count={liveEntry.data.review_count || 0}>
       ✓ Oznacz jako powtórzone
     </button>
   </div>
 
-  {entry.data.mindmap && (
+  {liveEntry.data.mindmap && (
     <div class="mindmap-container">
       <h3>🗺️ Mapa Myśli</h3>
-      <a href={`/maps/${entry.data.mindmap}`} target="_blank" rel="noopener noreferrer" title="Kliknij, aby powiększyć">
-        <img src={`/maps/${entry.data.mindmap}`} alt={`Mapa myśli dla ${entry.data.title}`} class="mindmap-image" />
+      <a href={`/maps/${liveEntry.data.mindmap}`} target="_blank" rel="noopener noreferrer" title="Kliknij, aby powiększyć">
+        <img src={`/maps/${liveEntry.data.mindmap}`} alt={`Mapa myśli dla ${liveEntry.data.title}`} class="mindmap-image" />
       </a>
       <p class="mindmap-hint">Kliknij na obrazek, aby otworzyć go w pełnym rozmiarze.</p>
     </div>

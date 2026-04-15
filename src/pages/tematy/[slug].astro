@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getFiszki } from '../../lib/read-content';
 
 const { slug } = Astro.params;
-const fiszki = await getCollection('fiszki');
+const fiszki = await getFiszki();
 const fiszka = fiszki.find(f => f.id === slug);
 
 if (!fiszka) {

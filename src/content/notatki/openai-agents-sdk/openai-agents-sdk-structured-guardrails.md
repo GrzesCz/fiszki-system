@@ -1,7 +1,7 @@
 ---
 title: 'Structured Output, Guardrails i Cykl Życia (OpenAI Agents SDK)'
 category: Agenci AI
-status: w_trakcie
+status: zrobione
 type: notatka
 hidden: true
 mindmaps: []
