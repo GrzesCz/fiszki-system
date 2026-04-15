@@ -9,9 +9,10 @@ npm run dev        # Uruchom serwer deweloperski (astro dev)
 npm run build      # Zbuduj wersję produkcyjną
 npm run preview    # Podgląd wersji produkcyjnej
 npm run new-topic  # Skrypt do tworzenia nowego tematu przez CLI
+npm test           # Uruchom testy jednostkowe (Vitest)
 ```
 
-Projekt nie posiada zestawu testów automatycznych.
+Projekt używa Vitest do testów jednostkowych. Zawsze uruchamiaj `npm test` przed **i po** wprowadzeniu zmian. Nigdy nie deklaruj że coś działa bez potwierdzenia wynikiem `npm test`. Przy naprawie buga najpierw napisz test który go reprodukuje — patrz sekcja „Testy jednostkowe".
 
 ## Architektura
 
@@ -69,3 +70,14 @@ Do notatki można przypisać jedną lub więcej map myśli. Pliki przechowywane 
 ### Rozwiązywanie slugów notatek
 
 Notatki znajdują się w zagnieżdżonych podkatalogach (np. `src/content/notatki/pytest/pytest-notatki.md`). ID kolekcji Astro to ścieżka względna bez `.md` (np. `pytest/pytest-notatki`). Adresy URL korzystają z tej pełnej ścieżki. Funkcja `findNoteMdPath()` obsługuje zarówno pełną ścieżkę względną, jak i samą nazwę pliku (dla wstecznej kompatybilności).
+
+## Testy jednostkowe
+
+Projekt używa Vitest do testów jednostkowych. Testy znajdują się w plikach `*.test.ts` obok testowanych modułów.
+
+### Obowiązkowy protokół testowania
+
+1. **Przed zmianami** — uruchom `npm test` i potwierdź, że wszystkie testy przechodzą. Jeśli coś nie przechodzi już na starcie, zgłoś to użytkownikowi zanim cokolwiek zmienisz.
+2. **Po każdej zmianie** — uruchom `npm test` ponownie. Dopiero gdy zobaczysz `X passed` bez żadnych błędów, możesz powiedzieć użytkownikowi że coś „działa" lub „jest naprawione". Nigdy nie deklaruj sukcesu bez potwierdzenia wynikiem `npm test`.
+3. **Przy naprawie buga** — zanim napiszesz fix, napisz test jednostkowy który ten bug reprodukuje (test musi najpierw nie przechodzić). Dopiero potem wdróż poprawkę i potwierdź że test teraz przechodzi. Dzięki temu bug nie może powrócić w przyszłości.
+4. **Napotkany bug przy innej pracy** — jeśli podczas pracy nad jakimś zadaniem natrafisz na buga (nawet jeśli nie jesteś proszony o jego naprawę), również napisz do niego test w odpowiednim pliku `*.test.ts`, a następnie napraw go. Test zostaje w pliku **na stałe** — od tej chwili każde uruchomienie `npm test` będzie go sprawdzać i zabezpieczy przed powrotem tego błędu.
