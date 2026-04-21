@@ -48,10 +48,13 @@ export type FiszkiEntry = {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-const validStatus = (s: unknown): Status =>
-  ['planowane', 'w_trakcie', 'zrobione'].includes(s as string)
-    ? (s as Status)
-    : 'planowane';
+const validStatus = (s: unknown): Status => {
+  if (typeof s === 'string') {
+    const normalized = s.replace(/\s+/g, '_').toLowerCase();
+    if (['planowane', 'w_trakcie', 'zrobione'].includes(normalized)) return normalized as Status;
+  }
+  return 'planowane';
+};
 
 async function walkMdFiles(dir: string): Promise<string[]> {
   const out: string[] = [];

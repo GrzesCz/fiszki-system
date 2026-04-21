@@ -36,7 +36,7 @@ const allCategories = Array.from(new Set([
       <datalist id="categoryList">
         {allCategories.map(cat => <option value={cat} />)}
       </datalist>
-      <p class="hint">Jeśli plik już ma frontmatter z kategorią, pole to jest ignorowane</p>
+      <p class="hint">Kategoria z formularza zawsze nadpisuje kategorię z frontmatter pliku</p>
     </div>
 
     <div class="form-group">
@@ -89,6 +89,9 @@ const allCategories = Array.from(new Set([
       msg.textContent = `✓ Notatka "${json.filename}" wgrana pomyślnie!`;
       form.reset();
       fileName.textContent = '';
+      if (json.slug) {
+        setTimeout(() => window.location.href = `/notatki/${json.slug}`, 1200);
+      }
     } else {
       msg.className = 'form-msg error';
       msg.textContent = `Błąd: ${json.error}`;

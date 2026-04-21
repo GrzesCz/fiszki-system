@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
 import { getMindmapsFromFrontmatter } from '../../lib/mindmaps-frontmatter';
 import { getNotatki, getFiszki } from '../../lib/read-content';
+import { renderNoteMarkdown } from '../../lib/render-note-markdown';
+import { findNoteMdPath } from '../../lib/find-note-md';
 
 const { kategoria } = Astro.params;
 const notatki = await getNotatki();   // live – aktualne dane z plików
@@ -26,31 +27,23 @@ const categoryNotes = notatki.filter(n => n.data.category === categoryName);
 const mainNote = categoryNotes.find(n => !n.data.hidden);
 const categoryFiszki = fiszki.filter(f => f.data.category === categoryName);
 
-let Content;
+let contentHtml = '';
 let mindmaps: { file: string; rotation?: number; zoom?: number }[] = [];
 let noteSlug = '';
 let backUrl = '';
-/** Z pliku .md — getCollection bywa nieaktualny po zapisie z API */
 let liveNextReviewDate: string | undefined;
 let liveReviewCount = 0;
 if (mainNote) {
-  // Dane frontmattera – live z getNotatki() (brak problemu zamrożonych danych)
   liveNextReviewDate = mainNote.data.next_review_date;
   liveReviewCount    = mainNote.data.review_count ?? 0;
   mindmaps           = getMindmapsFromFrontmatter(mainNote.data as Record<string, unknown>);
   noteSlug           = mainNote.id.replace(/\.md$/, '');
   backUrl            = '/kategoria/' + (categoryName || '').toLowerCase().replace(/\s+/g, '-');
 
-  // render() wymaga entry z Astro content collection (nie plain object)
   try {
-    const allCollection = await getCollection('notatki');
-    const mainId = mainNote.id.replace(/\.md$/, '');
-    const collectionEntry = allCollection.find(
-      n => n.id.replace(/\.md$/, '') === mainId
-    );
-    if (collectionEntry) {
-      const rendered = await render(collectionEntry);
-      Content = rendered.Content;
+    const absPath = await findNoteMdPath(noteSlug);
+    if (absPath) {
+      contentHtml = await renderNoteMarkdown(absPath);
     }
   } catch (e) {
     console.error('Błąd renderowania notatki:', e);
@@ -108,9 +101,7 @@ if (mainNote) {
         <div class="split-col" id="colNotes">
           <div class="category-section text-section">
             <h2 class="section-title">📖 Notatki</h2>
-            <article class="markdown-body">
-              <Content />
-            </article>
+            <article class="markdown-body" set:html={contentHtml}></article>
           </div>
         </div>
 

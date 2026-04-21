@@ -5,6 +5,7 @@ services:
       - "4321:4321"
     volumes:
       - ./src/content:/app/src/content
+      - ./src/data:/app/src/data
       - ./public/maps:/app/public/maps
       - ./public/maps:/app/dist/client/maps
     environment:

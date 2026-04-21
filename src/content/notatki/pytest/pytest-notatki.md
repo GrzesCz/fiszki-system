@@ -2,8 +2,8 @@
 title: 'Notatki: Pytest – testy, fixtures, mocking | Moduł 3: Web Framework'
 category: Pytest
 status: zrobione
-next_review_date: '2026-04-14'
-review_count: 4
+next_review_date: '2026-05-20'
+review_count: 5
 type: mapa
 mindmaps:
   - file: 20260319_135303.jpg

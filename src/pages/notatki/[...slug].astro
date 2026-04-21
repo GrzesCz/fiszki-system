@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
 import { getNotatki } from '../../lib/read-content';
+import { renderNoteMarkdown } from '../../lib/render-note-markdown';
+import { findNoteMdPath } from '../../lib/find-note-md';
 
 const { slug } = Astro.params;
-const cleanSlug = slug?.replace(/\.md$/, '');
+const cleanSlug = slug?.replace(/\.md$/, '') ?? '';
 
-// Dane live (review_count, next_review_date itp.)
 const allNotatki = await getNotatki();
 const liveEntry  = allNotatki.find(n => n.id.replace(/\.md$/, '') === cleanSlug);
 
@@ -14,15 +14,12 @@ if (!liveEntry) {
   return Astro.redirect('/');
 }
 
-// render() wymaga entry z Astro collection – użyj tylko do wyrenderowania treści Markdown
-const allCollection = await getCollection('notatki');
-const collectionEntry = allCollection.find(n => n.id.replace(/\.md$/, '') === cleanSlug);
-
-if (!collectionEntry) {
+const absPath = await findNoteMdPath(cleanSlug);
+if (!absPath) {
   return Astro.redirect('/');
 }
 
-const { Content } = await render(collectionEntry);
+const contentHtml = await renderNoteMarkdown(absPath);
 
 const categorySlug = liveEntry.data.category
   ? liveEntry.data.category.toLowerCase().replace(/\s+/g, '-')
@@ -51,9 +48,7 @@ const categorySlug = liveEntry.data.category
     </div>
   )}
 
-  <article class="markdown-body">
-    <Content />
-  </article>
+  <article class="markdown-body" set:html={contentHtml}></article>
 </BaseLayout>
 
 <style>
