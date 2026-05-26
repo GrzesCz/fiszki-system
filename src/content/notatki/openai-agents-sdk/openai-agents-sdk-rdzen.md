@@ -19,6 +19,7 @@ review_count: 2
 - 📗 [Programowanie Asynchroniczne (async/await) w Pythonie](/notatki/openai-agents-sdk/openai-agents-sdk-asyncio) (korutyny, event loop, gather)
 - 📬 [Context7 + przykład Outlook — `params`, library ID, kod](/notatki/openai-agents-sdk/openai-agents-sdk-context7) (dwa etapy: silnik MCP vs cel dokumentacji)
 - 🔌 [Zarządzanie wieloma MCP i FastMCP](/notatki/openai-agents-sdk/openai-agents-sdk-mcp) (`AsyncExitStack`, podłączanie z GitHuba, różnica między `@function_tool` a własnym MCP)
+- ⛓️ [Sandbox Agents (Harness vs Compute)](/notatki/openai-agents-sdk/openai-agents-sdk-sandbox) (Architektura bezpiecznego izolowania agenta i przeliczania w chmurze E2B)
 - 🧩 [Zaawansowana Orkiestracja](/notatki/openai-agents-sdk/openai-agents-sdk-orkiestracja) (wzorce architektoniczne dla wielu agentów, organizacja plików komercyjnego projektu)
 - ⭐ [10 Rekomendacji Inżynieryjnych](/notatki/openai-agents-sdk/openai-agents-sdk-10-rekomendacji) (dekalog pracy z systemami AI wyciągnięty z doświadczeń eksperckich)
 - 📓 Learning Loop – zadania i rozwiązania — notebook `learning_loop_zadania.ipynb` w folderze kursu (poza tym repozytorium)
@@ -37,9 +38,10 @@ review_count: 2
 8. [MCP (Model Context Protocol)](#mcp-model-context-protocol)
 9. [Lifecycle Callbacks (RunHooks)](#lifecycle-callbacks-runhooks)
 10. [Orkiestracja i wzorce zrównoleglania](#orkiestracja-i-wzorce-zrównoleglania)
-11. [10 Rekomendacji Inżynieryjnych](/notatki/openai-agents-sdk/openai-agents-sdk-10-rekomendacji)
+11. [Sandbox Agents (Izolacja)](#sandbox-agents)
+12. [10 Rekomendacji Inżynieryjnych](/notatki/openai-agents-sdk/openai-agents-sdk-10-rekomendacji)
 
-**Szczegóły (osobne pliki):** [async/await](/notatki/openai-agents-sdk/openai-agents-sdk-asyncio) · [konstruktor `Agent`](/notatki/openai-agents-sdk/openai-agents-sdk-konstruktor) · [katalog narzędzi SDK](/notatki/openai-agents-sdk/openai-agents-sdk-narzedzia) · [Context7/Outlook](/notatki/openai-agents-sdk/openai-agents-sdk-context7) · [Zaawansowane MCP](/notatki/openai-agents-sdk/openai-agents-sdk-mcp) · [Architektura Projektu](/notatki/openai-agents-sdk/openai-agents-sdk-orkiestracja) · [10 Rekomendacji](/notatki/openai-agents-sdk/openai-agents-sdk-10-rekomendacji)
+**Szczegóły (osobne pliki):** [async/await](/notatki/openai-agents-sdk/openai-agents-sdk-asyncio) · [konstruktor `Agent`](/notatki/openai-agents-sdk/openai-agents-sdk-konstruktor) · [katalog narzędzi SDK](/notatki/openai-agents-sdk/openai-agents-sdk-narzedzia) · [Context7/Outlook](/notatki/openai-agents-sdk/openai-agents-sdk-context7) · [Zaawansowane MCP](/notatki/openai-agents-sdk/openai-agents-sdk-mcp) · [Sandbox Agents](/notatki/openai-agents-sdk/openai-agents-sdk-sandbox) · [Architektura Projektu](/notatki/openai-agents-sdk/openai-agents-sdk-orkiestracja) · [10 Rekomendacji](/notatki/openai-agents-sdk/openai-agents-sdk-10-rekomendacji)
 
 ---
 
@@ -822,6 +824,23 @@ Podejście łączy Structured Output, zrównoleglanie i narzędzia hostowane. Dz
 W kursie pipeline deep research jest następnie przenoszony z Jupytera do **właściwych modułów Pythona** (osobny plik per agent, klasa menedżera koordynująca całość). Interfejs użytkownika budowany jest w **Gradio** — lekki framework do UI bez front-endu. Funkcja zwrotna (callback) dla przycisku używa `yield` (generator), dzięki czemu Gradio wyświetla aktualizacje postępu **przyrostowo** (nie trzeba czekać na koniec całego pipeline'u).
 
 > 👉 **Więcej szczegółów technicznych:** Zobacz pełne omówienie koncepcji **Autonomicznego Tradera** jako multiagenta oraz **organizacji plików** (np. `templates.py`, `mcp_params.py`) w komercyjnych projektach w notatce: **[Zaawansowana Orkiestracja (Wzorce)](/notatki/openai-agents-sdk/openai-agents-sdk-orkiestracja)**.
+
+---
+
+## Sandbox Agents
+
+### Zagadnienie
+Izolowanie agenta wykonującego skrypty w celu ochrony danych i kluczy API. Oddzielenie "mózgu" (Harness) od miejsca wykonywania operacji (Compute).
+
+---
+
+### Opis
+Najnowsza i bardzo potężna architektura OpenAI Agents SDK dzieli pracę na dwie strefy. "Harness" to miejsce gdzie działa logika i gdzie przechowywane są Twoje klucze `.env`. "Compute" to izolatka (sandbox), gdzie odpala się niebezpieczny, wygenerowany przez LLM kod. Nawet jeśli kod jest złośliwy, nie ma dostępu do Twoich kluczy.
+
+Do zbudowania takiej architektury zamiast obiektu `Agent()` używasz `SandboxAgent()`, któremu przekazujesz m.in. `manifest` (bezpieczna kserokopia katalogu z plikami), uprawnienia (`capabilities`) oraz `run_config` określający, gdzie fizycznie żyje ten Sandbox. 
+Dzięki takiemu podziałowi przeniesienie obliczeń z Twojego komputera do chmury zajmuje dosłownie zmianę jednej linijki!
+
+> 👉 **Pełne omówienie:** Zobacz jak przenieść obliczenia do chmury (np. E2B) bez ryzyka utraty sekretów w dedykowanej notatce: **[Sandbox Agents (Harness vs Compute)](/notatki/openai-agents-sdk/openai-agents-sdk-sandbox)**.
 
 ---
 

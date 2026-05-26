@@ -23,8 +23,34 @@ describe('renderNoteMarkdown', () => {
     expect(html).not.toContain('title: Test');
     expect(html).not.toContain('---');
     expect(html).toContain('<h1');
+    expect(html).toContain('id="heading"');
     expect(html).toContain('Heading');
     expect(html).toContain('<strong>bold</strong>');
+  });
+
+  it('adds heading ids compatible with internal table-of-contents links', async () => {
+    mockReadFile.mockResolvedValueOnce(
+      [
+        '## Struktura testów',
+        '',
+        '## Omówienie plików `__init__.py`, conftest.py, factory.py',
+        '',
+        '## Wzorzec GIVEN / WHEN / THEN',
+        '',
+        '## Test jednostkowy – mockowanie wszystkich zależności',
+      ].join('\n')
+    );
+
+    const html = await renderNoteMarkdown('/fake/path.md');
+
+    expect(html).toContain('<h2 id="struktura-testów">Struktura testów</h2>');
+    expect(html).toContain(
+      '<h2 id="omówienie-plików-__init__py-conftestpy-factorypy">Omówienie plików <code>__init__.py</code>, conftest.py, factory.py</h2>'
+    );
+    expect(html).toContain('<h2 id="wzorzec-given--when--then">Wzorzec GIVEN / WHEN / THEN</h2>');
+    expect(html).toContain(
+      '<h2 id="test-jednostkowy--mockowanie-wszystkich-zależności">Test jednostkowy – mockowanie wszystkich zależności</h2>'
+    );
   });
 
   it('renders paragraphs, lists and links', async () => {

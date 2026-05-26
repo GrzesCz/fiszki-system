@@ -65,6 +65,10 @@
       "default": false,
       "type": "boolean"
     },
+    "main": {
+      "default": false,
+      "type": "boolean"
+    },
     "next_review_date": {
       "type": "string"
     },

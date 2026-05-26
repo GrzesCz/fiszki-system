@@ -1,50 +1,59 @@
 ---
 import { getNotatki } from '../lib/read-content';
+import { getReviewableCategories } from '../lib/note-visibility';
 
 const notatki = await getNotatki();
-const today   = new Date().toISOString().split('T')[0];
+const today = new Date().toISOString().split('T')[0];
 
-// Notatki z zaległą powtórką – dane zawsze live
-const toReview = notatki.filter(
-  n => n.data.next_review_date != null &&
-       n.data.next_review_date !== '' &&
-       n.data.next_review_date <= today
-);
+const reviewCategories = getReviewableCategories(notatki, today);
 
-const suggestion = toReview.length > 0 ? toReview[0] : null;
+function formatReviewDatePl(iso: string) {
+  const s = iso.trim().slice(0, 10);
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+  if (!m) return iso;
+  return `${m[3]}.${m[2]}.${m[1]}`;
+}
 ---
 
-{suggestion && (
-  <div class="review-card mb-4">
+{reviewCategories.length > 0 && (
+  <section class="review-card mb-4">
     <div class="review-header">
       <span class="review-icon">💡</span>
-      <span class="review-title">Krzywa Zapominania Ostrzega!</span>
+      <span class="review-title">Powtórki wymagane: {reviewCategories.length}</span>
     </div>
-    
+
     <div class="review-body">
-      <h3 class="review-topic">{suggestion.data.title}</h3>
-      
       <p class="review-text">
-        System wykrył, że Twoja wiedza z tego zakresu może powoli zanikać. Czas na powtórkę!
+        System wykrył zaległe powtórki w poniższych tematach.
       </p>
-      
-      <div class="review-task">
-        <strong>Zadanie Feynmana:</strong> Spróbuj na głos wytłumaczyć ten temat "jak 5-latkowi", a następnie naszkicuj mapę myśli z pamięci.
+
+      <div class="review-list">
+        {reviewCategories.map((item) => (
+          <a href={`/kategoria/${item.slug}`} class="review-item">
+            <div class="review-item-main">
+              <h3 class="review-topic">{item.category}</h3>
+              {item.earliestNoteTitle && <p class="review-note">{item.earliestNoteTitle}</p>}
+            </div>
+            <div class="review-meta">
+              <span>{formatReviewDatePl(item.earliestReviewDate)}</span>
+              <span>{item.notes.length === 1 ? '1 notatka' : `${item.notes.length} notatek`}</span>
+            </div>
+          </a>
+        ))}
       </div>
-      
-      <div class="review-actions">
-        <a href={`/kategoria/${suggestion.data.category ? suggestion.data.category.toLowerCase().replace(/\s+/g, '-') : ''}`} class="btn-review">
-          Przejdź do materiału →
-        </a>
+
+      <div class="review-task">
+        <strong>Zadanie Feynmana:</strong> Spróbuj na głos wytłumaczyć wybrany temat "jak 5-latkowi", a następnie naszkicuj mapę myśli z pamięci.
       </div>
     </div>
-  </div>
+  </section>
 )}
 
 <style>
   .mb-4 {
     margin-bottom: 2rem;
   }
+
   .review-card {
     background: var(--surface);
     border: 1px solid var(--yellow);
@@ -54,7 +63,7 @@ const suggestion = toReview.length > 0 ? toReview[0] : null;
     max-width: 760px;
     box-shadow: 0 4px 20px rgba(247, 212, 74, 0.1);
   }
-  
+
   .review-header {
     background: rgba(247, 212, 74, 0.15);
     border-bottom: 1px solid rgba(247, 212, 74, 0.3);
@@ -63,11 +72,11 @@ const suggestion = toReview.length > 0 ? toReview[0] : null;
     align-items: center;
     gap: 0.5rem;
   }
-  
+
   .review-icon {
     font-size: 1.2rem;
   }
-  
+
   .review-title {
     color: var(--yellow);
     font-weight: 700;
@@ -75,24 +84,73 @@ const suggestion = toReview.length > 0 ? toReview[0] : null;
     letter-spacing: 0.05em;
     text-transform: uppercase;
   }
-  
+
   .review-body {
     padding: 1.5rem;
   }
-  
-  .review-topic {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-  }
-  
+
   .review-text {
     color: var(--text-dim);
     font-size: 0.95rem;
     margin-bottom: 1.25rem;
     line-height: 1.5;
   }
-  
+
+  .review-list {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .review-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(247, 212, 74, 0.25);
+    background: rgba(247, 212, 74, 0.06);
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .review-item:hover {
+    border-color: var(--yellow);
+    background: rgba(247, 212, 74, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .review-item-main {
+    min-width: 0;
+  }
+
+  .review-topic {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--text);
+  }
+
+  .review-note {
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    line-height: 1.35;
+    margin-top: 0.2rem;
+  }
+
+  .review-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--yellow);
+    white-space: nowrap;
+  }
+
   .review-task {
     background: rgba(124, 106, 247, 0.1);
     border-left: 4px solid var(--accent);
@@ -100,36 +158,22 @@ const suggestion = toReview.length > 0 ? toReview[0] : null;
     border-radius: 4px 8px 8px 4px;
     font-size: 0.9rem;
     line-height: 1.6;
-    margin-bottom: 1.5rem;
   }
-  
+
   .review-task strong {
     color: var(--accent);
     display: block;
     margin-bottom: 0.25rem;
   }
-  
-  .review-actions {
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .btn-review {
-    display: inline-block;
-    padding: 0.6rem 1.4rem;
-    border-radius: 8px;
-    border: 1px solid var(--yellow);
-    background: transparent;
-    color: var(--yellow);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  
-  .btn-review:hover {
-    background: rgba(247, 212, 74, 0.1);
-    transform: translateY(-2px);
+
+  @media (max-width: 640px) {
+    .review-item {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .review-meta {
+      align-items: flex-start;
+    }
   }
 </style>

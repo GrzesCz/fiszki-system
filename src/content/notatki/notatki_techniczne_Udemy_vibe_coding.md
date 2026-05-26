@@ -1,8 +1,9 @@
 ---
-title: Vibe Coding — Notatki Techniczne
+title: Vibe Coding — Notatki Techniczne (Udemy Week 1)
 category: Vibe Coding
 status: w_trakcie
 type: notatka
+hidden: true
 mindmaps: []
 next_review_date: '2026-04-23'
 review_count: 2
@@ -47,10 +48,10 @@ review_count: 2
 28. [AMP Code, Claude Code z OpenRouter i Ollama lokalnie](#28-amp-code-claude-code-z-openrouter-i-ollama-lokalnie)
 29. [Zaawansowane Zarządzanie Sesją i Składnia Claude Code](#29-zaawansowane-zarządzanie-sesją-i-składnia-claude-code)
 30. [Sesje, Checkpointing i Git — trzy poziomy „cofania” w Claude Code](#30-sesje-checkpointing-i-git--trzy-poziomy-cofania-w-claude-code)
-31. [Praktyka `/rewind`, skróty Ctrl+O / Ctrl+E / Ctrl+B i demonstracja checkpointów](#31-praktyka-rewind-skróty-ctrloe-ctrle-ctrlb-i-demonstracja-checkpointów)
+31. [Praktyka `/rewind`, skróty Ctrl+O / Ctrl+E / Ctrl+B i demonstracja checkpointów](#31-praktyka-rewind-skróty-ctrlo--ctrle--ctrlb-i-demonstracja-checkpointów)
 32. [Prawdziwy YOLO w Claude Code: `--dangerously-skip-permissions` i demo przebudowy UI](#32-prawdziwy-yolo-w-claude-code---dangerously-skip-permissions-i-demo-przebudowy-ui)
-33. [Ralph loops — oficjalna wtyczka Anthropic, pętla zewnętrzna i `--max-iterations`](#33-ralph-loops--oficjalna-wtyczka-anthropic-pętla-zewnętrzna-i---max-iterations)
-34. [Week 2 dzień 3: MCP, Skills, Plugins — narzędzia, MCP jako protokół, hype vs kontekst](#34-week-2-dzień-3-mcp-skills-plugins--narzędzia-mcp-jako-protokół-hype-vs-kontekst)
+33. [Ralph loops — oficjalna wtyczka Anthropic, pętla zewnętrzna i `--max-iterations`](#33-ralph-loops--autonomiczna-pętla-zewnętrzna-i-wtyczki-anthropic)
+34. [Week 2 dzień 3: MCP, Skills, Plugins — narzędzia, MCP jako protokół, hype vs kontekst](#34-week-2-dzień-3-inflection-point--mcp-skills-i-plugins)
 
 ---
 

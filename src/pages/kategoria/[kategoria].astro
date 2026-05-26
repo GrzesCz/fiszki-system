@@ -4,6 +4,7 @@ import { getMindmapsFromFrontmatter } from '../../lib/mindmaps-frontmatter';
 import { getNotatki, getFiszki } from '../../lib/read-content';
 import { renderNoteMarkdown } from '../../lib/render-note-markdown';
 import { findNoteMdPath } from '../../lib/find-note-md';
+import { selectMainNote } from '../../lib/note-visibility';
 
 const { kategoria } = Astro.params;
 const notatki = await getNotatki();   // live – aktualne dane z plików
@@ -22,9 +23,9 @@ if (!categoryName) {
   return Astro.redirect('/');
 }
 
-// Główna notatka to ta, która NIE jest ukryta (hidden !== true)
+// Prefer explicit main note, then fall back to the first visible note.
 const categoryNotes = notatki.filter(n => n.data.category === categoryName);
-const mainNote = categoryNotes.find(n => !n.data.hidden);
+const mainNote = selectMainNote(categoryNotes);
 const categoryFiszki = fiszki.filter(f => f.data.category === categoryName);
 
 let contentHtml = '';

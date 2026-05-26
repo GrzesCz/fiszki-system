@@ -24,6 +24,7 @@ export type NotatkiEntry = {
     category?: string;
     status: Status;
     hidden: boolean;
+    main: boolean;
     mindmap?: string;
     mindmaps?: MindmapItem[];
     mindmap_rotation?: number;
@@ -94,6 +95,7 @@ export async function getNotatki(): Promise<NotatkiEntry[]> {
           category: data.category != null ? String(data.category) : undefined,
           status: validStatus(data.status),
           hidden: Boolean(data.hidden),
+          main: Boolean(data.main),
           mindmap: data.mindmap != null ? String(data.mindmap) : undefined,
           mindmaps: Array.isArray(data.mindmaps) ? data.mindmaps : undefined,
           mindmap_rotation: data.mindmap_rotation != null ? Number(data.mindmap_rotation) : 0,

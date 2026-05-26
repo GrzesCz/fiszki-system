@@ -20,6 +20,7 @@ const notatkiCollection = defineCollection({
     type: z.enum(['notatka', 'mapa']).optional().default('notatka'),
     status: z.enum(['planowane', 'w_trakcie', 'zrobione']).optional().default('planowane'),
     hidden: z.boolean().optional().default(false),
+    main: z.boolean().optional().default(false),
     next_review_date: z.string().optional(),
     review_count: z.number().optional().default(0),
   }),

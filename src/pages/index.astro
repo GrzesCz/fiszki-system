@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ReviewSuggestion from '../components/ReviewSuggestion.astro';
 import { getNotatki, getFiszki } from '../lib/read-content';
+import { getVisibleNotes } from '../lib/note-visibility';
 
 const notatki = await getNotatki();
 const fiszki = await getFiszki();
@@ -21,7 +22,7 @@ const categories = Array.from(categoriesSet).sort();
 
 // Dla widoku ucznia: kategoria jest aktywna jeśli ma choć jeden element w_trakcie lub zrobione
 function categoryIsActive(category: string) {
-  const notes = notatki.filter(n => n.data.category === category);
+  const notes = getVisibleNotes(notatki.filter(n => n.data.category === category));
   const fiszkiCat = fiszki.filter(f => f.data.category === category);
   const allItems = [...notes, ...fiszkiCat];
   return allItems.some(i => i.data.status === 'w_trakcie' || i.data.status === 'zrobione');
@@ -60,7 +61,7 @@ function formatReviewDatePl(iso: string) {
 
   <div class="tiles-grid project-tiles">
     {activeCategories.map((category) => {
-      const categoryNotes = notatki.filter(n => n.data.category === category);
+      const categoryNotes = getVisibleNotes(notatki.filter(n => n.data.category === category));
       const pureNotes = categoryNotes.filter(n => n.data.type !== 'mapa' && !n.data.mindmap);
       const mindMaps = categoryNotes.filter(n => n.data.type === 'mapa' || !!n.data.mindmap);
       const categoryFiszki = fiszki.filter(f => f.data.category === category);

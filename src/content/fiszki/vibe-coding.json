@@ -1,0 +1,164 @@
+{
+  "title": "Vibe Engineering Masterclass",
+  "subtitle": "HITL, agents.md, plan.md, MCP, Skills, Orkiestracja",
+  "category": "Vibe Coding",
+  "status": "zrobione",
+  "cards": [
+    {
+      "cat": "pojecie",
+      "catLabel": "Pojecie",
+      "q": "Czym jest filozofia HITL (Human-In-The-Loop) w Vibe Engineeringu i dlaczego kategorycznie odrzucamy YOLO?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">HITL to absolutny fundament: <b>Ty nadzorujesz każdy krok agenta</b>.\n\nAgent projektuje → Ty akceptujesz.\nAgent pisze testy → Ty sprawdzasz.\nAgent implementuje → Ty robisz Code Review.\n\nYOLO (tryb pełnej autonomii, np. <code>--dangerously-skip-permissions</code>) prowadzi do <b>Ralph Wiggum Loops</b> — agent wpada w pętlę destrukcyjnych edycji, przepala budżet i niszczy kod. Nigdy nie puszczaj agenta samopas.</pre>"
+    },
+    {
+      "cat": "narzedzie",
+      "catLabel": "Narzedzie",
+      "q": "Co robi komenda `/config set requireApproval true` i jaka pułapka z nią się wiąże?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Włącza <b>systemowy hamulec ręczny</b> — agent musi pytać <code>y/n</code> przed KAŻDĄ operacją zapisu pliku.\n\nPułapka: <b>Approval Fatigue</b> (Zmęczenie klikaniem). Po godzinie pracy zaczniesz klikać <code>y, y, y</code> na ślepo — to powrót do YOLO tylnymi drzwiami!\n\nRozwiązanie: Czytaj każdy prompt. Gdy agent chce zmienić 5 plików naraz — wpisz <code>n</code> i każ zrobić tylko jeden.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "Pojecie",
+      "q": "Co to jest \"Bite-Sized Chunks\" (Metoda małych kęsów) i dlaczego jest kluczowa?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Dzielenie pracy na <b>zadania trwające 2-5 minut</b>.\n\nDlaczego kluczowa:\n1. Zapobiega halucynacjom (agent nie gubi kontekstu).\n2. Łatwiejsze Code Review (mała zmiana = mała szansa na błąd).\n3. Tańsze (mniej tokenów per zadanie).\n4. Łatwiejszy rollback (jeden <code>git revert</code> cofa jeden mały krok).\n\nZasada Osmaniego: Pojedynczy PR nie powinien przekraczać ~100 linii.</pre>"
+    },
+    {
+      "cat": "narzedzie",
+      "catLabel": "Narzedzie",
+      "q": "Czym jest plik `agents.md` (Konstytucja Agenta) i jakie sekcje MUSI zawierać?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">System prompt dołączany do kontekstu agenta przed każdym zadaniem. Wymusza jakość Senior Enterprise.\n\nKluczowe sekcje:\n• <b>End Goal</b> — jak wygląda sukces projektu\n• <b>Starting Point</b> — aktualny stan (nie \"Current State\"!)\n• <b>Narzędzia</b> — twarde wymogi (uv, Pydantic, ruff)\n• <b>Anti-Slop</b> — zakaz TODO, emoji, oczywistych komentarzy\n• <b>TDD</b> — najpierw test RED, potem kod GREEN\n• <b>Grounding</b> — zakaz halucynacji, pytaj gdy nie wiesz\n\nKto pisze? <b>TY</b> — nigdy nie pozwalaj agentowi samodzielnie zatwierdzać Konstytucji.</pre>"
+    },
+    {
+      "cat": "narzedzie",
+      "catLabel": "Narzedzie",
+      "q": "Czym jest plik `plan.md` (Ustawa) i co to są znaczniki STOP?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><code>plan.md</code> to state-tracker: lista zadań i specyfikacja w jednym. Zawiera:\n1. <b>Cel</b> — krótki i konkretny\n2. <b>Kroki</b> — checkboxy <code>[ ]</code>/<code>[x]</code>, Bite-sized chunks\n3. <b>Definition of Done</b> — np. testy >= 90%\n4. <b>Znaczniki STOP</b>:\n\n<code>[!!! STOP !!! ZATRZYMAJ PRACĘ I CZEKAJ NA ZATWIERDZENIE]</code>\n\nTo fizyczna blokada po KAŻDYM zadaniu — \"próg zwalniający\" który dosłownie zatrzymuje agenta przed wykonaniem 10 kroków bez Twojej zgody.</pre>"
+    },
+    {
+      "cat": "workflow",
+      "catLabel": "Workflow",
+      "q": "Na czym polega Plan Verification Gate (Bramka Weryfikacji Planu) i dlaczego jest najważniejsza?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">To <b>najważniejszy moment całego procesu</b>. Po wygenerowaniu <code>plan.md</code>:\n\n1. <b>ZATRZYMAJ</b> — NIE pozwól agentowi od razu wykonać planu\n2. Przeczytaj plan linijka po linijce\n3. Szukaj <b>czerwonych flag</b>:\n   • \"Zaimplementuj cały moduł auth\" → ZA OGÓLNE, każ rozbić na 5 podzadań\n   • Brak znaczników STOP → każ dodać\n   • Punkty zakładające deploy/migracje → wytnij ręcznie\n4. Edytuj sam lub odeślij do poprawy\n\nBez tej bramki <b>cały HITL traci sens</b>.</pre>"
+    },
+    {
+      "cat": "zasada",
+      "catLabel": "Zasada",
+      "q": "Wymień 5 Nie-negocjowalnych Zasad dla Agenta (Addy Osmani, Google).",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">1. <b>Ujawnij założenia</b> zanim zaczniesz budować (milczące założenia = najczęstsza awaria)\n\n2. <b>Zatrzymaj się i zapytaj</b> gdy wymagania się wykluczają (nigdy nie zgaduj)\n\n3. <b>Sprzeciw się</b> gdy jest powód (agent to nie maszyna do potakiwania)\n\n4. <b>Preferuj nudne, oczywiste rozwiązanie</b> (\"clever code\" jest drogie w utrzymaniu)\n\n5. <b>Dotykaj tylko tego, o co zostałeś poproszony</b> (Touch only what you're asked to touch)</pre>"
+    },
+    {
+      "cat": "zasada",
+      "catLabel": "Zasada",
+      "q": "Co to jest Płot Chestertona (Chesterton's Fence) w kontekście agentów AI?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Agentom <b>nie wolno usunąć ŻADNEJ linii kodu</b>, dopóki w 100% nie zrozumieją i nie wytłumaczą, dlaczego ten kod się tam znalazł.\n\nDlaczego? Agenty mają tendencję do kasowania \"niepotrzebnego kodu\", który w rzeczywistości obsługuje edge-case'y, kompatybilność wsteczną lub rzadkie scenariusze.\n\nZasada pochodzi od G.K. Chestertona: <i>\"Nie usuwaj płotu, dopóki nie wiesz, dlaczego ktoś go tam postawił.\"</i></pre>"
+    },
+    {
+      "cat": "zasada",
+      "catLabel": "Zasada",
+      "q": "Co to jest Reguła Beyonce i Zasada małych PR-ów?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Reguła Beyonce</b> (Google): \"If you liked it, you should have put a test on it.\"\nKod bez testu = kod, na którego działaniu nam nie zależy. Zmiany infrastrukturalne nie chronią — chronią testy.\n\n<b>Zasada małych PR-ów (~100 linii)</b>:\nPowyżej 100 linii kod nie jest recenzowany, jest jedynie \"gumostemplowany\". Agent MUSI rozbijać pracę tak, aby pojedynczy commit nie przekraczał tej granicy.</pre>"
+    },
+    {
+      "cat": "zasada",
+      "catLabel": "Zasada",
+      "q": "Czym są Tabele Antywymówek (Anti-rationalization tables) i podaj 2 przykłady.",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Lista typowych <b>wymówek agenta</b> i twardych odpowiedzi blokujących drogę na skróty. Wpisuje się je do <code>agents.md</code>.\n\nPrzykłady:\n\n<b>Wymówka:</b> \"To za mała zmiana na testy.\"\n<b>Odpowiedź:</b> \"Mała czy duża — kod bez testu to kod odrzucony.\"\n\n<b>Wymówka:</b> \"Kod działa, więc można kończyć.\"\n<b>Odpowiedź:</b> \"Działający kod to nie dowód. Pokaż wynik testu, log lub screenshot.\"\n\nCel: z góry zamknąć agentowi drogę do lenistwa.</pre>"
+    },
+    {
+      "cat": "narzedzie",
+      "catLabel": "Narzedzie",
+      "q": "Czym jest MCP (Model Context Protocol) i jaka jest jego rola w hierarchii rozszerzeń?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">MCP to <b>otwarty standard</b> (\"kabel USB-C\") łączący LLM z narzędziami zewnętrznymi (JIRA, GitHub, Slack, bazy danych).\n\n<b>Hierarchia rozszerzeń</b> (Ed Donner):\n1. <b>Plugins</b> (gotowe paczki) — domyślny wybór\n2. <b>Skills</b> (własne instrukcje) — złoty standard firmowy\n3. <b>MCP</b> (surowe połączenia) — ostateczność\n\n<b>Ostrzeżenie:</b> Każdy aktywny serwer MCP ładuje opisy narzędzi do promptu → zbyt dużo = Context Rot. Wyłączaj to, czego nie używasz!</pre>"
+    },
+    {
+      "cat": "narzedzie",
+      "catLabel": "Narzedzie",
+      "q": "Czym jest Skill (SKILL.md), jakie są dwa typy i co to Bullseye?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Skill</b> = plik <code>.md</code> uczący agenta konkretnej procedury.\n\n<b>Typ 1 (Knowledge):</b> Wiedza twarda — np. parametry FFMPEG.\n<b>Typ 2 (Process):</b> Firmowy workflow — np. \"wideo zapisuj do /out\".\n\n<b>Bullseye</b> = sztuka pisania pola <code>description</code>:\n\nZŁY: <code>\"Pomaga z plikami wideo\"</code>\nDOBRY: <code>\"Łączy nagrania przez FFMPEG i wysyła na Drive. Używaj gdy: 'merge wideo', 'połącz nagrania'\"</code>\n\nAgent ładuje Skilla TYLKO gdy opis zgra się z zapytaniem. Bez precyzyjnego opisu — Skill jest martwy.</pre>"
+    },
+    {
+      "cat": "narzedzie",
+      "catLabel": "Narzedzie",
+      "q": "Czym są Hooks (Hooki) i jak działa 'Strażnik Bramy' (on_stop)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Hook</b> = bezwzględny, automatyczny skrypt wpięty w cykl życia agenta. Agent NIE może go zignorować.\n\n<b>5 eventów:</b> SessionStart, PreToolUse, PostToolUse, SubagentStop, Stop.\n\n<b>Strażnik Bramy (on_stop):</b>\nGdy agent mówi \"skończyłem\", Hook automatycznie:\n1. Odpala <code>ruff check</code> (linter)\n2. Odpala <code>mypy --strict</code> (typy)\n3. Odpala <code>bandit</code> (bezpieczeństwo)\n4. Odpala <code>pytest</code> (testy)\n\nJeśli COKOLWIEK padnie → agent <b>nie może zakończyć</b>, dostaje log i musi naprawić.\n\nZasada: <i>\"Twarde bariery biją sprytne prompty za każdym razem.\"</i></pre>"
+    },
+    {
+      "cat": "narzedzie",
+      "catLabel": "Narzedzie",
+      "q": "Czym są Plugins i jaka jest zasada tworzenia własnych (Custom Skills vs Custom Plugins)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Plugin</b> = gotowa \"skrzynka z narzędziami\" — paczka łącząca MCP, Skills, Hooks i czasem Sub-Agenty.\n\nInstalacja: <code>/plugin → Discover → install</code>\n\n<b>Zasada tworzenia własnych narzędzi:</b>\n1. <b>ZAWSZE zaczynaj od Custom Skills</b> — proste, łatwa dystrybucja przez <code>git push</code>\n2. <b>Dopiero na końcu (PRO)</b> twórz Custom Plugins — trudniejsze, wymagają rejestru <code>marketplace.json</code>\n\nSkill = wrzucasz do <code>.claude/skills/</code>, robisz <code>git push</code>, każdy po <code>git pull</code> ma narzędzie.\nPlugin = wymaga osobnego URL marketplace, manualnej instalacji.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "Pojecie",
+      "q": "Czym jest Sub-Agent i dlaczego chroni przed Context Rot?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Sub-Agent</b> = mały \"podwykonawca\" z własnym, czystym oknem kontekstowym.\n\nGdy główne okno jest zapchane (Context Rot), zlecasz wąskie zadanie nowemu Sub-Agentowi, który:\n• NIE dźwiga historii dyskusji głównego okna\n• Dostaje tylko konkretny plik/zadanie\n• Zwraca gotowy wynik i znika\n\n<b>Żelazne zasady:</b>\n1. Sub-Agent NIE MOŻE powołać kolejnego Sub-Agenta (brak rekurencji)\n2. Nie przypisuj mu \"roli\" (\"Jesteś Frontend Dev\") — daj <b>precyzyjne zadanie</b>\n3. Wywołuj słowami, nie slash commands</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "Pojecie",
+      "q": "Czym jest Context Rot i jak działa efekt 'Lost in the Middle'?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Context Rot</b> = degradacja inteligencji agenta, gdy okno kontekstowe jest przepełnione.\n\n<b>Lost in the Middle</b>: Model doskonale pamięta <b>początek</b> i <b>koniec</b> promptu, ale kompletnie gubi się w środku (krzywa U).\n\n<b>Smart Zone vs Dumb Zone</b>:\n• Smart Zone = do 1/4 - 1/2 zadeklarowanego kontekstu\n• Dumb Zone = powyżej — model głupieje, jest podatny na błędne info\n\n<b>Rozwiązanie:</b> Regularnie <code>/clear</code>, delegowanie do Sub-Agentów, manualna kompresja kontekstu do pliku MD.</pre>"
+    },
+    {
+      "cat": "workflow",
+      "catLabel": "Workflow",
+      "q": "Jak prawidłowo zarządzać oknem kontekstowym (manualna kompresja)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Nigdy nie polegaj na automatycznej kompresji! Rób to świadomie:\n\n<b>Procedura:</b>\n1. Każ agentowi wyciągnąć wnioski do pliku MD (np. <code>docs/analiza_auth.md</code>)\n2. Zamknij sesję — <code>/clear</code> lub nowy czat\n3. Otwórz sterylne okno, dołącz TYLKO skompresowany plik\n4. Dopiero teraz zleć pisanie kodu\n\n<b>Złota zasada:</b> Jeden cel = jedno okno. Nie skacz po modułach w tym samym czacie. Cykl: Research → Plan → Implement, reset okna między każdym etapem.</pre>"
+    },
+    {
+      "cat": "workflow",
+      "catLabel": "Workflow",
+      "q": "Jak działa Cross-Model Review (Weryfikacja Zderzeniem Tytanów)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Wykorzystanie <b>różnych modeli LLM</b> do wzajemnej weryfikacji. Inne sieci zwracają uwagę na inne detale.\n\nPraktyczne wywołanie z Claude Code:\n<code>codex exec 'Przeczytaj docs/RAPORT_BLEDOW.md i zweryfikuj punkt 1. Czy to faktycznie błąd, czy halucynacja? Zapisz do docs/cross_check.md. NIE MODYFIKUJ KODU.'</code>\n\n<b>Strategia kosztowa:</b>\n• Codzienna praca: Sonnet / GPT-4o-mini (tanie)\n• Audyt: Opus / o1 (drogie, ale głębsze rozumowanie)\n• Refaktoryzacja po audycie: Sonnet (zadania już znane)</pre>"
+    },
+    {
+      "cat": "workflow",
+      "catLabel": "Workflow",
+      "q": "Na czym polega Systematyczne Debugowanie z plikiem debug.md?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Odrzucamy instynkt \"Zepsuło się, napraw to\". Procedura:\n\n1. <b>Twardy git commit</b> — linia obrony przed agresywnym agentem\n2. <b>Podejście szybkie:</b> Wklej stack trace bez komentarza\n3. <b>Podejście systematyczne:</b>\n   • Agent dokumentuje reprodukcję błędu w <code>debug.md</code>\n   • Generuje <b>udowodnione hipotezy</b> na bazie logów\n   • TY akceptujesz hipotezę → dopiero wtedy naprawa kodu\n4. Challenguj agenta: <i>\"Udowodnij, że to dotyczy naszego przypadku\"</i>\n\n<b>Ostrzeżenie:</b> Agent często kłamie \"Found it!\" na bazie przestarzałego StackOverflow.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "Pojecie",
+      "q": "Co to są Ralph Wiggum Loops i kiedy (jedyne) można użyć YOLO?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Ralph Wiggum Loops</b> (od postaci z Simpsonów mówiącej \"I'm helping!\"):\nAgent wpada w pętlę: edytuje kod → test pada → edytuje gorzej → test pada → kasuje pół pliku...\nPrzepala $5+ na bezsensowne zmagania.\n\n<b>Kiedy YOLO jest akceptowalne:</b>\n• WYŁĄCZNIE przy MVP/prototypowaniu\n• W izolowanych sandboxach chmurowych\n• Przy wielkim, z góry napisanym prompcie\n• Nigdy na produkcji, nigdy w Enterprise\n\nRozwiązanie: <code>requireApproval=true</code>, <code>/clear</code> gdy agent zaczyna halucynować.</pre>"
+    },
+    {
+      "cat": "zasada",
+      "catLabel": "Zasada",
+      "q": "Co to jest Progressive Disclosure i anti-wzorzec 'bad-CLAUDE.md'?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Progressive Disclosure</b> = pokazuj agentowi instrukcje dopiero gdy ich potrzebuje.\n\nW <code>agents.md</code> umieść odnośniki:\n<code>\"Jeśli edytujesz bazę, przeczytaj docs/db_rules.md\"</code>\n\nAgent ładuje wiedzę na żądanie, nie zapycha kontekstu.\n\n<b>Anti-wzorzec 'bad-CLAUDE.md':</b>\nPakowanie WSZYSTKICH zasad (200+ linii) do jednego pliku. Efekt: natychmiastowy Context Rot, agent od startu w \"Dumb Zone\".\n\n<b>Rozwiązanie:</b> Zwięzły <code>agents.md</code> + oddzielne pliki szczegółów ładowane warunkowo.</pre>"
+    },
+    {
+      "cat": "zasada",
+      "catLabel": "Zasada",
+      "q": "Co to jest Grounding (zakaz halucynacji) i jak konfrontować agenta z fałszywym alarmem?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Grounding:</b> BEZWZGLĘDNY ZAKAZ halucynacji. Agent bazuje WYŁĄCZNIE na dokumentacji i istniejącym kodzie. Jeśli czegoś nie ma w specyfikacji — MUSI zapytać.\n\n<b>Konfrontacja (gdy agent halucynuje w audycie):</b>\nAgent: <i>\"Critical: .env wyciekł do Git!\"</i>\n\nTwoja odpowiedź:\n<i>\"Sprawdziłem — plik .env JEST w .gitignore (linia 4) i nie ma go w git ls-files. Zaktualizuj raport — to fałszywy alarm. POKAŻ MI DOWÓD, jeśli upierasz się, że masz inne źródło.\"</i>\n\nZawsze weryfikuj Critical issues osobiście!</pre>"
+    },
+    {
+      "cat": "zasada",
+      "catLabel": "Zasada",
+      "q": "Czym jest zasada 'Touch only what you're asked to touch' (Scope Discipline)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Agent ma <b>surowy zakaz</b>:\n• Refaktoryzowania sąsiedniego kodu \"przy okazji\"\n• Poprawiania stylu innych funkcji\n• Usuwania cudzych TODO\n• Zmieniania API bez zgody\n\nJeśli widzi problem poza zakresem zadania → <b>zapisuje jako sugestię w raporcie</b>, ale NIE dotyka kodu.\n\n<b>Dlaczego?</b> Dobra zmiana jest mała, czytelna i ma jasny powód istnienia. \"Przy okazji\" poprawki to najczęstsza przyczyna regresji w projektach z agentami AI.</pre>"
+    },
+    {
+      "cat": "workflow",
+      "catLabel": "Workflow",
+      "q": "Jaka jest różnica między `/rewind` a `git commit` i kiedy używać `/resume`?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b><code>/rewind</code></b> cofa tylko to, co wiedział Claude. NIE cofa skutków ubocznych skryptów! To nie wehikuł czasu.\n\n<b><code>git commit</code></b> to twarda linia obrony. ZAWSZE rób commit przed ryzykownym zadaniem. W razie kryzysu: <code>git revert</code>.\n\n<b><code>/resume</code></b>: Gdy Claude Code padnie lub zamkniesz terminal — NIE startuj od zera! Wpisz <code>/resume</code> po ponownym uruchomieniu CLI. Wczytuje ostatnią sesję bez utraty kontekstu.\n\n<b>Złota reguła:</b> Przed każdą interakcją z agentem = <code>git commit</code>.</pre>"
+    },
+    {
+      "cat": "workflow",
+      "catLabel": "Workflow",
+      "q": "Jak wygląda Case Study: Architektura Code Review (Read-Only Audytor)?",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\"><b>Architektura:</b>\n1. <b>plan.md</b> dzieli repo na Bite-sized fazy (Auth, Płatności, Dane)\n2. <b>agents.md Audytora</b> z twardym ZAKAZEM pisania kodu\n3. <b>Model</b>: przełącz na Opus/o1 (głębsze rozumowanie)\n4. <b>Prompt Read-Only</b>: \"Wypisz naprawczą listę do docs/review.md. NIE dotykaj kodu.\"\n\n<b>Dlaczego NIE Agent Teams?</b>\nRecenzent + Koder w jednym zespole = nieskończone spory i zepsuty kod. Recenzent działa jako <b>izolowany Sub-Agent</b>, raportuje TYLKO do Ciebie (HITL). Ty wdrażasz poprawki świadomie.</pre>"
+    },
+    {
+      "cat": "pojecie",
+      "catLabel": "Pojecie",
+      "q": "Wymień Mantrę '5 Warstw Vibe Engineeringu' (Agent Development Kit) w prawidłowej kolejności.",
+      "a": "<pre style=\"white-space:pre-wrap;font-family:inherit;margin:0;background:transparent;border:none;padding:0;font-size:0.95rem;line-height:1.6;\">Ściągawka Brija Kishore Pandey — ucz się jak wiersz:\n\n1. <b>CLAUDE.md sets rules</b>\n   (Konstytucja ustala zasady gry)\n\n2. <b>Skills provide expertise</b>\n   (Wstrzykują leniwie ładowane procedury)\n\n3. <b>Hooks enforce quality</b>\n   (Na twardo egzekwują jakość skryptami)\n\n4. <b>Subagents delegate work</b>\n   (Zlecają wąskie zadania, chroniąc kontekst)\n\n5. <b>Plugins distribute to team</b>\n   (Paczkują wszystko w zestaw dla zespołu)</pre>"
+    }
+  ]
+}
