@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ReviewSuggestion from '../components/ReviewSuggestion.astro';
 import { getNotatki, getFiszki } from '../lib/read-content';
-import { getVisibleNotes } from '../lib/note-visibility';
+import { getVisibleNotes, selectMainNote } from '../lib/note-visibility';
 
 const notatki = await getNotatki();
 const fiszki = await getFiszki();
@@ -30,13 +30,12 @@ function categoryIsActive(category: string) {
 
 const activeCategories = categories.filter(categoryIsActive);
 
-/** Najwcześniejsza next_review_date wśród notatek kategorii (ISO yyyy-mm-dd). */
-function earliestReviewInCategory(notes: typeof notatki) {
-  const dates = notes
-    .map((n) => n.data.next_review_date)
-    .filter((d): d is string => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}/.test(d.trim()));
-  if (dates.length === 0) return undefined;
-  return dates.reduce((a, b) => (a <= b ? a : b));
+/** next_review_date glownej notatki kategorii (ISO yyyy-mm-dd). */
+function mainReviewInCategory(notes: typeof notatki) {
+  const nextReviewDate = selectMainNote(notes)?.data.next_review_date;
+  if (typeof nextReviewDate !== 'string') return undefined;
+  const trimmedDate = nextReviewDate.trim();
+  return /^\d{4}-\d{2}-\d{2}/.test(trimmedDate) ? trimmedDate.slice(0, 10) : undefined;
 }
 
 function formatReviewDatePl(iso: string) {
@@ -89,7 +88,7 @@ function formatReviewDatePl(iso: string) {
       }
 
       const slug = category.toLowerCase().replace(/\s+/g, '-');
-      const nextReviewRaw = allDone ? earliestReviewInCategory(categoryNotes) : undefined;
+      const nextReviewRaw = allDone ? mainReviewInCategory(categoryNotes) : undefined;
       const nextReviewLabel = nextReviewRaw ? formatReviewDatePl(nextReviewRaw) : null;
 
       return (

@@ -48,35 +48,35 @@ export function getReviewableCategories<T extends NoteVisibilityEntry>(
   notes: T[],
   today: string,
 ): ReviewableCategory<T>[] {
-  const groups = new Map<string, ReviewableCategory<T>>();
+  const notesByCategory = new Map<string, T[]>();
 
-  for (const note of getReviewableNotes(notes, today)) {
+  for (const note of getVisibleNotes(notes)) {
     const category = note.data.category?.trim();
-    const nextReviewDate = note.data.next_review_date;
+    if (!category) continue;
 
-    if (!category || !nextReviewDate) continue;
-
-    const existing = groups.get(category);
-    if (!existing) {
-      groups.set(category, {
-        category,
-        slug: categoryToSlug(category),
-        notes: [note],
-        earliestReviewDate: nextReviewDate,
-        earliestNoteTitle: note.data.title,
-      });
-      continue;
-    }
-
-    existing.notes.push(note);
-
-    if (nextReviewDate < existing.earliestReviewDate) {
-      existing.earliestReviewDate = nextReviewDate;
-      existing.earliestNoteTitle = note.data.title;
-    }
+    const categoryNotes = notesByCategory.get(category) ?? [];
+    categoryNotes.push(note);
+    notesByCategory.set(category, categoryNotes);
   }
 
-  return Array.from(groups.values()).sort((a, b) => {
+  const reviewableCategories: ReviewableCategory<T>[] = [];
+
+  for (const [category, categoryNotes] of notesByCategory) {
+    const mainNote = selectMainNote(categoryNotes);
+    const nextReviewDate = mainNote?.data.next_review_date;
+
+    if (!mainNote || !nextReviewDate || nextReviewDate > today) continue;
+
+    reviewableCategories.push({
+      category,
+      slug: categoryToSlug(category),
+      notes: [mainNote],
+      earliestReviewDate: nextReviewDate,
+      earliestNoteTitle: mainNote.data.title,
+    });
+  }
+
+  return reviewableCategories.sort((a, b) => {
     if (a.earliestReviewDate !== b.earliestReviewDate) {
       return a.earliestReviewDate.localeCompare(b.earliestReviewDate);
     }

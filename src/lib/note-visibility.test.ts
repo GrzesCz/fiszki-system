@@ -38,12 +38,12 @@ describe('note visibility', () => {
     expect(getReviewableNotes(notes, '2026-05-26')).toEqual([notes[1]]);
   });
 
-  it('groups review suggestions by visible categories', () => {
+  it('groups review suggestions by visible category main notes', () => {
     const notes = [
       note({ category: 'Vibe Coding', title: 'Hidden old', hidden: true, next_review_date: '2026-01-01' }),
-      note({ category: 'Agenci AI', title: 'Agents later', next_review_date: '2026-04-24' }),
+      note({ category: 'Agenci AI', title: 'Agents main', main: true, next_review_date: '2026-04-24' }),
       note({ category: 'Pytest', title: 'Pytest', next_review_date: '2026-05-20' }),
-      note({ category: 'Agenci AI', title: 'Agents earlier', next_review_date: '2026-04-23' }),
+      note({ category: 'Agenci AI', title: 'Agents detail', next_review_date: '2026-04-23' }),
       note({ category: 'Future', title: 'Future', next_review_date: '2026-12-31' }),
     ];
 
@@ -51,9 +51,9 @@ describe('note visibility', () => {
       {
         category: 'Agenci AI',
         slug: 'agenci-ai',
-        notes: [notes[1], notes[3]],
-        earliestReviewDate: '2026-04-23',
-        earliestNoteTitle: 'Agents earlier',
+        notes: [notes[1]],
+        earliestReviewDate: '2026-04-24',
+        earliestNoteTitle: 'Agents main',
       },
       {
         category: 'Pytest',
@@ -63,5 +63,14 @@ describe('note visibility', () => {
         earliestNoteTitle: 'Pytest',
       },
     ]);
+  });
+
+  it('does not mark a category due when only a detail note is overdue', () => {
+    const notes = [
+      note({ category: 'Agenci AI', title: 'Agents main', main: true, next_review_date: '2026-06-03' }),
+      note({ category: 'Agenci AI', title: 'Agents detail', next_review_date: '2026-04-24' }),
+    ];
+
+    expect(getReviewableCategories(notes, '2026-05-27')).toEqual([]);
   });
 });
