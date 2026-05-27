@@ -4,8 +4,8 @@ category: Agenci AI
 status: zrobione
 type: notatka
 mindmaps: []
-next_review_date: '2026-04-23'
-review_count: 2
+next_review_date: '2026-06-03'
+review_count: 3
 ---
 # Notatki: OpenAI Agents SDK – Rdzeń i Autonomia | Moduł 1
 
