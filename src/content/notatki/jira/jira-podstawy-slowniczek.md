@@ -1,6 +1,6 @@
 ---
 title: 'Podstawy i Słowniczek (JIRA vs GitHub Issues)'
-category: 'Narzędzia i Procesy'
+category: 'Jira'
 status: zrobione
 type: notatka
 mindmaps: []

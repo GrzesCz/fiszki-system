@@ -1,6 +1,6 @@
 ---
 title: 'Masterclass: JIRA i GitHub Issues w Vibe Engineering'
-category: 'Narzędzia i Procesy'
+category: 'Jira'
 status: zrobione
 type: notatka
 mindmaps: []

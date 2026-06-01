@@ -1,6 +1,6 @@
 ---
 title: 'Workflow Vibe Engineering i Zapobieganie Trybowi YOLO'
-category: 'Narzędzia i Procesy'
+category: 'Jira'
 status: zrobione
 type: notatka
 mindmaps: []

@@ -1,6 +1,6 @@
 ---
 title: 'Konfiguracja JIRA/GitHub i Integracja z MCP'
-category: 'Narzędzia i Procesy'
+category: 'Jira'
 status: zrobione
 type: notatka
 mindmaps: []
