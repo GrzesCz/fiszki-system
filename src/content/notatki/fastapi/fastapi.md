@@ -48,11 +48,11 @@ Poniższa tabela zestawia kluczowe obszary, które definiują profesjonalną apl
 
 Poniżej znajdują się poszczególne lekcje, w których każdy z filarów jest rozkładany na czynniki pierwsze:
 
-1. [Pętla zdarzeń i Asynchroniczność](szczegoly/01_petla_zdarzen.md)
-2. [Czysta Architektura 3-warstwowa](szczegoly/02_architektura.md)
-3. [Zarządzanie Sekretami i Pydantic Settings](szczegoly/03_sekrety.md)
-4. [Nowoczesne Haszowanie Haseł (bcrypt)](szczegoly/04_haszowanie.md)
-5. [Precyzyjna Obsługa Wyjątków](szczegoly/05_wyjatki.md)
+1. [Pętla zdarzeń i Asynchroniczność](/notatki/fastapi/szczegoly/01_petla_zdarzen)
+2. [Czysta Architektura 3-warstwowa](/notatki/fastapi/szczegoly/02_architektura)
+3. [Zarządzanie Sekretami i Pydantic Settings](/notatki/fastapi/szczegoly/03_sekrety)
+4. [Nowoczesne Haszowanie Haseł (bcrypt)](/notatki/fastapi/szczegoly/04_haszowanie)
+5. [Precyzyjna Obsługa Wyjątków](/notatki/fastapi/szczegoly/05_wyjatki)
 
 ---
 
