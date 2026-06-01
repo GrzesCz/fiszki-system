@@ -5,7 +5,7 @@ status: zrobione
 type: notatka
 main: true
 mindmaps: []
-next_review_date: '2026-05-19'
+next_review_date: '2026-06-30'
 review_count: 0
 ---
 
@@ -18,10 +18,10 @@ review_count: 0
 **Dodatkowe materiały (wyodrębnione szczegóły):**
 
 **Fundamenty (teoria):**
-- 📘 [Konstytucja Agenta: Szablony i wytyczne (`agents.md`)](/notatki/vibe-coding/vibe-coding-agents-md) (anti-slop, senior python, zakazy, TDD)
-- 📙 [Zarządzanie Zadaniami i TDD (`plan.md`)](/notatki/vibe-coding/vibe-coding-plan-md) (bite-sized chunks, DoD, brak placeholderów)
+- 📘 [Konstytucja Agenta: Szablony i wytyczne (agents.md)](/notatki/vibe-coding/vibe-coding-agents-md) (anti-slop, senior python, zakazy, TDD)
+- 📙 [Zarządzanie Zadaniami i TDD (plan.md)](/notatki/vibe-coding/vibe-coding-plan-md) (bite-sized chunks, DoD, brak placeholderów)
 - 📗 [Rozszerzanie kompetencji: MCP, Plugins, Hooks](/notatki/vibe-coding/vibe-coding-rozszerzenia) (hierarchia rozszerzeń, MCP, hook „strażnik bramy", custom pluginy, `/loop`)
-- 🎯 [Skills: `SKILL.md`, Bullseye, Skill Creator + rama Osmani](/notatki/vibe-coding/vibe-coding-skills) (workflow vs esej, instalacja `agent-skills`, pięć zasad)
+- 🎯 [Skills: SKILL.md, Bullseye, Skill Creator + rama Osmani](/notatki/vibe-coding/vibe-coding-skills) (workflow vs esej, instalacja `agent-skills`, pięć zasad)
 - 📬 [Orkiestracja: Sub-Agents, Swarms i Ralph Loops](/notatki/vibe-coding/vibe-coding-orkiestracja) (unikanie YOLO, optymalizacja kosztów tokenów, HITL)
 - 🔌 [Case Study: Zespół do Code Review](/notatki/vibe-coding/vibe-coding-code-review) (przełączanie modeli, audyt, read-only mode, izolacja agentów)
 - 🧠 [Mindset i Workflow: Debugowanie, Jira i Budżet](/notatki/vibe-coding/vibe-coding-mindset-workflow) (systematyczne debugowanie, koszty tokenów, Jira, FeatureDev)
@@ -40,8 +40,9 @@ review_count: 0
 4. [Orkiestracja, Programatyczne SDK, Agent Teams i Odrzucenie YOLO (Ralph loops)](#4-orkiestracja-programatyczne-sdk-agent-teams-i-odrzucenie-yolo-ralph-loops)
 5. [Systematyczne Debugowanie, Cross-Model i (Case Study) Zespół do Code Review](#5-systematyczne-debugowanie-cross-model-i-case-study-zespół-do-code-review)
 6. [Mindset, Jira i Zarządzanie Procesem](#6-mindset-jira-i-zarządzanie-procesem)
+7. [Prawdziwy Wymiar Senior Enterprise (ADR, Threat Modeling, CI/CD)](#7-prawdziwy-wymiar-senior-enterprise-adr-threat-modeling-cicd)
 
-**Szczegóły (osobne pliki):** [Konstytucja agents.md](/notatki/vibe-coding/vibe-coding-agents-md) · [Zarządzanie plan.md](/notatki/vibe-coding/vibe-coding-plan-md) · [MCP / Plugins / Hooks](/notatki/vibe-coding/vibe-coding-rozszerzenia) · [Skills (Ed + Osmani)](/notatki/vibe-coding/vibe-coding-skills) · [Orkiestracja i Swarms](/notatki/vibe-coding/vibe-coding-orkiestracja) · [Code Review Case Study](/notatki/vibe-coding/vibe-coding-code-review) · [Workflow i Debug](/notatki/vibe-coding/vibe-coding-mindset-workflow)
+**Szczegóły (osobne pliki):** [Konstytucja agents.md](/notatki/vibe-coding/vibe-coding-agents-md) · [Zarządzanie plan.md](/notatki/vibe-coding/vibe-coding-plan-md) · [MCP / Plugins / Hooks](/notatki/vibe-coding/vibe-coding-rozszerzenia) · [Skills (Ed + Osmani)](/notatki/vibe-coding/vibe-coding-skills) · [Orkiestracja i Swarms](/notatki/vibe-coding/vibe-coding-orkiestracja) · [Code Review Case Study](/notatki/vibe-coding/vibe-coding-code-review) · [Workflow i Debug](/notatki/vibe-coding/vibe-coding-mindset-workflow) · [Python od Zera](/notatki/vibe-coding/vibe-coding-python-od-zera) · [Refaktoryzacja](/notatki/vibe-coding/vibe-coding-python-refaktoryzacja)
 
 ---
 
@@ -301,3 +302,32 @@ Nawet najlepsze prompty i agenty zawiodą, jeśli proces jest chaotyczny. "Vibe 
 5. **Rewind vs Git:** `/rewind` w Claude Code to nie wehikuł czasu dla całego systemu. Cofa tylko to, co wiedział Claude. Zawsze rób lokalny `git commit` przed ryzykownym zadaniem. W razie problemu ratuje Cię twardy "revert" w Git.
 6. **Ratunek po awarii sesji (`/resume`):** Gdy Claude Code padnie albo zamkniesz przypadkiem terminal, NIE startuj od zera. Po ponownym uruchomieniu CLI wpisz `/resume` — wczytuje ostatnią sesję bez utraty kontekstu (agent przypomni sobie, na czym skończyliście). Niezbędne przy długich projektach.
 7. **Złoty Nawyk Czyszczenia (`/clear` po Fazie):** Po ukończeniu każdej Fazy z `plan.md` poproś agenta: *"Podsumuj decyzje architektoniczne do `docs/decisions.md`"*, a następnie wpisz `/clear`. To "wyczyści mu głowę" z kontekstowych śmieci ze starej rozmowy — następna Faza będzie **lżejsza, szybsza i tańsza** o 50-70%.
+
+---
+
+## 7. Prawdziwy Wymiar Senior Enterprise (ADR, Threat Modeling, CI/CD)
+
+### Zagadnienie
+Powyższe metody uczą **sterowania agentem** (Vibe Coding), ale to tylko połowa sukcesu na poziomie "Senior Enterprise". Aby w pełni wejść na ten poziom, architektura i procesy muszą objąć również to, czego agenty same z siebie nie zaproponują.
+
+### Opis
+Nawet najlepsze skrypty w `.claude/hooks` nie zastąpią profesjonalnych praktyk wytwarzania oprogramowania. Vibe Engineer musi wpleść agenta w istniejące, korporacyjne procesy:
+
+1. **Architecture Decision Records (ADR):**
+   - Zanim zmusisz agenta do implementacji kluczowych komponentów, wymuś na nim przygotowanie pliku ADR w `docs/adr/`.
+   - ADR musi zawierać Kontekst, Decyzję, Konsekwencje i Alternatywy. Agenty mają tendencję do cichego przemycania bibliotek. ADR wymusza jawność.
+   - Wrzucaj do Jiry tickety typu "Napisz ADR dla systemu logowania", zanim przejdziesz do kodu.
+
+2. **Threat Modeling (Modelowanie Zagrożeń):**
+   - Kod generowany przez AI to jedno z największych ryzyk bezpieczeństwa (np. ukryte podatności). 
+   - Zanim stworzysz plik `plan.md`, zbuduj model zagrożeń. Zmuś Agenta-Audytora (najlepiej w izolacji z o1-preview) do odszukania wektorów ataku dla nowej funkcjonalności. Wpisz te wnioski do Konstytucji dla danej funkcji.
+
+3. **Integracja z CI/CD Pipeline:**
+   - Twój lokalny plik `quality_gate.sh` to absolutne minimum (tzw. "Strażnik Bramy"). Prawdziwe Enterprise zakłada pełną pętlę CI/CD (GitHub Actions, GitLab CI).
+   - Agent ma zakaz pushowania kodu na główną gałąź. Agent przygotowuje Pull Request, a pipeline CI odpala SonarQube, skanery Trivy (obrazów Docker) i testy integracyjne E2E.
+   - Zlecaj agentowi naprawianie błędów zrzutów z Sentry wprost powiązanych z ID pipeline'u, używając zewnętrznych systemów i logów (Atlassian MCP / Sentry MCP).
+
+4. **Product Discovery:**
+   - Przed zleceniem agentowi kodu, musisz wiedzieć, CO budujesz. Brak procesu Discovery prowadzi do masowej produkcji bezużytecznego kodu. Używaj modelu na etapie burzy mózgów (Brainstorming), by przeanalizować cele biznesowe, a dopiero później konwertuj je na `plan.md`.
+
+Odróżnia to inżyniera "sterującego maszyną" od "Architekta Systemów Enterprise". Agenty piszą kod, Ty projektujesz fabrykę, w której pracują.

@@ -1,7 +1,7 @@
 ---
 title: 'Szczegóły: Zespół Code Review w Pythonie (Case Study)'
 category: Vibe Coding
-next_review_date: '2026-05-19'
+next_review_date: '2026-06-30'
 review_count: 0
 status: zrobione
 type: notatka

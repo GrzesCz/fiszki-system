@@ -4,7 +4,7 @@ category: Vibe Coding
 status: zrobione
 type: notatka
 hidden: true
-next_review_date: '2026-05-19'
+next_review_date: '2026-06-30'
 review_count: 0
 ---
 # Plik plan.md (Ustawa i Zarządzanie)

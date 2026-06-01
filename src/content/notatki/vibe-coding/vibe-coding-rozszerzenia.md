@@ -4,7 +4,7 @@ category: Vibe Coding
 status: zrobione
 type: notatka
 hidden: true
-next_review_date: '2026-05-19'
+next_review_date: '2026-06-30'
 review_count: 0
 ---
 # Rozszerzanie kompetencji Agenta: MCP, Plugins, Hooks i Skills (nawigacja)

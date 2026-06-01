@@ -4,7 +4,7 @@ category: Vibe Coding
 status: zrobione
 type: notatka
 hidden: true
-next_review_date: '2026-05-19'
+next_review_date: '2026-06-30'
 review_count: 0
 mindmaps: []
 ---
@@ -110,6 +110,23 @@ Teraz zapraszamy Claude'a do pracy i dajemy mu najlepsze narzędzia.
 
 ---
 
+## 🏛️ ETAP 3.5: Architektura i Bezpieczeństwo (ADR i Threat Modeling) [MODEL: 🔴 CLAUDE OPUS / o1-preview]
+
+Na poziomie "Senior Enterprise" nie rzucamy się od razu do pisania planu zadań. Najpierw formalizujemy decyzje i szukamy luk bezpieczeństwa (Shift-Left Security).
+
+1. **Architecture Decision Records (ADR):**
+   Gdy Agent podczas Burzy Mózgów wymyśli użycie np. FastAPI zamiast Django, każ mu zapisać tę decyzję formalnie:
+   > "Podsumuj nasze kluczowe wybory technologiczne z `docs/BRAINSTORM.md` i wygeneruj dla nich formalne pliki w katalogu `docs/adr/`. Każdy ADR ma zawierać: Kontekst, Decyzję, Konsekwencje i Alternatywy. To zapobiegnie cichemu przemycaniu zbędnych bibliotek w przyszłości."
+
+2. **Modelowanie Zagrożeń (Threat Modeling):**
+   Zanim zaczniesz budować, każ maszynie wejść w rolę hakera.
+   > "Na podstawie `docs/BRAINSTORM.md`, przeanalizuj wektory ataku dla nowej aplikacji. Wskaż granice zaufania (Trust Boundaries) i wymień krytyczne podatności, na które musimy uważać. Zapisz wyniki w `docs/THREAT_MODEL.md`."
+
+3. **Zrób zapis (Commit):**
+   W terminalu wpisz: `git add . && git commit -m "Dodano ADR i Threat Model"`
+
+---
+
 ## 📜 ETAP 4: Pisanie Konstytucji (agents.md) [MODEL: ❌ BRAK AI (piszemy sami)]
 
 Zanim ruszymy do pracy, musisz dać agentowi zasady gry. Ten plik piszesz **TY**, a nie agent!
@@ -136,6 +153,7 @@ Zaczynamy od zera. Mamy pusty projekt i zainicjowane środowisko. (Uwaga: zawsze
 - Budujemy projekt w [WPISZ JĘZYK, np. Python].
 - Zawsze używaj [WPISZ NARZĘDZIA, np. uv, FastAPI, Pydantic].
 - **Bezwzględnie przestrzegaj struktury katalogów:** kod biznesowy ZAWSZE ląduje w `/src`, testy w `/tests`, a dokumentacja w `/docs`. Nie twórz plików z kodem luzem w głównym katalogu!
+- **Obserwowalność (Observability):** Od pierwszego dnia używaj logowania strukturalnego (np. `structlog` w Pythonie) zamiast gołego `print()`. Każdy ważny proces musi logować metadane!
 
 ## 2. Anti-Slop (Wysoka jakość kodu)
 - Zawsze pisz od razu gotowy kod. 
@@ -301,6 +319,9 @@ To najlepsza tarcza przed *AI Slop*. Hook to brutalny skrypt, który uruchamia s
    }
    ```
 **Co to zmienia?** Od teraz, gdy Agent powie "skończyłem zadanie", system automatycznie uruchomi testy. Jeśli coś jest źle, **Agent nie może zakończyć pracy** i musi naprawić błąd. Ty się tym nie martwisz!
+
+> **🚀 Poziom Senior Enterprise (Zdalne CI/CD):**
+> Twój lokalny `quality_gate.sh` to absolutne minimum, chroniące Twoją maszynę. Docelowo Agent musi też wygenerować plik dla zewnętrznego pipeline'u (np. `.github/workflows/ci.yml`), który uruchomi te same testy, lintery oraz zdalne skanery bezpieczeństwa (np. Trivy, SonarQube) niezależnie od Ciebie. Zewnętrzne CI to fundament Enterprise.
 
 ---
 

@@ -4,7 +4,7 @@ category: Vibe Coding
 status: zrobione
 type: notatka
 hidden: true
-next_review_date: '2026-05-19'
+next_review_date: '2026-06-30'
 review_count: 0
 mindmaps: []
 ---
@@ -28,6 +28,18 @@ Zanim pozwolisz sztucznej inteligencji dotknąć swojego kodu, musisz zapisać j
    git tag punkt-kontrolny
    ```
    *(Jeśli AI zepsuje Ci aplikację, będziesz mógł wpisać `git reset --hard punkt-kontrolny` i wszystko natychmiast wróci do normy).*
+
+---
+
+## 🧪 ETAP 1.5: Testy Charakteryzujące (Golden Master) [MODEL: 🔴 CLAUDE OPUS]
+
+Na poziomie "Senior Enterprise", refaktoryzacja legacy code bez testów to rosyjska ruletka. Jeśli stary kod nie ma pokrycia, najpierw zbuduj "Sieć Bezpieczeństwa" (Testy Charakteryzujące).
+
+1. **Zmuś Agenta do stworzenia czarnej skrzynki:**
+   Zanim pozwolisz mu cokolwiek "naprawiać" w kodzie aplikacji, wydaj polecenie:
+   > "Przeanalizuj moduły, które będziemy docelowo refaktoryzować. Napisz testy (tzw. testy charakteryzujące / Snapshot tests), które po prostu wywołają obecne funkcje i utrwalą ich obecne wyniki jako oczekiwane (nawet jeśli są błędne lub brzydkie). Musimy mieć twardy dowód, że po refaktoryzacji kod zachowa się identycznie. Nie modyfikuj absolutnie żadnego pliku w `/src`, dodawaj tylko testy."
+2. **Uruchom testy:** Upewnij się, że przechodzą "na zielono" na starym kodzie.
+3. **Zrób zapis (Commit):** Wpisz w terminalu: `git add . && git commit -m "Zabezpieczono stary kod testami charakteryzującymi"`
 
 ---
 
@@ -137,6 +149,8 @@ Poniższe wymówki są ZAKAZANE:
 - Przestarzałego kodu i ogromnych plików, które trzeba podzielić.
 - Błędów bezpieczeństwa i wycieków pamięci.
 - Miejsc, gdzie brakuje testów.
+- **Braków w Telemetrii:** Zweryfikuj, jak i czy aplikacja w ogóle loguje błędy strukturalnie i raportuje je (np. do Sentry).
+- **Zarządzania Stanem (Baza danych):** Sprawdź, czy projekt posiada bezpieczny mechanizm do wersjonowania i migracji schematu bazy danych (np. Alembic, Prisma).
 
 ## 8. Brak Zgadywania (Grounding)
 - Bazuj WYŁĄCZNIE na obecnym kodzie. ZAKAZ halucynacji i zmyślania nieistniejących błędów.
@@ -269,6 +283,11 @@ Gdy zostawiasz agenta na 10 minut i widzisz, że ciągle edytuje ten sam plik, t
 1. Zrób `git reset --hard punkt-kontrolny` (wracasz do bezpiecznego stanu).
 2. Wpisz `/clear` (resetujesz mu pamięć).
 3. Zacznij od nowa, dając mu BARDZIEJ KONKRETNĄ instrukcję (np. nie "napraw test", tylko "test sprawdza X, kod ma robić Y, błąd wskazuje Z – napraw konkretnie tę linię").
+
+### 🗄️ Krytyczne: Migracje Bazy Danych
+Gdy agent przebudowuje logikę i dotyka modeli danych w starym systemie, grozi to katastrofą (wygenerowanie kodu robiącego `DROP TABLE` na produkcji). Wprowadź twardą zasadę dla Budowniczego:
+> "Jeśli w tym zadaniu musisz zmodyfikować schemat bazy danych, MASZ ZAKAZ modyfikowania bazy wprost. Musisz wygenerować plik migracyjny (np. w narzędziu Alembic) jako osobną operację. Zawsze zachowuj kompatybilność wsteczną."
+Nigdy nie zlecaj uruchomienia nowej migracji wprost na serwerze przez agenta bez Twojego review!
 
 ### 🐛 Workflow `debug.md` (Gdy pojawi się błąd)
 Gdy podczas wykonywania planu wystąpi błąd, ZAKAZ łatania na ślepo. Zamiast tego:

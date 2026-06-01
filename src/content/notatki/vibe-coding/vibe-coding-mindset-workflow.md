@@ -1,7 +1,7 @@
 ---
 title: 'Szczegóły: Workflow, Mindset i Debugowanie'
 category: Vibe Coding
-next_review_date: '2026-05-19'
+next_review_date: '2026-06-30'
 review_count: 0
 status: zrobione
 type: notatka
@@ -29,6 +29,7 @@ Podejście "Vibe Engineer" polega na utrzymaniu rygoru inżynieryjnego.
 3. **Nie wierz w ułudę 10x:** Zrobisz to szybciej, ale zderzysz się ze ścianą bugów. Prawdziwa wartość to ekspansja możliwości (możesz zrobić więcej typów aplikacji), a nie tylko czysta prędkość.
 4. **"Watch like a hawk" (Karpathy):** Obserwuj agenta jak jastrząb. Nie ufaj jego poprawkom w ciemno. Grozi Ci **atrofia umiejętności** — jeśli przestaniesz czytać kod agenta, stracisz zdolność programowania.
 5. **Nadchodzi Slop Apocalypse:** Za rok branża zbuntuje się przeciw rozwlekłym, emoji-heavy kodom i gigantycznym README generowanym z LLM. Pisz zwięźle.
+6. **Shift-Left Enterprise:** Prawdziwy Vibe Engineer nie prosi o kod przed stworzeniem modelu zagrożeń (Threat Modeling) i zapisaniem decyzji architektonicznych (ADR). Myśl strukturalnie, a nie tylko tokenowo.
 
 ## 3. Strategia Debugowania
 
@@ -48,7 +49,7 @@ Jeśli pracujesz na budżecie i nie używasz potężnego API z karty kredytowej:
 - **AMP Code (Ads for AI):** Projekt dostarczający dzienny kredyt AI (~10 USD) w zamian za reklamy w terminalu. Super do nauki. Używaj trybu **Deep** (`Ctrl+S`), by agent "myślał dłużej" przy kodowaniu.
 - **Haczyk Darmowych Modeli:** Korzystając z darmowych warstw, zgadzasz się na trenowanie modeli swoim kodem i upublicznianie promptów. W projektach komercyjnych jest to absolutnie nieakceptowalne.
 
-## 6. Zarządzanie oknem kontekstowym (Lost in the Middle & Context Rot)
+## 5. Zarządzanie oknem kontekstowym (Lost in the Middle & Context Rot)
 
 Zgodnie z najnowszymi obserwacjami (m.in. materiały Olafa Sulicha oraz badania z 2023 r.), ogromne okna kontekstowe rzędu miliona tokenów są złudne. Zrzucenie wszystkiego do jednego promptu powoduje degradację intelektu Agenta.
 
@@ -58,6 +59,8 @@ Zgodnie z najnowszymi obserwacjami (m.in. materiały Olafa Sulicha oraz badania 
    Gdy Agent wykona ciężki audyt lub zanalizuje logikę, nie zmuszaj go do pisania na tej podstawie kodu w tym samym, zanieczyszczonym już oknie. Intencjonalnie każ mu **wyciągnąć wnioski do pliku Markdown** (np. `docs/analiza_auth.md`). Następnie zamknij sesję (wymuś `clear` lub otwórz nowy czat w Cursorze), stwórz nowe, sterylne okno kontekstowe, dołącz TYLKO ten skompresowany plik i dopiero na jego podstawie zleć pisanie kodu. Nigdy nie polegaj na wbudowanych w edytor automatach do kompresji kontekstu — rób to świadomie.
 4. **Jeden cel, jedno okno (Krótka Smycz i Unikanie Skoków):**
    Trzymaj model "na krótkiej smyczy". Im bardziej sprecyzujesz cel, tym mniej pola do niebezpiecznego manewru ma Agent. **Nie mieszaj odpowiedzialności!** Nie skacz po różnych modułach w tym samym oknie konwersacji. Podążaj cyklem *Research $\rightarrow$ Plan $\rightarrow$ Implement*, resetując okno dla każdego z tych zadań i przekazując pomiędzy nimi tylko wypracowane podsumowania Markdown.
+
+## 6. Używanie pluginu FeatureDev (Zastrzeżenia)
 
 `FeatureDev` to potężny, wieloetapowy plugin Anthropic budujący nową funkcjonalność.
 - Instaluj go w folderze projektu `.clawd` i **koniecznie** wrzucaj to do Git (commit) by inni w zespole go mieli.
