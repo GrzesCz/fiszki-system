@@ -3,6 +3,7 @@ title: 'Masterclass: Zarządzanie migracjami Alembic na poziomie Senior Enterpri
 category: 'Alembic'
 status: zrobione
 type: notatka
+main: true
 mindmaps: []
 next_review_date: '2026-06-30'
 review_count: 0
