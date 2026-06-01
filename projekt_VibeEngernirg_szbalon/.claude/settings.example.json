@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "stop": [
+      {
+        "type": "command",
+        "command": "uv run python scripts/quality_gate.py",
+        "description": "Run deterministic Python quality gate before finishing"
+      }
+    ]
+  }
+}
+
