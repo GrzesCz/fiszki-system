@@ -1,16 +1,29 @@
 ---
-name: Boy Scout Rule
+name: boy-scout-rule
 description: >
   Enforces the "Boy Scout Rule" — on EVERY file modification the agent MUST: run
   a linter from terminal, scan the file for specific technical debt patterns, fix
   found issues, verify the module imports cleanly, and remove all temporary logs.
   ZERO tolerance for NameError.
+version: 1.0.0
+
 ---
 
 # Boy Scout Rule
 
 ## Trigger
-- Active ALWAYS when you edit or modify ANY `.py` file for ANY reason — even a single line.
+- Active when you edit or modify ANY `.py` file. Apply effort proportional to the change:
+  - **Full ritual** (all 5 steps + report) for changes to logic, auth, DB, API, external
+    integrations, or anything more than cosmetic.
+  - **Light mode** (Step 1 linter + Step 3 import test only) for purely cosmetic edits:
+    a typo, formatting, a docstring wording fix. Do not run the full grep battery and
+    full report for a one-character fix — that is response slop and burns context.
+
+## Relationship to other skills
+- `boy-scout-rule` removes **dead / garbage** code (unused imports, debug logs, bare
+  except, print). `simplicity-gate` removes **live but unnecessary** code (speculative
+  abstractions, defensive guards that cannot fire, what-comments). Do not duplicate their
+  work: leave over-engineering judgements to `simplicity-gate`.
 
 ## Procedure
 
@@ -38,7 +51,7 @@ You MUST scan the modified file for EACH of these patterns:
 | 5 | **Print instead of logger** | `grep -n "print(" <file>` | Replace `print()` with appropriate `logger.info/debug/warning` |
 | 6 | **Temporary debug logs** | `grep -n "#region agent\|open(\"debug\|# DEBUG\|# TODO: remove\|# HACK" <file>` | Remove UNCONDITIONALLY before submitting code |
 | 7 | **Missing type hints** | `grep -n "def " <file>` — do signatures have `->` and typed arguments? | Add typing (at minimum `-> None` and argument types) |
-| 8 | **Magic numbers/strings** | Look for repeated literals (e.g., `"production"`, `3600`, `"admin"`) | Extract to a constant (`CACHE_TTL = 3600`) |
+| 8 | **Magic numbers/strings** | Look for repeated literals (e.g., `"production"`, `3600`, `"admin"`). **Manual judgement** — grep cannot reliably distinguish a magic `3600` from a benign `range(10)`; review candidates, do not auto-replace blindly | Extract to a constant (`CACHE_TTL = 3600`) only where it genuinely improves clarity |
 
 ### STEP 3: Mandatory Import Test
 After every modification, you MUST run an import test in terminal:
@@ -97,7 +110,7 @@ The file is ready for submission ONLY when:
 ## Anti-Rationalization
 | Rationalization | Action |
 | --- | --- |
-| "I'm just fixing a typo, I don't need to run a linter." | **DENIED.** The rule applies to EVERY modification — even 1 line. Run the linter. |
+| "I'm just fixing a typo, I don't need to run a linter." | **PARTIAL.** Even in light mode you run the linter (Step 1) and the import test (Step 3). The full grep battery is reserved for substantive changes — but linting a touched file is never skipped. |
 | "The linter found 20 errors, but they were there before I touched the file." | **DENIED.** If you touched the file, you are responsible for cleaning up the mess. Fix the errors. |
 | "The import test will take too long." | **DENIED.** The test takes 2 seconds. Run `python -c` and prove the import works. |
 | "I'll leave this print(), it will help me debug later." | **DENIED.** ZERO tolerance for print() in production code. Replace with logger or remove. |

@@ -30,8 +30,11 @@ Turn a rough idea into a clear product brief that can drive architecture and pla
 
 ## Procedure
 
-1. Identify business problem.
-2. Identify users/personas.
+1. **Technology Check:** Ask the user what technology stack they plan to use.
+   - If the stack includes frameworks or concepts you are not perfectly familiar with, STOP and instruct the user: *"Please run `/deep research [technology name]` first so I can gather the latest context before designing the architecture."*
+   - Proceed only when you have full context.
+2. Identify business problem.
+3. Identify users/personas.
 3. Identify MVP scope.
 4. Identify out-of-scope items.
 5. Identify success criteria.

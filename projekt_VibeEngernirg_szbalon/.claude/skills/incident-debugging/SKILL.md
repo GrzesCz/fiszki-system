@@ -37,7 +37,9 @@ Fix the root cause without guessing and prevent recurrence.
 3. Write hypotheses to `docs/debug.md`.
 4. Prove or disprove each hypothesis.
 5. Fix root cause.
-6. Add regression test.
+6. Add regression test. Design it per `test-design-enforcer`: it MUST reproduce the bug
+   (fail on the old code) and pass on the fix — prove both. A regression test that passes
+   without the fix guards nothing.
 7. Update `docs/postmortem.md` if significant.
 
 ## Scope Discipline

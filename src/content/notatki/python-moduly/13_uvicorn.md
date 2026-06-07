@@ -1,6 +1,8 @@
 ---
-title: "Notatki: uvicorn – serwer ASGI | Moduł 3: Web Framework"
-category: "Uvicorn"
+title: 'Notatki: uvicorn – serwer ASGI | Moduł 3: Web Framework'
+category: Uvicorn
+status: zrobione
+mindmaps: []
 ---
 # Notatki: uvicorn – serwer ASGI | Moduł 3: Web Framework
 

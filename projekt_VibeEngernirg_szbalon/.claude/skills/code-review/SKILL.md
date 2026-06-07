@@ -33,6 +33,15 @@ Find real issues with evidence without changing production code.
 
 ## Procedure
 
+> **Relationship to other skills:** use `code-review` for a focused review of a single PR
+> or file. For a full pre-commit scan across security/performance/quality/architecture use
+> `enterprise-code-auditor`; for security *design* use `threat-modeling`. Avoid running all
+> three on the same change — pick the one matching the scope.
+>
+> **Grep is triage, not proof.** Pattern scans surface candidates; they miss sophisticated
+> issues and produce false positives. Confirm each finding by reading the actual code, and
+> mark uncertain ones as `needs verification` rather than asserting them.
+
 1. Enter read-only mode.
 2. Identify review type: PR review, security audit, architecture review or legacy audit.
 3. Inspect the relevant diff/files.

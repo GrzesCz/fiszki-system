@@ -1,11 +1,13 @@
 ---
-name: Pydantic Security Enforcer
+name: pydantic-security
 description: >
   Strictly enforces the use of pydantic-settings and SecretStr for managing
   configuration, tokens, and passwords. Enforces the Singleton pattern, Fail-Fast startup validation,
   creation/updating of .env.example, and field validators. Triggers whenever the user says:
   "configure environment", "read key from env", "build settings.py" or
   when the project requires API authorization. Forbids the use of the plain os module.
+version: 1.0.0
+
 ---
 
 # Iron Law of Configuration Management (Secure by Design)
@@ -18,11 +20,16 @@ Whenever configuration is needed, you MUST create or modify the settings file (e
 ```python
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr, field_validator
+from pathlib import Path
 import sys
+
+# Resolve .env relative to this file, NOT the current working directory.
+# A hardcoded "../.env" breaks the moment the app is launched from another folder.
+_ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="../.env", # Make sure the path is correct
+        env_file=str(_ENV_PATH),   # adjust .parent depth to your project layout
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore" # ignores unknown keys in the .env file
@@ -37,8 +44,12 @@ class Settings(BaseSettings):
         secret_val = value.get_secret_value()
         if not secret_val.strip():
             raise ValueError("API Key cannot be empty.")
-        if not secret_val.startswith("sk-"):
-            raise ValueError("OpenAI API key should start with 'sk-'.")
+        # Validate non-emptiness and a sane minimum length. Do NOT hardcode a
+        # provider-specific prefix like "sk-": it rejects valid keys (project keys
+        # "sk-proj-...", Azure/other providers) and rots as formats change. If you
+        # need a prefix check, make it configurable per provider, not a literal here.
+        if len(secret_val) < 20:
+            raise ValueError("OpenAI API key looks too short to be valid.")
         return value
 
 # Singleton initialization - this variable will be imported project-wide

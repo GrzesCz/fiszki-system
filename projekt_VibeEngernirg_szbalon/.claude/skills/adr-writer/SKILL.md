@@ -37,8 +37,12 @@ Create a clear Architecture Decision Record with context, alternatives and conse
 2. Read relevant requirements and existing ADRs.
 3. Write the context and constraints.
 4. List at least two alternatives.
-5. Explain why the chosen option wins.
-6. Record positive and negative consequences.
+5. Explain why the chosen option wins. The chosen option MUST be the simplest one that
+   fully satisfies the requirement. Any extra complexity it introduces (an additional
+   layer, dependency, pattern, or service) must be explicitly justified in step 6 —
+   "might be useful later" is not a justification (YAGNI). The ADR is the cheapest place
+   to stop over-engineering before any code exists.
+6. Record positive and negative consequences (including the cost of every added abstraction).
 7. Record rollback or revision criteria.
 8. Save the ADR as `docs/adr/NNNN-short-title.md`.
 9. Add a dated entry to `plan.md` Status Log.

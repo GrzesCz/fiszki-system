@@ -1,10 +1,12 @@
 ---
-name: Hallucination Shield
+name: hallucination-shield
 description: >
   Forces the agent to verify the environment state, strictly read the latest documentation,
   test import correctness (python -c), and analyze deprecation before deploying code.
   Triggers when the user says "implement this API", "add MCP", "use the latest library X",
   "write code", or "refactor".
+version: 1.0.0
+
 ---
 
 # Environment Verification Procedure (No Blind Coding)

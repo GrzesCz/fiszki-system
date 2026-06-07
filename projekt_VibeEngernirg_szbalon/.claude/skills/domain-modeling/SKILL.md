@@ -43,6 +43,11 @@ Define domain concepts before implementation.
 ## Scope Discipline
 You are strictly limited to creating and updating markdown documentation (`docs/domain_model.md`). You are FORBIDDEN from generating or modifying Python classes, Pydantic models, or SQLAlchemy entities during this task.
 
+Model only what real business rules require (YAGNI at the domain level). Do not introduce
+entities, value objects, or aggregates "for the future" — every modeled concept must trace
+back to a stated requirement or invariant. Speculative domain structure is the most
+expensive slop because all the code later inherits it.
+
 ## Output
 
 - Updated `docs/domain_model.md`

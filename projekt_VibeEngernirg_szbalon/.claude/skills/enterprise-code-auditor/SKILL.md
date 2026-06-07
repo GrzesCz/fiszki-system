@@ -1,11 +1,13 @@
 ---
-name: Enterprise Code Auditor
+name: enterprise-code-auditor
 description: >
   Triggers before any major code commit or on user request. Performs a rigorous,
   structured audit of security, performance, quality, and architecture. The agent
   MUST use terminal commands and grep_search to prove every finding — answering
   from memory is forbidden. Triggers when the user says "audit my code", "security
   review", "check code quality", "run enterprise audit".
+version: 1.0.0
+
 ---
 
 # Enterprise Code Auditor
@@ -16,8 +18,17 @@ description: >
 
 ## Procedure
 
+### STEP 0: Cost Guard (Token Black Hole Prevention)
+Before running any `grep` or terminal commands, you MUST check the size of the repository.
+1. Run `find . -name "*.py" -not -path "*/\.*" -not -path "*/venv/*" | wc -l` (or equivalent) to count Python files.
+2. If the count is **> 10 files**, you MUST STOP immediately and print the following warning:
+   > "🚨 **WARNING: LARGE PROJECT DETECTED.** Running a full Enterprise Audit on this project using Dynamic Workflows or Ultra Code may consume massive amounts of tokens. Do you authorize running the full audit, or would you prefer to audit specific files using `/goal`?"
+3. Proceed ONLY if the user explicitly authorizes it.
+
 ### STEP 1: Information Gathering (No Hallucination)
 You MUST use `grep_search` or terminal (`grep -rn`) to actively scan the codebase for the specific patterns listed below. You are FORBIDDEN from answering from memory — every point must have terminal proof.
+
+> **Grep is triage, not proof.** The patterns below catch naive cases (e.g. `execute(f"...")`) but miss sophisticated ones (SQL built with `.format()` two lines up, ORM filters from unsanitized input, secrets passed through a variable). A clean grep does NOT mean clean code. Where available, back the scan with real tools: `bandit -r src` (security lint), `pip-audit` (dependency CVEs), and `semgrep` with OWASP rules. Treat grep results as candidates for judgement, not verdicts.
 
 ### STEP 2: Security Audit
 
@@ -46,13 +57,14 @@ Scan the project using EXACTLY these patterns:
 | **Error Handling** | `grep -rn "logger.error" --include="*.py"` — does every occurrence have `exc_info=True`? `grep -rn "except:" --include="*.py"` — look for bare except | OK / ISSUES |
 | **Type Hints** | `grep -rn "def " --include="*.py"` — do function signatures have argument types and return type (`-> ...`)? | OK / MISSING |
 | **Print vs Logger** | `grep -rn "print(" --include="*.py"` — is production code using `print()` instead of `logger`? | OK / ISSUES |
+| **Over-Engineering** | `uv run ruff check --select C901,PLR src` (complexity) + manual review: interfaces/factories with a single implementation, `try/except` with no real failure path, what-comments restating code | OK / BLOAT |
 
 ### STEP 5: Architecture Audit
 
 | Problem | Commands/Patterns to Search | Verdict |
 | :--- | :--- | :--- |
 | **Layer Separation** | Do router files (files with `APIRouter`) contain business logic or SQL queries? `grep -rn "execute\|select\|insert\|update\|delete" router*.py` | OK / VIOLATION |
-| **Modularity** | Are files reasonably sized (<400 lines)? `wc -l *.py` or review directory structure | OK / OVERSIZED |
+| **Modularity** | Are files reasonably sized? `wc -l *.py`. ~400 lines is a smell worth reviewing, NOT a hard limit — do not fragment cohesive code just to lower the count | OK / REVIEW |
 | **Data Source Consistency** | Are all defined data sources (e.g., local DB + external APIs) handled? Are any missing from new endpoints? | OK / MISSING |
 
 ### STEP 6: Report — Output Format
@@ -75,6 +87,11 @@ You MUST generate the report in EXACTLY the following format (paste terminal pro
 - ERROR HANDLING (exc_info): [OK / ISSUES]
 - TYPE HINTS: [OK / MISSING]
 - PRINT vs LOGGER: [OK / ISSUES]
+
+## ✂️ SIMPLICITY AUDIT
+- OVER-ENGINEERING (speculative abstractions): [OK / BLOAT] — proof: `ruff --select C901,PLR ...` + notes
+- DEFENSIVE CODE (unreachable guards): [OK / BLOAT]
+- WHAT-COMMENTS: [OK / BLOAT]
 
 ## 🏗️ ARCHITECTURE AUDIT
 - LAYER SEPARATION: [OK / VIOLATION]
