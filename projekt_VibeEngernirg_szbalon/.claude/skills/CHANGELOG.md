@@ -1,7 +1,39 @@
 # CHANGELOG — poprawiony zestaw skilli (VibeEngineering)
 
-Wersja paczki: **1.2.0** · Data: 2026-06-01
-Bazuje na oryginalnym zestawie 18 skilli + 3 nowe. Razem **21 skilli**.
+Wersja paczki: **1.3.0** · Data: 2026-06-08
+Bazuje na zestawie z v1.2.0 + 4 nowe skille bezpieczeństwa.
+
+## Nowe skille (v1.3.0) — warstwa AppSec / Secure Coding
+
+Cztery skille domykające lukę „bezpieczeństwo budowanego kodu" (poza istniejącymi
+`threat-modeling`, `pydantic-security`, `enterprise-code-auditor`). Każdy zgodny z konwencją
+zestawu (Trigger + Procedure ze STEP-ami + dowód z terminala/pytest + Hard Exit Criteria +
+Anti-Rationalization) oraz z parą `SKILL.md` (EN, kanon) + `docs/SKILL_PL.md` (PL).
+
+- **`api-security-enforcer`** — egzekwuje OWASP API Top 10 na endpointach FastAPI: autoryzacja
+  na poziomie obiektu (anty-BOLA/IDOR), na poziomie funkcji (anty-BFLA), ochrona przed
+  mass-assignment (jawne DTO + `extra="forbid"`), limity/paginacja, hardening uploadu, rate
+  limiting i higiena błędów. Każda reguła authz dowodzona pytestem (obcy aktor → 403/404).
+- **`injection-defense`** — wymusza bezpieczną konstrukcję na styku niezaufane-wejście→sink:
+  sparametryzowany SQL, **path-traversal** (containment pod allowlistowanym katalogiem —
+  istotne dla rozwiązywania slug→plik), zakaz `shell=True`/`pickle`/`yaml.load`/`eval`, SSRF,
+  oraz kodowanie/sanityzacja wyjścia HTML (anty-XSS przy renderze Markdown). Dowód testem ataku.
+- **`dependency-supply-chain`** — czyni politykę z `docs/agent/security_data.md` wykonywalną:
+  `pip-audit`/`osv-scanner`, pin z hashami, SBOM, prześwietlenie nowej zależności (utrzymanie,
+  typosquatting, licencja, zasięg tranzytywny) i bramka CI. YAGNI dla zależności.
+- **`ai-llm-security`** — bezpieczeństwo funkcji LLM/agent/MCP: oddzielenie instrukcji od
+  niezaufanych danych (anty prompt-injection), least-privilege + serwerowa autoryzacja
+  tool-calli, walidacja wyjścia modelu przed działaniem, zakaz sekretów/PII w prompcie,
+  ramowanie MITRE ATLAS. Dowód testem adwersarialnym. (Uzupełnia `hallucination-shield`:
+  poprawność vs bezpieczeństwo.)
+
+### Wpięcia w istniejące skille (v1.3.0)
+- `enterprise-code-auditor` — wykrywa wzorce grepem (triage); `injection-defense` i
+  `api-security-enforcer` egzekwują i dowodzą poprawki testem.
+- `release-readiness` / `python-quality-gate` — skan zależności z `dependency-supply-chain`
+  jako głębsza, decyzyjna wersja bramki `pip-audit`.
+
+---
 
 ## Nowe skille (v1.2.0)
 
